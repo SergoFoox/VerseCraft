@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_poplar_mosaic": {
+      "conditions": {
+        "items": [
+          {
+            "items": "versecraft:poplar_mosaic"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "versecraft:poplar_mosaic_stairs"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_poplar_mosaic"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "versecraft:poplar_mosaic_stairs"
+    ]
+  }
+}

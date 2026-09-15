@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:granite_brick_stairs_from_granite_bricks_stonecutting"
+        "recipes": "versecraft:granite_brick_stairs_from_granite_bricks_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

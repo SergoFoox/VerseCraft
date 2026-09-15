@@ -16,6 +16,8 @@
   "block.versecraft.azalea_hanging_sign": "Азалиевая подвесная табличка",
   "block.versecraft.azalea_shelf": "Азалиевая Полка",
 
+  "item.versecraft.azalea_hanging_sign": "Азалиевая подвесная табличка",
+  "item.versecraft.azalea_sign": "Азалиевая табличка",
   "item.versecraft.azalea_chest_boat": "Азалиевая грузовая лодка",
   "item.versecraft.azalea_boat": "Азалиевая лодка",
 
@@ -74,6 +76,10 @@
   "block.versecraft.pale_oak_mosaic": "Бледно дубовая мозаика",
   "block.versecraft.pale_oak_mosaic_stairs": "Ступеньки из бледно дубовой мозаики",
   "block.versecraft.pale_oak_mosaic_slab": "Плита из бледно дубовой мозаики",
+
+  "block.versecraft.poplar_mosaic": "Тополевая мозаика",
+  "block.versecraft.poplar_mosaic_stairs": "Ступеньки из тополевой мозаики",
+  "block.versecraft.poplar_mosaic_slab": "Плита из тополевой мозаики",
 
 
   "block.versecraft.warped_mosaic": "Искажённая мозаика",
@@ -159,5 +165,6 @@
   "block.versecraft.glowshroom": "Светящийся грибы",
 
   "block.versecraft.copper_jack_o_lantern": "Медный светильник джека",
+  "block.versecraft.copper_campfire": "Медный костёр",
   "block.versecraft.soul_jack_o_lantern": "Светильник джека душ"
 }

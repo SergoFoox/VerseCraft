@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:azalea_planks"
+        "recipes": "versecraft:azalea_planks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

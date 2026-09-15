@@ -1,14 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "${mod_id}",
+  "id": "versecraft",
   "version": "${version}",
   "name": "VerseCraft",
-  "description": "Adding block, features and etc....",
+  "description": "VerseCraft expands vanilla Minecraft with new decorative blocks, plants, food, and small details — all designed to fit seamlessly into the original game style.",
   "authors": [
     "SergoFox",
     "Zozozrob"
-  ],
-  "contributors": [
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/versecraft",
@@ -20,38 +18,22 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.sergofox123.versecraft.VerseCraft"
+      "net.sergofoox.versecraft.VerseCraft"
     ],
     "client": [
-      "net.sergofox123.versecraft.VerseCraftClient"
-    ],
-    "frozenlib:mob_categories": [
-      "net.sergofox123.versecraft.VerseCraft"
-    ],
-    "frozenlib:decorated_pot_patterns": [
-      "net.sergofox123.versecraft.registry.RegisterDecoratedPotPattern"
+      "net.sergofoox.versecraft.VerseCraftClientInitializer"
     ],
     "fabric-datagen": [
-      "net.sergofox123.versecraft.misc.VerseCraftDataGenerator"
+      "net.sergofoox.versecraft.VerseCraftDataGenerator"
     ]
   },
   "mixins": [
     "versecraft.mixins.json"
   ],
-  "accessWidener": "versecraft.classtweaker",
   "depends": {
-    "frozenlib": "${frozenlib_version}",
-    "fabric-api": "${fabric_api_version}",
-    "minecraft": "${minecraft_version}",
-    "java": ">=21"
-  },
-  "suggests": {
-    "cloth-config": "*",
-    "modmenu": "*"
-  },
-  "custom": {
-    "frozenlib_registry": {
-      "mod_protocol": $protocol_version
-    }
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3-",
+    "java": ">=25",
+    "fabric-api": "*"
   }
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:cracked_calcite_bricks"
+        "recipes": "versecraft:cracked_calcite_bricks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

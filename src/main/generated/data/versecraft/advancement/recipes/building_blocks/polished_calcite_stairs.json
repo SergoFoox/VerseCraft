@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:polished_calcite_stairs"
+        "recipes": "versecraft:polished_calcite_stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

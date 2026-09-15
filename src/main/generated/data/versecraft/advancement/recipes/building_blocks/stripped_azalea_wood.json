@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:stripped_azalea_wood"
+        "recipes": "versecraft:stripped_azalea_wood"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

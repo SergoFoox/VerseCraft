@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:jungle_mosaic_slab"
+        "recipes": "versecraft:jungle_mosaic_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

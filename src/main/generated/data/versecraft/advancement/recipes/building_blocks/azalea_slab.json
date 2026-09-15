@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:azalea_slab"
+        "recipes": "versecraft:azalea_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

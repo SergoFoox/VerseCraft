@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:polished_calcite_wall"
+        "recipes": "versecraft:polished_calcite_wall"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

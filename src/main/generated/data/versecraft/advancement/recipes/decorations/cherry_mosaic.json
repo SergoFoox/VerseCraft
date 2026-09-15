@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:cherry_mosaic"
+        "recipes": "versecraft:cherry_mosaic"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

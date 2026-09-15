@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:dripstone_wall"
+        "recipes": "versecraft:dripstone_wall"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

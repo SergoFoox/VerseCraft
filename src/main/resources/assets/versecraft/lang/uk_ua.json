@@ -16,7 +16,8 @@
   "block.versecraft.azalea_sign": "Азалієва табличка",
   "block.versecraft.azalea_shelf": "Азалієва полиця",
 
-
+  "item.versecraft.azalea_hanging_sign": "Азалієва вивіска",
+  "item.versecraft.azalea_sign": "Азалієва табличка",
   "item.versecraft.azalea_chest_boat": "Азалієвий човен зі скринею",
   "item.versecraft.azalea_boat": "Азалієвий човен",
 
@@ -75,6 +76,10 @@
   "block.versecraft.pale_oak_mosaic": "Блідо-дубова мозаїка",
   "block.versecraft.pale_oak_mosaic_stairs": "Сходи з блідо-дубової мозаїки",
   "block.versecraft.pale_oak_mosaic_slab": "Плита з блідо-дубової мозаїки",
+
+  "block.versecraft.poplar_mosaic": "Тополева мозаїка",
+  "block.versecraft.poplar_mosaic_stairs": "Сходи з тополевої мозаїки",
+  "block.versecraft.poplar_mosaic_slab": "Плита з тополевої мозаїки",
 
   "block.versecraft.warped_mosaic": "Химерна мозаїка",
   "block.versecraft.warped_mosaic_stairs": "Сходи з химерної мозаїки",
@@ -160,5 +165,6 @@
   "block.versecraft.glowshroom": "Світиться гриби",
 
   "block.versecraft.copper_jack_o_lantern": "Мідний лихтар Джека",
+  "block.versecraft.copper_campfire": "Мідне багаття",
   "block.versecraft.soul_jack_o_lantern": "Лихтар Джека душ"
 }

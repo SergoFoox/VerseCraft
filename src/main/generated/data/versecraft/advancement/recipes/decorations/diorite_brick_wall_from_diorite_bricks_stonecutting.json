@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:diorite_brick_wall_from_diorite_bricks_stonecutting"
+        "recipes": "versecraft:diorite_brick_wall_from_diorite_bricks_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:copper_jack_o_lantern"
+        "recipes": "versecraft:copper_jack_o_lantern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

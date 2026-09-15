@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:polished_dripstone_slab"
+        "recipes": "versecraft:polished_dripstone_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

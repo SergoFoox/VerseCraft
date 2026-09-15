@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:azalea_fence_gate"
+        "recipes": "versecraft:azalea_fence_gate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

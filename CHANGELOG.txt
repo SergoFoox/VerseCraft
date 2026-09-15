@@ -1,6 +1,0 @@
-Changelog
-
-Put changelog here:
------------------
-- Added the Copper Jack-o'Lantern and the Soul Jack-o'Lantern
-- Update to 1.21.11

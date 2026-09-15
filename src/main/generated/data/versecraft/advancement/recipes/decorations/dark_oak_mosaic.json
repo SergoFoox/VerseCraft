@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:dark_oak_mosaic"
+        "recipes": "versecraft:dark_oak_mosaic"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

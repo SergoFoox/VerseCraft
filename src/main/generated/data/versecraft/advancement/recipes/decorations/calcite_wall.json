@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:calcite_wall"
+        "recipes": "versecraft:calcite_wall"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

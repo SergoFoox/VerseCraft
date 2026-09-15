@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:acacia_mosaic_slab"
+        "recipes": "versecraft:acacia_mosaic_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

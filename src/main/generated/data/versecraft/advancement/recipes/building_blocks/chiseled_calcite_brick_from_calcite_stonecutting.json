@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "versecraft:chiseled_calcite_bricks_from_calcite_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_calcite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:calcite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_calcite"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "versecraft:chiseled_calcite_bricks_from_calcite_stonecutting"
+    ]
+  }
+}

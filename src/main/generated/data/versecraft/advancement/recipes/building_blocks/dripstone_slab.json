@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:dripstone_slab"
+        "recipes": "versecraft:dripstone_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

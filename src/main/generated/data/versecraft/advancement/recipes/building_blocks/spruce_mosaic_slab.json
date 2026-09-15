@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:spruce_mosaic_slab"
+        "recipes": "versecraft:spruce_mosaic_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

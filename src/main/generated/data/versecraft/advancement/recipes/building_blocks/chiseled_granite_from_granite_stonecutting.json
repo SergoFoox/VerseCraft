@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:chiseled_granite_from_granite_stonecutting"
+        "recipes": "versecraft:chiseled_granite_from_granite_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

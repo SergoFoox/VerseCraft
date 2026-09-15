@@ -1,11 +1,10 @@
 # VerseCraft
 
+VerseCraft expands vanilla Minecraft with new decorative blocks, plants, food, and small details — all designed to fit seamlessly into the original game style.
 
-VerseCraft is a mod that adds new blocks, new plants, and more. It's a great addition to the vanilla game.
+CurseForge: https://www.curseforge.com/minecraft/mc-mods/versecraft
 
-https://www.curseforge.com/minecraft/mc-mods/versecraft
-
-https://modrinth.com/mod/versecraft
+Modrinth: https://modrinth.com/mod/versecraft
 
 The code to implement some of the ideas I wanted to implement was taken from WilderWild and TrailierTales by the FrozenBlock team.
 

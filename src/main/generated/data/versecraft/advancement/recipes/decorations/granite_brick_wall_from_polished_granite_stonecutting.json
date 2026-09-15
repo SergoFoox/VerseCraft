@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:granite_brick_wall_from_polished_granite_stonecutting"
+        "recipes": "versecraft:granite_brick_wall_from_polished_granite_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -16,7 +16,8 @@
   "block.versecraft.azalea_sign": "Azalea Sign",
   "block.versecraft.azalea_shelf": "Azalea Shelf",
 
-
+  "item.versecraft.azalea_hanging_sign": "Azalea Hanging Sign",
+  "item.versecraft.azalea_sign": "Azalea Sign",
   "item.versecraft.azalea_chest_boat": "Azalea Chest Boat",
   "item.versecraft.azalea_boat": "Azalea Boat",
 
@@ -75,6 +76,10 @@
   "block.versecraft.pale_oak_mosaic": "Pale Oak Mosaic",
   "block.versecraft.pale_oak_mosaic_stairs": "Pale Oak Mosaic Stairs",
   "block.versecraft.pale_oak_mosaic_slab": "Pale Oak Mosaic Slab",
+
+  "block.versecraft.poplar_mosaic": "Poplar Mosaic",
+  "block.versecraft.poplar_mosaic_stairs": "Poplar Mosaic Stairs",
+  "block.versecraft.poplar_mosaic_slab": "Poplar Mosaic Slab",
 
   "block.versecraft.warped_mosaic": "Warped Mosaic",
   "block.versecraft.warped_mosaic_stairs": "Warped Mosaic Stairs",
@@ -159,5 +164,6 @@
   "block.versecraft.glowshroom": "Glowshroom",
 
   "block.versecraft.copper_jack_o_lantern": "Copper Jack o'Lantern",
+  "block.versecraft.copper_campfire": "Copper Campfire",
   "block.versecraft.soul_jack_o_lantern": "Soul Jack o'Lantern"
 }

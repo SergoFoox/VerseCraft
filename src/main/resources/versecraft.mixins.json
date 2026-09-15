@@ -1,15 +1,13 @@
 {
   "required": true,
   "minVersion": "0.8.5",
-  "package": "net.sergofox123.versecraft.mixin",
+  "package": "net.sergofoox.versecraft.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "datafix.boat.BoatSplitFixMixin",
-    "datafix.boat.V4067Mixin",
-    "common.decorated_pot.DecoratedPotBlockEntityMixin"
+    "MyceliumBlockMixin"
   ],
   "client": [
-    "client.decorated_pot.DecoratedPotRendererMixin"
+
   ],
   "injectors": {
     "defaultRequire": 1

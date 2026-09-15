@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:light_blue_dye_from_blue_rose"
+        "recipes": "versecraft:light_blue_dye_from_blue_rose"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

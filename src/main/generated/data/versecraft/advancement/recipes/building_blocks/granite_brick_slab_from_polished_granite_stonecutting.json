@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:granite_brick_stairs_from_polished_granite_stonecutting"
+        "recipes": "versecraft:granite_brick_slab_from_polished_granite_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "versecraft:granite_brick_stairs_from_polished_granite_stonecutting"
+      "versecraft:granite_brick_slab_from_polished_granite_stonecutting"
     ]
   }
 }

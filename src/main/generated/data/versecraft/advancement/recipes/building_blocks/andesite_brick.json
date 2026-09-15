@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:andesite_brick"
+        "recipes": "versecraft:andesite_brick"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

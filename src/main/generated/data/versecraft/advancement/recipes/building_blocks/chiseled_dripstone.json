@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:chiseled_dripstone"
+        "recipes": "versecraft:chiseled_dripstone"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

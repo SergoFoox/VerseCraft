@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:chiseled_calcite"
+        "recipes": "versecraft:chiseled_calcite"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

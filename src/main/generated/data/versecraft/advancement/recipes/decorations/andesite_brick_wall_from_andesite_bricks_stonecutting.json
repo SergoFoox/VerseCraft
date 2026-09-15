@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:andesite_brick_wall_from_andesite_bricks_stonecutting"
+        "recipes": "versecraft:andesite_brick_wall_from_andesite_bricks_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

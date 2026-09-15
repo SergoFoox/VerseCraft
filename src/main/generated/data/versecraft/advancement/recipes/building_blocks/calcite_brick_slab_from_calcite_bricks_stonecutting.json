@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:calcite_brick_slab_from_calcite_bricks_stonecutting"
+        "recipes": "versecraft:calcite_brick_slab_from_calcite_bricks_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

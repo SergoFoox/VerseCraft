@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:diorite_brick_stairs_from_polished_diorite_stonecutting"
+        "recipes": "versecraft:diorite_brick_slab_from_polished_diorite_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "versecraft:diorite_brick_stairs_from_polished_diorite_stonecutting"
+      "versecraft:diorite_brick_slab_from_polished_diorite_stonecutting"
     ]
   }
 }

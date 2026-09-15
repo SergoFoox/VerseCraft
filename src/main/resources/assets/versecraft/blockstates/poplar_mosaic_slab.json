@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "versecraft:block/poplar_mosaic_slab"
+    },
+    "type=double": {
+      "model": "versecraft:block/poplar_mosaic"
+    },
+    "type=top": {
+      "model": "versecraft:block/poplar_mosaic_slab_top"
+    }
+  }
+}

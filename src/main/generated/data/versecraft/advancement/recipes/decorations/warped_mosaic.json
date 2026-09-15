@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:warped_mosaic"
+        "recipes": "versecraft:warped_mosaic"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

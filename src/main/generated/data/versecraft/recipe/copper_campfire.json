@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": "#minecraft:logs",
+    "S": "minecraft:stick",
+    "T": "minecraft:raw_copper"
+  },
+  "pattern": [
+    " S ",
+    "STS",
+    "LLL"
+  ],
+  "result": {
+    "id": "versecraft:copper_campfire"
+  }
+}

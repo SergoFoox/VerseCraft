@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:chiseled_andesite_from_andesite_stonecutting"
+        "recipes": "versecraft:chiseled_andesite_from_andesite_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

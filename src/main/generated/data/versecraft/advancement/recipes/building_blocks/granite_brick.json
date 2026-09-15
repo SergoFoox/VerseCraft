@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:granite_brick"
+        "recipes": "versecraft:granite_brick"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

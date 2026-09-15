@@ -16,7 +16,8 @@
   "block.versecraft.azalea_sign": "杜鹃木告示牌",
   "block.versecraft.azalea_shelf": "杜鵑花架",
 
-
+  "item.versecraft.azalea_hanging_sign": "悬挂式杜鹃木告示牌",
+  "item.versecraft.azalea_sign": "杜鹃木告示牌",
   "item.versecraft.azalea_chest_boat": "杜鹃木运输船",
   "item.versecraft.azalea_boat": "杜鹃木船",
 
@@ -75,6 +76,10 @@
   "block.versecraft.pale_oak_mosaic": "淺橡木馬賽克",
   "block.versecraft.pale_oak_mosaic_stairs": "淺橡木馬賽克樓梯",
   "block.versecraft.pale_oak_mosaic_slab": "淺橡木馬賽克板",
+
+  "block.versecraft.poplar_mosaic": "杨树花叶病",
+  "block.versecraft.poplar_mosaic_stairs": "杨木马赛克拼花楼梯",
+  "block.versecraft.poplar_mosaic_slab": "杨木马赛克拼板",
 
   "block.versecraft.warped_mosaic": "诡异木马赛克",
   "block.versecraft.warped_mosaic_stairs": "诡异木马赛克楼梯",
@@ -159,5 +164,6 @@
   "block.versecraft.glowshroom": "螢光菇",
 
   "block.versecraft.copper_jack_o_lantern": "铜制南瓜灯",
+  "block.versecraft.copper_campfire": "铜篝火",
   "block.versecraft.soul_jack_o_lantern": "灵魂南瓜灯"
 }

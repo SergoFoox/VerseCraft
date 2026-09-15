@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:cyan_dye_from_pop_flower"
+        "recipes": "versecraft:cyan_dye_from_pop_flower"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

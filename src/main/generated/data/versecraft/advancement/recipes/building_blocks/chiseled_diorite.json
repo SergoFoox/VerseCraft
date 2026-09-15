@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "versecraft:chiseled_diorite"
+        "recipes": "versecraft:chiseled_diorite"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

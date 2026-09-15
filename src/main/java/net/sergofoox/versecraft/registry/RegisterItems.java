@@ -2,34 +2,25 @@ package net.sergofoox.versecraft.registry;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.sergofoox.versecraft.VerseCraft;
 
 import java.util.function.Function;
 
 public class RegisterItems {
 
-    public static final Item DRAGON_POTTERY_SHERD = registerItem("dragon_pottery_sherd",
-            props -> new Item(props.potPattern(RegisterPotPattern.DRAGON).rarity(Rarity.UNCOMMON)));
-
-    public static final Item EYE_POTTERY_SHERD = registerItem("eye_pottery_sherd",
-            props -> new Item(props.potPattern(RegisterPotPattern.EYE).rarity(Rarity.UNCOMMON)));
-
-    public static final Item EGG_POTTERY_SHERD = registerItem("egg_pottery_sherd",
-            props -> new Item(props.potPattern(RegisterPotPattern.EGG).rarity(Rarity.UNCOMMON)));
-
-    public static final Item PILLAGER_POTTERY_SHERD = registerItem("pillager_pottery_sherd",
-            props -> new Item(props.potPattern(RegisterPotPattern.PILLAGER).rarity(Rarity.UNCOMMON)));
-
-    public static final Item PORTAL_POTTERY_SHERD = registerItem("portal_pottery_sherd",
-            props -> new Item(props.potPattern(RegisterPotPattern.PORTAL).rarity(Rarity.UNCOMMON)));
-
-    public static final Item SWORD_POTTERY_SHERD = registerItem("sword_pottery_sherd",
-            props -> new Item(props.potPattern(RegisterPotPattern.SWORD).rarity(Rarity.UNCOMMON)));
+    public static final Item DRAGON_POTTERY_SHERD = registerSherd("dragon_pottery_sherd", RegisterPotPattern.DRAGON);
+    public static final Item EYE_POTTERY_SHERD = registerSherd("eye_pottery_sherd", RegisterPotPattern.EYE);
+    public static final Item EGG_POTTERY_SHERD = registerSherd("egg_pottery_sherd", RegisterPotPattern.EGG);
+    public static final Item PILLAGER_POTTERY_SHERD = registerSherd("pillager_pottery_sherd", RegisterPotPattern.PILLAGER);
+    public static final Item PORTAL_POTTERY_SHERD = registerSherd("portal_pottery_sherd", RegisterPotPattern.PORTAL);
+    public static final Item SWORD_POTTERY_SHERD = registerSherd("sword_pottery_sherd", RegisterPotPattern.SWORD);
 
     public static final Item AZALEA_SIGN = registerItem("azalea_sign",
             props -> new StandingAndWallBlockItem(
@@ -74,6 +65,13 @@ public class RegisterItems {
                 function.apply(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name)))));
     }
 
+    private static Item registerSherd(String name, ResourceKey<DecoratedPotPattern> pattern) {
+        return registerItem(name, props -> new Item(
+                props.rarity(Rarity.UNCOMMON)
+                        .delayedComponent(DataComponents.PROVIDES_POTTERY_PATTERN,
+                                provider -> provider.get(pattern).orElse(null))
+        ));
+    }
     public static void registerItems() {
         VerseCraft.LOGGER.info("Registering Items for Mod" + VerseCraft.MOD_ID);
     }

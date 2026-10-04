@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "versecraft:calcite_bricks",
-  "result": {
-    "count": 1,
-    "id": "versecraft:calcite_bricks_wall"
-  }
-}

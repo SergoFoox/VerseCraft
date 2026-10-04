@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "versecraft:dripstone_bricks",
-  "result": {
-    "count": 1,
-    "id": "versecraft:chiseled_dripstone_bricks"
-  }
-}

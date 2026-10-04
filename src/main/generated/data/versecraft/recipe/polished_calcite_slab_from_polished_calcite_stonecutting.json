@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "versecraft:polished_calcite",
+  "result": {
+    "count": 2,
+    "id": "versecraft:polished_calcite_slab"
+  }
+}

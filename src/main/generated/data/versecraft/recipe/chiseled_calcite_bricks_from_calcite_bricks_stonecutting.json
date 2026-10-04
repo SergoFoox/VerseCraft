@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "versecraft:calcite_bricks",
+  "result": {
+    "id": "versecraft:chiseled_calcite_bricks"
+  }
+}

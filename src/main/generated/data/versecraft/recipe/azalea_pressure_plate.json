@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "versecraft:azalea_planks"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "id": "versecraft:azalea_pressure_plate"
+  }
+}

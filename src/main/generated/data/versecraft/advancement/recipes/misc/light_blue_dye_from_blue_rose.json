@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_blue_rose": {
+      "conditions": {
+        "items": [
+          {
+            "items": "versecraft:blue_rose"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "versecraft:light_blue_dye_from_blue_rose"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_blue_rose"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "versecraft:light_blue_dye_from_blue_rose"
+    ]
+  }
+}

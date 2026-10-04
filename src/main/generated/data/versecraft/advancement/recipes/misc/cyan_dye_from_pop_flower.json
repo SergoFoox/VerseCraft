@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pop_flower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "versecraft:pop_flower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "versecraft:cyan_dye_from_pop_flower"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pop_flower"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "versecraft:cyan_dye_from_pop_flower"
+    ]
+  }
+}

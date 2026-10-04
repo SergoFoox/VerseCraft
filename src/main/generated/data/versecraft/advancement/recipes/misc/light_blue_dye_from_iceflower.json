@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_iceflower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "versecraft:iceflower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "versecraft:light_blue_dye_from_iceflower"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_iceflower"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "versecraft:light_blue_dye_from_iceflower"
+    ]
+  }
+}

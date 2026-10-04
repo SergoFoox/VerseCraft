@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "versecraft:dripstone_bricks",
+  "result": {
+    "id": "versecraft:dripstone_bricks_stairs"
+  }
+}

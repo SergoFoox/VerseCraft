@@ -1,0 +1,16 @@
+{
+  "values": [
+    "versecraft:calcite_wall",
+    "versecraft:polished_calcite_wall",
+    "versecraft:calcite_bricks_wall",
+    "versecraft:dripstone_wall",
+    "versecraft:polished_dripstone_wall",
+    "versecraft:dripstone_bricks_wall",
+    "versecraft:polished_diorite_wall",
+    "versecraft:diorite_bricks_wall",
+    "versecraft:polished_andesite_wall",
+    "versecraft:andesite_bricks_wall",
+    "versecraft:polished_granite_wall",
+    "versecraft:granite_bricks_wall"
+  ]
+}

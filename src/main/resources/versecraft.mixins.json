@@ -4,10 +4,13 @@
   "package": "net.sergofoox.versecraft.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MyceliumBlockMixin"
+    "MyceliumBlockMixin",
+    "ArmorStandMixin",
+    "AbstractCauldronBlockMixin",
+    "SwampHutPieceMixin"
   ],
   "client": [
-
+    "ArmorStandRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

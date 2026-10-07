@@ -18,6 +18,7 @@ public class VerseCraft implements ModInitializer {
     public void onInitialize() {
 
         RegisterBlocks.registerBlocks();
+        RegisterBlockEntities.registerBlockEntities();
         RegisterCreativeInventorySorting.sortInventory();
         RegisterItems.registerItems();
         RegisterEntityTypes.registerEntitiesTypes();

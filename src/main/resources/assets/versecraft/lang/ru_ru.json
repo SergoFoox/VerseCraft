@@ -1,4 +1,4 @@
-{
+﻿{
   "block.versecraft.azalea_log": "Азалиевое бревно",
   "block.versecraft.azalea_wood": "Азалиевое дерево",
   "block.versecraft.stripped_azalea_log": "Обтёсанное азалиевое бревно",
@@ -166,5 +166,8 @@
 
   "block.versecraft.copper_jack_o_lantern": "Медный светильник джека",
   "block.versecraft.copper_campfire": "Медный костёр",
-  "block.versecraft.soul_jack_o_lantern": "Светильник джека душ"
+  "block.versecraft.soul_jack_o_lantern": "Светильник джека душ",
+  "block.versecraft.dyed_water_cauldron": "Котёл с окрашенной водой",
+  "block.versecraft.potion_cauldron": "Котёл с зельем"
 }
+

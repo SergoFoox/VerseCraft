@@ -620,6 +620,19 @@ public class RegisterBlocks {
                     .pushReaction(PushReaction.PUSH)
     );
 
+    //Cauldron
+    public static final Block DYED_WATER_CAULDRON = registerBlockWithoutBlockItem("dyed_water_cauldron",
+            properties -> new DyedCauldronBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WATER_CAULDRON)
+                    .overrideLootTable(Blocks.CAULDRON.getLootTable())
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, "dyed_water_cauldron"))))
+    );
+
+    public static final Block POTION_CAULDRON = registerBlockWithoutBlockItem("potion_cauldron",
+            properties -> new PotionCauldronBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WATER_CAULDRON)
+                    .overrideLootTable(Blocks.CAULDRON.getLootTable())
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, "potion_cauldron"))))
+    );
+
     private static void registerFuels() {
         addFuel(AZALEA_LOG, 300);
         addFuel(STRIPPED_AZALEA_LOG, 300);
@@ -838,3 +851,4 @@ public class RegisterBlocks {
         registerComposting();
     }
 }
+

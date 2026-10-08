@@ -60,6 +60,10 @@ public class RegisterItems {
             properties -> new BlockItem(RegisterBlocks.ICEFLOWER_CROP, properties)
     );
 
+    public static final Item MOOBLOOM_SPAWN_EGG = registerItem("moobloom_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(RegisterEntityTypes.MOOBLOOM))
+    );
+
     private static Item registerItem(String name, Function<Item.Properties, Item> function) {
         return Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name),
                 function.apply(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name)))));

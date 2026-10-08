@@ -17,6 +17,7 @@ public class RegisterWorldgen {
     private static final ResourceKey<PlacedFeature> SHORT_MYCELIUM_GRASS_PLACED = ResourceKey.create(Registries.PLACED_FEATURE, VerseCraft.id("short_mycelium_grass_placed"));
     private static final ResourceKey<PlacedFeature> TALL_MYCELIUM_GRASS_PLACED = ResourceKey.create(Registries.PLACED_FEATURE, VerseCraft.id("tall_mycelium_grass_placed"));
     private static final ResourceKey<PlacedFeature> GLOWSHROOM_PLACED = ResourceKey.create(Registries.PLACED_FEATURE, VerseCraft.id("glowshroom_placed"));
+    private static final ResourceKey<PlacedFeature> BUTTERCUP_PLACED = ResourceKey.create(Registries.PLACED_FEATURE, VerseCraft.id("buttercup_placed"));
 
 
     public static void init() {
@@ -25,12 +26,14 @@ public class RegisterWorldgen {
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS), GenerationStep.Decoration.VEGETAL_DECORATION, SHORT_MYCELIUM_GRASS_PLACED);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS), GenerationStep.Decoration.VEGETAL_DECORATION, TALL_MYCELIUM_GRASS_PLACED);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS), GenerationStep.Decoration.VEGETAL_DECORATION, GLOWSHROOM_PLACED);
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.FLOWER_FOREST, Biomes.MEADOW, Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS), GenerationStep.Decoration.VEGETAL_DECORATION, BUTTERCUP_PLACED);
 
         //Mob spawn
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SAVANNA), MobCategory.CREATURE, EntityTypes.LLAMA,8,1,4);
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WINDSWEPT_SAVANNA),MobCategory.CREATURE,EntityTypes.LLAMA,8,1,4);
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SPARSE_JUNGLE),MobCategory.CREATURE,EntityTypes.PARROT,40,1,2);
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SPARSE_JUNGLE),MobCategory.CREATURE,EntityTypes.OCELOT,30,1,2);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.FLOWER_FOREST), MobCategory.CREATURE, RegisterEntityTypes.MOOBLOOM, 8, 2, 4);
     }
 
 }

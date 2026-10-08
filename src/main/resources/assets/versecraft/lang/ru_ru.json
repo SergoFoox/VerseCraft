@@ -164,10 +164,14 @@
   "block.versecraft.pop_flower": "Скачущий цветок",
   "block.versecraft.glowshroom": "Светящийся грибы",
 
+  "block.versecraft.buttercup": "Лютик",
+  "block.versecraft.potted_buttercup": "Лютик в горшке",
+  "entity.versecraft.moobloom": "Мублум",
+  "item.versecraft.moobloom_spawn_egg": "Яйцо призыва мублума",
+
   "block.versecraft.copper_jack_o_lantern": "Медный светильник джека",
   "block.versecraft.copper_campfire": "Медный костёр",
   "block.versecraft.soul_jack_o_lantern": "Светильник джека душ",
   "block.versecraft.dyed_water_cauldron": "Котёл с окрашенной водой",
   "block.versecraft.potion_cauldron": "Котёл с зельем"
 }
-

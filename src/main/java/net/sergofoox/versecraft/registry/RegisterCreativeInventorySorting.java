@@ -220,7 +220,8 @@ public class RegisterCreativeInventorySorting {
             output.insertAfter(Blocks.TORCHFLOWER, RegisterBlocks.ICEFLOWER);
             output.insertAfter(RegisterBlocks.ICEFLOWER, RegisterBlocks.BLUE_ROSE);
             output.insertAfter(Blocks.PINK_PETALS, RegisterBlocks.POP_FLOWER);
-            output.insertAfter(RegisterBlocks.POP_FLOWER, RegisterBlocks.GLOWSHROOM);
+            output.insertAfter(RegisterBlocks.POP_FLOWER, RegisterBlocks.BUTTERCUP);
+            output.insertAfter(RegisterBlocks.BUTTERCUP, RegisterBlocks.GLOWSHROOM);
             output.insertAfter(Blocks.SHORT_GRASS, RegisterBlocks.SHORT_MYCELIUM_GRASS);
             output.insertAfter(Blocks.TALL_GRASS, RegisterBlocks.TALL_MYCELIUM_GRASS);
 
@@ -234,6 +235,10 @@ public class RegisterCreativeInventorySorting {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(output -> {
             //Food
             output.insertAfter(Items.CHORUS_FRUIT, RegisterItems.CHERRY);
+        });
+
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(output -> {
+            output.insertAfter(Items.MOOSHROOM_SPAWN_EGG, RegisterItems.MOOBLOOM_SPAWN_EGG);
         });
     }
 }

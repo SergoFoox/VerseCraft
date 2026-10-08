@@ -163,10 +163,14 @@
   "block.versecraft.pop_flower": "Pop Flower",
   "block.versecraft.glowshroom": "Glowshroom",
 
+  "block.versecraft.buttercup": "Buttercup",
+  "block.versecraft.potted_buttercup": "Potted Buttercup",
+  "entity.versecraft.moobloom": "Moobloom",
+  "item.versecraft.moobloom_spawn_egg": "Moobloom Spawn Egg",
+
   "block.versecraft.copper_jack_o_lantern": "Copper Jack o'Lantern",
   "block.versecraft.copper_campfire": "Copper Campfire",
   "block.versecraft.soul_jack_o_lantern": "Soul Jack o'Lantern",
   "block.versecraft.dyed_water_cauldron": "Dyed Water Cauldron",
   "block.versecraft.potion_cauldron": "Potion Cauldron"
 }
-

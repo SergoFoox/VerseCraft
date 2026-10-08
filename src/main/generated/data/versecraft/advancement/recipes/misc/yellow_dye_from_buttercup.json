@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_buttercup": {
+      "conditions": {
+        "items": [
+          {
+            "items": "versecraft:buttercup"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "versecraft:yellow_dye_from_buttercup"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_buttercup"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "versecraft:yellow_dye_from_buttercup"
+    ]
+  }
+}

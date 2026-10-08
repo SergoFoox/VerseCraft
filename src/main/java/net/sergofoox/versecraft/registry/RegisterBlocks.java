@@ -201,6 +201,8 @@ public class RegisterBlocks {
 
     //Jungle Mosaic
 
+    public static final Block CHISELED_JUNGLE_MOSAIC = null; // placeholder if needed
+
     public static final Block JUNGLE_MOSAIC = register("jungle_mosaic",
             properties -> new Block(properties.strength(2f,3f)
                     .sound(SoundType.WOOD)));
@@ -585,6 +587,22 @@ public class RegisterBlocks {
             Blocks.flowerPotProperties()
     );
 
+    public static final Block BUTTERCUP = register("buttercup",
+            properties -> new FlowerBlock(MobEffects.SATURATION, 0.0F, properties),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .noCollision()
+                    .instabreak()
+                    .sound(SoundType.GRASS)
+                    .offsetType(BlockBehaviour.OffsetType.XZ)
+                    .pushReaction(PushReaction.PUSH)
+    );
+
+    public static final Block POTTED_BUTTERCUP = registerBlockWithoutBlockItem("potted_buttercup",
+            properties -> new FlowerPotBlock(BUTTERCUP, properties),
+            Blocks.flowerPotProperties()
+    );
+
     public static final Block GLOWSHROOM = register("glowshroom",
             FireflyBushBlock::new,
             BlockBehaviour.Properties.ofFullCopy(Blocks.FIREFLY_BUSH)
@@ -751,6 +769,7 @@ public class RegisterBlocks {
         fireRegistry.add(RegisterBlocks.TALL_MYCELIUM_GRASS, 100, 60);
         fireRegistry.add(RegisterBlocks.SHORT_MYCELIUM_GRASS, 100, 60);
         fireRegistry.add(RegisterBlocks.POP_FLOWER, 100, 60);
+        fireRegistry.add(RegisterBlocks.BUTTERCUP, 100, 60);
     }
 
     private static void registerComposting() {
@@ -764,6 +783,7 @@ public class RegisterBlocks {
         addCompostable(SHORT_MYCELIUM_GRASS, 0.30F);
         addCompostable(TALL_MYCELIUM_GRASS, 0.50F);
         addCompostable(RegisterItems.CHERRY, 0.65F);
+        addCompostable(BUTTERCUP, 0.65F);
 
     }
 
@@ -775,6 +795,11 @@ public class RegisterBlocks {
 
     private static Block registerBlockWithoutBlockItem(String name, Function<BlockBehaviour.Properties, Block> function) {
         Block toRegister = function.apply(BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name))));
+        return Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name), toRegister);
+    }
+
+    private static Block registerBlockWithoutBlockItem(String name, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
+        Block toRegister = function.apply(properties.setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name))));
         return Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name), toRegister);
     }
 
@@ -851,4 +876,3 @@ public class RegisterBlocks {
         registerComposting();
     }
 }
-

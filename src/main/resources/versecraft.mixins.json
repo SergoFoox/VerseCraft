@@ -8,7 +8,9 @@
     "ArmorStandMixin",
     "AbstractCauldronBlockMixin",
     "SwampHutPieceMixin",
-    "ChunkGeneratorMixin"
+    "ChunkGeneratorMixin",
+    "BeeMixin",
+    "BeeInvoker"
   ],
   "client": [
     "ArmorStandRendererMixin"

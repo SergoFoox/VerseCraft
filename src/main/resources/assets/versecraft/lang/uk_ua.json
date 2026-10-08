@@ -164,6 +164,11 @@
   "block.versecraft.pop_flower": "Скачуща квітка",
   "block.versecraft.glowshroom": "Світиться гриби",
 
+  "block.versecraft.buttercup": "Жовтець",
+  "block.versecraft.potted_buttercup": "Жовтець у горщику",
+  "entity.versecraft.moobloom": "Мублум",
+  "item.versecraft.moobloom_spawn_egg": "Яйце прикликання мублума",
+
   "block.versecraft.copper_jack_o_lantern": "Мідний лихтар Джека",
   "block.versecraft.copper_campfire": "Мідне багаття",
   "block.versecraft.soul_jack_o_lantern": "Лихтар Джека душ"

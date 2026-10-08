@@ -137,7 +137,8 @@ public class VerseBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider
         tag(BlockTags.BEE_ATTRACTIVE)
                 .add(key(RegisterBlocks.BLUE_ROSE))
                 .add(key(RegisterBlocks.ICEFLOWER))
-                .add(key(RegisterBlocks.POP_FLOWER));
+                .add(key(RegisterBlocks.POP_FLOWER))
+                .add(key(RegisterBlocks.BUTTERCUP));
 
         tag(BlockTags.CAMPFIRES)
                 .add(key(RegisterBlocks.COPPER_CAMPFIRE));
@@ -155,18 +156,21 @@ public class VerseBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider
         tag(BlockTags.FLOWERS)
                 .add(key(RegisterBlocks.BLUE_ROSE))
                 .add(key(RegisterBlocks.ICEFLOWER))
-                .add(key(RegisterBlocks.POP_FLOWER));
+                .add(key(RegisterBlocks.POP_FLOWER))
+                .add(key(RegisterBlocks.BUTTERCUP));
 
         tag(BlockTags.FLOWER_POTS)
                 .add(key(RegisterBlocks.POTTED_BLUE_ROSE))
                 .add(key(RegisterBlocks.POTTED_ICEFLOWER))
-                .add(key(RegisterBlocks.POTTED_POP_FLOWER));
+                .add(key(RegisterBlocks.POTTED_POP_FLOWER))
+                .add(key(RegisterBlocks.POTTED_BUTTERCUP));
 
         tag(BlockTags.MAINTAINS_FARMLAND)
                 .add(key(RegisterBlocks.BLUE_ROSE))
                 .add(key(RegisterBlocks.BLUE_ROSE_CROP))
                 .add(key(RegisterBlocks.ICEFLOWER))
-                .add(key(RegisterBlocks.ICEFLOWER_CROP));
+                .add(key(RegisterBlocks.ICEFLOWER_CROP))
+                .add(key(RegisterBlocks.BUTTERCUP));
 
         tag(BlockTags.OVERWORLD_NATURAL_LOGS)
                 .add(key(RegisterBlocks.AZALEA_LOG));
@@ -202,7 +206,8 @@ public class VerseBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider
         tag(BlockTags.SMALL_FLOWERS)
                 .add(key(RegisterBlocks.BLUE_ROSE))
                 .add(key(RegisterBlocks.ICEFLOWER))
-                .add(key(RegisterBlocks.POP_FLOWER));
+                .add(key(RegisterBlocks.POP_FLOWER))
+                .add(key(RegisterBlocks.BUTTERCUP));
 
         tag(BlockTags.STAIRS)
                 .add(key(RegisterBlocks.AZALEA_STAIRS))

@@ -117,6 +117,7 @@ public class VerseBlocksLootTableProvider extends FabricBlockLootSubProvider {
         dropSelf(RegisterBlocks.BLUE_ROSE);
         dropSelf(RegisterBlocks.GLOWSHROOM);
         dropSelf(RegisterBlocks.POP_FLOWER);
+        dropSelf(RegisterBlocks.BUTTERCUP);
 
         add(RegisterBlocks.BLUE_ROSE_CROP,
                 this.applyExplosionDecay(
@@ -162,6 +163,7 @@ public class VerseBlocksLootTableProvider extends FabricBlockLootSubProvider {
         dropPottedContents(RegisterBlocks.POTTED_BLUE_ROSE);
         dropPottedContents(RegisterBlocks.POTTED_ICEFLOWER);
         dropPottedContents(RegisterBlocks.POTTED_POP_FLOWER);
+        dropPottedContents(RegisterBlocks.POTTED_BUTTERCUP);
 
         //Other
         dropSelf(RegisterBlocks.COPPER_JACK_O_LANTERN);

@@ -14,6 +14,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.sergofoox.versecraft.block.entity.DyedCauldronBlockEntity;
 import net.sergofoox.versecraft.block.entity.PotionCauldronBlockEntity;
+import net.sergofoox.versecraft.client.renderer.entity.MoobloomRenderer;
 import net.sergofoox.versecraft.registry.RegisterBlocks;
 import net.sergofoox.versecraft.registry.RegisterEntityTypes;
 
@@ -36,6 +37,7 @@ public class VerseCraftClientInitializer implements ClientModInitializer {
 
         EntityRendererRegistry.register(RegisterEntityTypes.AZALEA_BOAT, context -> new BoatRenderer(context, AZALEA_BOAT_LAYER));
         EntityRendererRegistry.register(RegisterEntityTypes.AZALEA_CHEST_BOAT, context -> new BoatRenderer(context, AZALEA_CHEST_BOAT_LAYER));
+        EntityRendererRegistry.register(RegisterEntityTypes.MOOBLOOM, MoobloomRenderer::new);
 
         BlockColorRegistry.register(
                 List.of(new BlockTintSource() {

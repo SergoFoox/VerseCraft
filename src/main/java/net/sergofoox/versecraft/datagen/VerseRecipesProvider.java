@@ -424,6 +424,7 @@ public class VerseRecipesProvider extends FabricRecipeProvider {
                         .save(this.output);
 
                 oneToOneConversionRecipe(Items.DYE.cyan(), RegisterBlocks.POP_FLOWER, "cyan_dye");
+                oneToOneConversionRecipe(Items.DYE.yellow(), RegisterBlocks.BUTTERCUP, "yellow_dye");
                 oneToOneConversionRecipe(Items.DYE.lightBlue(), RegisterBlocks.BLUE_ROSE, "light_blue_dye");
                 oneToOneConversionRecipe(Items.DYE.lightBlue(), RegisterBlocks.ICEFLOWER, "light_blue_dye");
 

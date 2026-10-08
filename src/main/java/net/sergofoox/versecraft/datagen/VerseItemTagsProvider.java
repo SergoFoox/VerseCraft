@@ -40,7 +40,8 @@ public class VerseItemTagsProvider extends FabricTagsProvider.ItemTagsProvider {
         tag(ItemTags.BEE_FOOD)
                 .add(key(RegisterBlocks.BLUE_ROSE))
                 .add(key(RegisterBlocks.ICEFLOWER))
-                .add(key(RegisterBlocks.POP_FLOWER));
+                .add(key(RegisterBlocks.POP_FLOWER))
+                .add(key(RegisterBlocks.BUTTERCUP));
 
         tag(ItemTags.BOATS)
                 .add(key(RegisterItems.AZALEA_BOAT));
@@ -62,7 +63,8 @@ public class VerseItemTagsProvider extends FabricTagsProvider.ItemTagsProvider {
         tag(BlockItemTags.FLOWERS.item())
                 .add(key(RegisterBlocks.BLUE_ROSE))
                 .add(key(RegisterBlocks.ICEFLOWER))
-                .add(key(RegisterBlocks.POP_FLOWER));
+                .add(key(RegisterBlocks.POP_FLOWER))
+                .add(key(RegisterBlocks.BUTTERCUP));
 
         tag(BlockItemTags.HANGING_SIGNS.item())
                 .add(key(RegisterBlocks.AZALEA_HANGING_SIGN));
@@ -101,7 +103,8 @@ public class VerseItemTagsProvider extends FabricTagsProvider.ItemTagsProvider {
         tag(BlockItemTags.SMALL_FLOWERS.item())
                 .add(key(RegisterBlocks.BLUE_ROSE))
                 .add(key(RegisterBlocks.ICEFLOWER))
-                .add(key(RegisterBlocks.POP_FLOWER));
+                .add(key(RegisterBlocks.POP_FLOWER))
+                .add(key(RegisterBlocks.BUTTERCUP));
 
         tag(BlockItemTags.STAIRS.item())
                 .add(key(RegisterBlocks.AZALEA_STAIRS))

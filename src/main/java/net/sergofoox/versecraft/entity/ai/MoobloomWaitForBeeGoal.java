@@ -1,7 +1,6 @@
 package net.sergofoox.versecraft.entity.ai;
 
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.animal.bee.Bee;
 import net.sergofoox.versecraft.entity.Moobloom;
 
 import java.util.EnumSet;
@@ -11,7 +10,7 @@ public class MoobloomWaitForBeeGoal extends Goal {
 
     public MoobloomWaitForBeeGoal(Moobloom moobloom) {
         this.moobloom = moobloom;
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
     }
 
     @Override
@@ -32,9 +31,5 @@ public class MoobloomWaitForBeeGoal extends Goal {
     @Override
     public void tick() {
         this.moobloom.getNavigation().stop();
-        Bee bee = this.moobloom.getPollinatingBee();
-        if (bee != null && bee.isAlive()) {
-            this.moobloom.getLookControl().setLookAt(bee, 15.0F, 15.0F);
-        }
     }
 }

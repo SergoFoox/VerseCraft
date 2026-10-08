@@ -18,6 +18,7 @@ public class BeePollinateMoobloomGoal extends Goal {
     private final Bee bee;
     @Nullable
     private Moobloom targetMoobloom;
+    private int targetFlowerSlot = -1;
     private int pollinatingTicks;
     private int searchCooldown;
     private int timeToLive;
@@ -35,28 +36,41 @@ public class BeePollinateMoobloomGoal extends Goal {
         if (this.searchCooldown-- > 0) {
             return false;
         }
-        this.searchCooldown = 30 + this.bee.getRandom().nextInt(20);
+        this.searchCooldown = 20 + this.bee.getRandom().nextInt(20);
 
         List<Moobloom> mooblooms = this.bee.level().getEntitiesOfClass(
                 Moobloom.class,
                 this.bee.getBoundingBox().inflate(16.0, 8.0, 16.0),
-                Moobloom::canBePollinated
+                Moobloom::hasAvailableFlower
         );
 
         if (mooblooms.isEmpty()) {
             return false;
         }
 
-        this.targetMoobloom = mooblooms.stream()
-                .min(Comparator.comparingDouble(m -> m.distanceToSqr(this.bee)))
-                .orElse(null);
+        mooblooms.sort(Comparator.comparingDouble(m -> m.distanceToSqr(this.bee)));
 
-        return this.targetMoobloom != null;
+        for (Moobloom moobloom : mooblooms) {
+            int slot = moobloom.claimFlowerSlot(this.bee);
+            if (slot != -1) {
+                this.targetMoobloom = moobloom;
+                this.targetFlowerSlot = slot;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean canContinueToUse() {
         if (this.targetMoobloom == null || !this.targetMoobloom.isAlive() || this.targetMoobloom.isBaby()) {
+            return false;
+        }
+        if (this.targetFlowerSlot < 0 || !this.targetMoobloom.hasFlower(this.targetFlowerSlot)) {
+            return false;
+        }
+        if (!this.targetMoobloom.isFlowerReservedBy(this.targetFlowerSlot, this.bee)) {
             return false;
         }
         if (this.bee.hasNectar() || this.bee.hasStung() || this.bee.isAngry()) {
@@ -68,20 +82,23 @@ public class BeePollinateMoobloomGoal extends Goal {
     @Override
     public void start() {
         this.pollinatingTicks = 0;
-        this.timeToLive = 300;
-        if (this.targetMoobloom != null) {
-            this.targetMoobloom.setReservedByBee(this.bee);
-            Vec3 hoverPos = this.getFlowerHoverPos();
+        this.timeToLive = 400;
+        if (this.targetMoobloom != null && this.targetFlowerSlot != -1) {
+            Vec3 hoverPos = this.targetMoobloom.getFlowerWorldPos(this.targetFlowerSlot);
             this.bee.getNavigation().moveTo(hoverPos.x, hoverPos.y, hoverPos.z, 1.25);
         }
     }
 
     @Override
     public void stop() {
-        if (this.targetMoobloom != null && this.targetMoobloom.getPollinatingBee() == this.bee) {
-            this.targetMoobloom.clearReservedBee();
+        if (this.targetMoobloom != null) {
+            this.targetMoobloom.removeActivePollinator(this.bee);
+            if (this.targetFlowerSlot != -1) {
+                this.targetMoobloom.releaseFlowerSlot(this.targetFlowerSlot, this.bee);
+            }
         }
         this.targetMoobloom = null;
+        this.targetFlowerSlot = -1;
         this.pollinatingTicks = 0;
         this.bee.getNavigation().stop();
     }
@@ -91,29 +108,23 @@ public class BeePollinateMoobloomGoal extends Goal {
         return true;
     }
 
-    private Vec3 getFlowerHoverPos() {
-        // Adult cow back is at ~1.35, flower extends to ~1.75.
-        // Hovering at 1.85 puts the bee right above the flower on the cow's back.
-        return this.targetMoobloom.position().add(0, 1.85, 0);
-    }
-
     @Override
     public void tick() {
-        if (this.targetMoobloom == null) {
+        if (this.targetMoobloom == null || this.targetFlowerSlot < 0) {
             return;
         }
 
         this.timeToLive--;
-        Vec3 hoverPos = this.getFlowerHoverPos();
+        Vec3 hoverPos = this.targetMoobloom.getFlowerWorldPos(this.targetFlowerSlot);
         double distSq = this.bee.distanceToSqr(hoverPos);
 
         // When approaching within ~4 blocks, tell Moobloom to stop and wait
         if (distSq < 18.0) {
-            this.targetMoobloom.startBeePollination(this.bee);
+            this.targetMoobloom.addActivePollinator(this.bee);
         }
 
-        if (distSq > 1.5) {
-            // Approach the air position directly above the flower
+        if (distSq > 1.2) {
+            // Approach the air position directly above the specific flower
             this.bee.getNavigation().moveTo(hoverPos.x, hoverPos.y, hoverPos.z, 1.2);
             this.bee.getLookControl().setLookAt(hoverPos.x, hoverPos.y, hoverPos.z, 30.0F, 30.0F);
         } else {
@@ -122,7 +133,7 @@ public class BeePollinateMoobloomGoal extends Goal {
 
             this.pollinatingTicks++;
 
-            // Gentle hovering animation above the flower
+            // Gentle hovering animation above the specific flower
             double bobY = hoverPos.y + Math.sin(this.pollinatingTicks * 0.25) * 0.05;
             this.bee.getMoveControl().setWantedPosition(hoverPos.x, bobY, hoverPos.z, 0.4);
 
@@ -130,8 +141,8 @@ public class BeePollinateMoobloomGoal extends Goal {
             Vec3 delta = this.bee.getDeltaMovement();
             this.bee.setDeltaMovement(delta.x * 0.6, delta.y * 0.8, delta.z * 0.6);
 
-            // Look down directly at the flowers on the cow's back
-            this.bee.getLookControl().setLookAt(this.targetMoobloom.getX(), this.targetMoobloom.getY() + 1.35, this.targetMoobloom.getZ(), 30.0F, 30.0F);
+            // Look down directly at the flower
+            this.bee.getLookControl().setLookAt(hoverPos.x, hoverPos.y - 0.5, hoverPos.z, 30.0F, 30.0F);
 
             // Particles falling from bee onto the flower
             if (this.bee.level() instanceof ServerLevel serverLevel) {
@@ -156,20 +167,14 @@ public class BeePollinateMoobloomGoal extends Goal {
                     invoker.versecraft$invokeSetHasNectar(true);
                 }
                 this.bee.resetTicksWithoutNectarSinceExitingHive();
-                this.bee.playSound(SoundEvents.BEE_POLLINATE, 1.0F, 1.2F);
 
-                if (this.bee.level() instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(
-                            ParticleTypes.HAPPY_VILLAGER,
-                            this.targetMoobloom.getX(),
-                            this.targetMoobloom.getY() + 1.4,
-                            this.targetMoobloom.getZ(),
-                            8, 0.35, 0.3, 0.35, 0.05
-                    );
-                }
-
-                this.targetMoobloom.onPollinationSuccess();
+                int slot = this.targetFlowerSlot;
+                Moobloom moobloom = this.targetMoobloom;
+                this.targetFlowerSlot = -1;
                 this.targetMoobloom = null;
+
+                moobloom.removeActivePollinator(this.bee);
+                moobloom.onPollinationSuccess(slot);
             }
         }
     }

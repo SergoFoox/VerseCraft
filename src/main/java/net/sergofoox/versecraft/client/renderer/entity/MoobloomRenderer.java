@@ -35,6 +35,7 @@ public class MoobloomRenderer extends AgeableMobRenderer<Moobloom, MoobloomRende
     @Override
     public void extractRenderState(Moobloom entity, MoobloomRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
+        state.flowerMask = entity.getFlowerMask();
         this.blockModelResolver.update(state.flowerModel, RegisterBlocks.BUTTERCUP.defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
     }
 

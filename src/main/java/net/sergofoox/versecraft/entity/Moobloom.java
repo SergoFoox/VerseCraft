@@ -2,6 +2,9 @@ package net.sergofoox.versecraft.entity;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SpellParticleOption;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -10,6 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ConversionParams;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
@@ -27,24 +31,40 @@ import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
 import net.sergofoox.versecraft.entity.ai.MoobloomWaitForBeeGoal;
 import net.sergofoox.versecraft.registry.RegisterBlocks;
 import net.sergofoox.versecraft.registry.RegisterEntityTypes;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 public class Moobloom extends AbstractCow implements Shearable {
 
+    public static final int FLOWER_COUNT = 3;
+    public static final byte ALL_FLOWERS = 0b111; // 7
+
+    private static final EntityDataAccessor<Byte> DATA_FLOWER_MASK =
+            SynchedEntityData.defineId(Moobloom.class, EntityDataSerializers.BYTE);
+
     @Nullable
     private SuspiciousStewEffects stewEffects;
-    private int pollinationCooldown = 0;
-    @Nullable
-    private Bee pollinatingBee = null;
-    private boolean isWaitingForBee = false;
+
+    private final int[] flowerRegrowTimers = new int[FLOWER_COUNT];
+    private final UUID[] flowerReservations = new UUID[FLOWER_COUNT];
+    private final Set<UUID> activePollinators = new HashSet<>();
 
     public Moobloom(EntityType<? extends Moobloom> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_FLOWER_MASK, ALL_FLOWERS);
     }
 
     @Override
@@ -53,42 +73,160 @@ public class Moobloom extends AbstractCow implements Shearable {
         super.registerGoals();
     }
 
-    public boolean canBePollinated() {
-        return this.isAlive() && !this.isBaby() && this.pollinationCooldown <= 0 && this.pollinatingBee == null;
+    public byte getFlowerMask() {
+        return this.entityData.get(DATA_FLOWER_MASK);
     }
 
-    public void setReservedByBee(Bee bee) {
-        this.pollinatingBee = bee;
+    public void setFlowerMask(byte mask) {
+        this.entityData.set(DATA_FLOWER_MASK, mask);
     }
 
-    public void startBeePollination(Bee bee) {
-        this.pollinatingBee = bee;
-        this.isWaitingForBee = true;
-        this.getNavigation().stop();
+    public boolean hasFlower(int slot) {
+        return (this.getFlowerMask() & (1 << slot)) != 0;
+    }
+
+    public boolean hasAvailableFlower() {
+        if (!this.isAlive() || this.isBaby()) {
+            return false;
+        }
+        byte mask = this.getFlowerMask();
+        for (int i = 0; i < FLOWER_COUNT; i++) {
+            if ((mask & (1 << i)) != 0 && this.flowerReservations[i] == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public synchronized int claimFlowerSlot(Bee bee) {
+        if (!this.isAlive() || this.isBaby()) {
+            return -1;
+        }
+        byte mask = this.getFlowerMask();
+        UUID beeUuid = bee.getUUID();
+
+        // If this bee already has a reservation, return it
+        for (int i = 0; i < FLOWER_COUNT; i++) {
+            if ((mask & (1 << i)) != 0 && beeUuid.equals(this.flowerReservations[i])) {
+                return i;
+            }
+        }
+
+        // Find the first available unreserved flower
+        for (int i = 0; i < FLOWER_COUNT; i++) {
+            if ((mask & (1 << i)) != 0 && this.flowerReservations[i] == null) {
+                this.flowerReservations[i] = beeUuid;
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public synchronized void releaseFlowerSlot(int slot, Bee bee) {
+        if (slot >= 0 && slot < FLOWER_COUNT) {
+            if (bee.getUUID().equals(this.flowerReservations[slot])) {
+                this.flowerReservations[slot] = null;
+            }
+        }
+    }
+
+    public boolean isFlowerReservedBy(int slot, Bee bee) {
+        if (slot >= 0 && slot < FLOWER_COUNT) {
+            return bee.getUUID().equals(this.flowerReservations[slot]);
+        }
+        return false;
+    }
+
+    public void addActivePollinator(Bee bee) {
+        this.activePollinators.add(bee.getUUID());
+    }
+
+    public void removeActivePollinator(Bee bee) {
+        this.activePollinators.remove(bee.getUUID());
+    }
+
+    public void clearAllActivePollinators() {
+        this.activePollinators.clear();
+        for (int i = 0; i < FLOWER_COUNT; i++) {
+            this.flowerReservations[i] = null;
+        }
     }
 
     public boolean isWaitingForBee() {
-        return this.isWaitingForBee && this.pollinatingBee != null && this.pollinatingBee.isAlive() && this.distanceToSqr(this.pollinatingBee) < 36.0;
+        return !this.activePollinators.isEmpty();
     }
 
-    @Nullable
-    public Bee getPollinatingBee() {
-        return this.pollinatingBee;
+    public Vec3 getFlowerWorldPos(int slot) {
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+
+        if (slot == 2) {
+            // Head flower: projects forward along head yaw
+            float headRad = (float) Math.toRadians(this.yHeadRot);
+            double cos = Math.cos(headRad);
+            double sin = Math.sin(headRad);
+            double fwdZ = 0.65;
+            double offX = -sin * fwdZ;
+            double offZ = cos * fwdZ;
+            return new Vec3(x + offX, y + 1.85, z + offZ);
+        }
+
+        // Back flowers: rotated along body yaw
+        float bodyRad = (float) Math.toRadians(this.yBodyRot);
+        double cos = Math.cos(bodyRad);
+        double sin = Math.sin(bodyRad);
+
+        // Slot 0: back right, Slot 1: back left
+        double localX = (slot == 0) ? 0.25 : -0.2;
+        double localZ = (slot == 0) ? -0.35 : 0.15;
+
+        double offX = -sin * localZ + cos * localX;
+        double offZ = cos * localZ + sin * localX;
+
+        return new Vec3(x + offX, y + 1.8, z + offZ);
     }
 
-    public void clearReservedBee() {
-        this.pollinatingBee = null;
-        this.isWaitingForBee = false;
+    public void onPollinationSuccess(int slot) {
+        if (slot >= 0 && slot < FLOWER_COUNT) {
+            byte newMask = (byte) (this.getFlowerMask() & ~(1 << slot));
+            this.setFlowerMask(newMask);
+            this.flowerRegrowTimers[slot] = 2400; // 2 minutes
+            this.flowerReservations[slot] = null;
+
+            if (this.level() instanceof ServerLevel serverLevel) {
+                Vec3 flowerPos = this.getFlowerWorldPos(slot);
+                serverLevel.sendParticles(
+                        ParticleTypes.HAPPY_VILLAGER,
+                        flowerPos.x, flowerPos.y, flowerPos.z,
+                        8, 0.25, 0.25, 0.25, 0.05
+                );
+                serverLevel.playSound(null, this.blockPosition(), SoundEvents.BEE_POLLINATE, SoundSource.NEUTRAL, 1.0F, 1.2F);
+            }
+        }
     }
 
-    public void onPollinationSuccess() {
-        this.pollinationCooldown = 2400; // 2 minutes
-        this.clearReservedBee();
+    public void regrowFlower(int slot) {
+        if (slot >= 0 && slot < FLOWER_COUNT) {
+            byte newMask = (byte) (this.getFlowerMask() | (1 << slot));
+            this.setFlowerMask(newMask);
+            this.flowerReservations[slot] = null;
+
+            if (this.level() instanceof ServerLevel serverLevel) {
+                Vec3 flowerPos = this.getFlowerWorldPos(slot);
+                serverLevel.sendParticles(
+                        ParticleTypes.HAPPY_VILLAGER,
+                        flowerPos.x, flowerPos.y, flowerPos.z,
+                        6, 0.2, 0.2, 0.2, 0.02
+                );
+                serverLevel.playSound(null, this.blockPosition(), SoundEvents.CHORUS_FLOWER_GROW, SoundSource.NEUTRAL, 0.8F, 1.2F);
+            }
+        }
     }
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
-        this.clearReservedBee();
+        this.clearAllActivePollinators();
         return super.hurtServer(level, source, amount);
     }
 
@@ -96,12 +234,26 @@ public class Moobloom extends AbstractCow implements Shearable {
     public void aiStep() {
         super.aiStep();
 
-        if (this.pollinationCooldown > 0) {
-            this.pollinationCooldown--;
-        }
+        if (!this.level().isClientSide()) {
+            byte mask = this.getFlowerMask();
+            for (int i = 0; i < FLOWER_COUNT; i++) {
+                if ((mask & (1 << i)) == 0) {
+                    if (this.flowerRegrowTimers[i] > 0) {
+                        this.flowerRegrowTimers[i]--;
+                        if (this.flowerRegrowTimers[i] <= 0) {
+                            this.regrowFlower(i);
+                        }
+                    }
+                }
+            }
 
-        if (this.pollinatingBee != null && (!this.pollinatingBee.isAlive() || this.distanceToSqr(this.pollinatingBee) > 64.0)) {
-            this.clearReservedBee();
+            // Cleanup any active pollinators that died or moved far away
+            if (!this.activePollinators.isEmpty() && this.tickCount % 20 == 0) {
+                this.activePollinators.removeIf(uuid -> {
+                    Entity entity = ((ServerLevel) this.level()).getEntity(uuid);
+                    return entity == null || !entity.isAlive() || this.distanceToSqr(entity) > 64.0;
+                });
+            }
         }
     }
 
@@ -139,6 +291,7 @@ public class Moobloom extends AbstractCow implements Shearable {
             return InteractionResult.SUCCESS;
         }
 
+        // Кормление цветком для загадочного рагу (как у коричневого грибного мушрума — ТОЛЬКО для взрослых)
         if (!this.isBaby()) {
             Optional<SuspiciousStewEffects> stewEffectsOpt = Optional.ofNullable(SuspiciousEffectHolder.tryGet(itemStack.getItem()))
                     .map(SuspiciousEffectHolder::getSuspiciousEffects);
@@ -184,7 +337,7 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     @Override
     public void shear(ServerLevel serverLevel, SoundSource soundSource, ItemStack itemStack) {
-        this.clearReservedBee();
+        this.clearAllActivePollinators();
         serverLevel.playSound(null, this, SoundEvents.MOOSHROOM_SHEAR, soundSource, 1.0F, 1.0F);
         this.convertTo(EntityTypes.COW, ConversionParams.single(this, false, false), cow -> {
             serverLevel.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
@@ -216,13 +369,19 @@ public class Moobloom extends AbstractCow implements Shearable {
     protected void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
         output.storeNullable("stew_effects", SuspiciousStewEffects.CODEC, this.stewEffects);
-        output.putInt("pollination_cooldown", this.pollinationCooldown);
+        output.putByte("flower_mask", this.getFlowerMask());
+        output.putInt("flower_timer_0", this.flowerRegrowTimers[0]);
+        output.putInt("flower_timer_1", this.flowerRegrowTimers[1]);
+        output.putInt("flower_timer_2", this.flowerRegrowTimers[2]);
     }
 
     @Override
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
         this.stewEffects = input.read("stew_effects", SuspiciousStewEffects.CODEC).orElse(null);
-        this.pollinationCooldown = input.getIntOr("pollination_cooldown", 0);
+        this.setFlowerMask(input.getByteOr("flower_mask", ALL_FLOWERS));
+        this.flowerRegrowTimers[0] = input.getIntOr("flower_timer_0", 0);
+        this.flowerRegrowTimers[1] = input.getIntOr("flower_timer_1", 0);
+        this.flowerRegrowTimers[2] = input.getIntOr("flower_timer_2", 0);
     }
 }

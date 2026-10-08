@@ -18,7 +18,7 @@ public class MoobloomFlowerLayer extends RenderLayer<MoobloomRenderState, CowMod
 
     @Override
     public void submit(PoseStack poseStack, SubmitNodeCollector buffer, int packedLight, MoobloomRenderState state, float yRot, float xRot) {
-        if (state.isBaby || state.flowerModel.isEmpty()) {
+        if (state.isBaby || state.flowerModel.isEmpty() || state.flowerMask == 0) {
             return;
         }
         boolean outlineOnly = state.appearsGlowing() && state.isInvisible;
@@ -27,32 +27,41 @@ public class MoobloomFlowerLayer extends RenderLayer<MoobloomRenderState, CowMod
         }
         int overlayCoords = LivingEntityRenderer.getOverlayCoords(state, 0.0F);
 
-        poseStack.pushPose();
-        poseStack.translate(0.2F, -0.35F, 0.5F);
-        poseStack.rotateDegrees(Axis.YP, -48.0F);
-        poseStack.scale(-1.0F, -1.0F, 1.0F);
-        poseStack.translate(-0.5F, -0.5F, -0.5F);
-        submitFlowerBlock(poseStack, buffer, packedLight, outlineOnly, state.outlineColor, state.flowerModel, overlayCoords);
-        poseStack.popPose();
+        // Flower 0: Back Right
+        if ((state.flowerMask & (1 << 0)) != 0) {
+            poseStack.pushPose();
+            poseStack.translate(0.2F, -0.35F, 0.5F);
+            poseStack.rotateDegrees(Axis.YP, -48.0F);
+            poseStack.scale(-1.0F, -1.0F, 1.0F);
+            poseStack.translate(-0.5F, -0.5F, -0.5F);
+            submitFlowerBlock(poseStack, buffer, packedLight, outlineOnly, state.outlineColor, state.flowerModel, overlayCoords);
+            poseStack.popPose();
+        }
 
-        poseStack.pushPose();
-        poseStack.translate(0.2F, -0.35F, 0.5F);
-        poseStack.rotateDegrees(Axis.YP, 42.0F);
-        poseStack.translate(0.1F, 0.0F, -0.6F);
-        poseStack.rotateDegrees(Axis.YP, -48.0F);
-        poseStack.scale(-1.0F, -1.0F, 1.0F);
-        poseStack.translate(-0.5F, -0.5F, -0.5F);
-        submitFlowerBlock(poseStack, buffer, packedLight, outlineOnly, state.outlineColor, state.flowerModel, overlayCoords);
-        poseStack.popPose();
+        // Flower 1: Back Left
+        if ((state.flowerMask & (1 << 1)) != 0) {
+            poseStack.pushPose();
+            poseStack.translate(0.2F, -0.35F, 0.5F);
+            poseStack.rotateDegrees(Axis.YP, 42.0F);
+            poseStack.translate(0.1F, 0.0F, -0.6F);
+            poseStack.rotateDegrees(Axis.YP, -48.0F);
+            poseStack.scale(-1.0F, -1.0F, 1.0F);
+            poseStack.translate(-0.5F, -0.5F, -0.5F);
+            submitFlowerBlock(poseStack, buffer, packedLight, outlineOnly, state.outlineColor, state.flowerModel, overlayCoords);
+            poseStack.popPose();
+        }
 
-        poseStack.pushPose();
-        this.getParentModel().getHead().translateAndRotate(poseStack);
-        poseStack.translate(0.0F, -0.7F, -0.2F);
-        poseStack.rotateDegrees(Axis.YP, -78.0F);
-        poseStack.scale(-1.0F, -1.0F, 1.0F);
-        poseStack.translate(-0.5F, -0.5F, -0.5F);
-        submitFlowerBlock(poseStack, buffer, packedLight, outlineOnly, state.outlineColor, state.flowerModel, overlayCoords);
-        poseStack.popPose();
+        // Flower 2: Head
+        if ((state.flowerMask & (1 << 2)) != 0) {
+            poseStack.pushPose();
+            this.getParentModel().getHead().translateAndRotate(poseStack);
+            poseStack.translate(0.0F, -0.7F, -0.2F);
+            poseStack.rotateDegrees(Axis.YP, -78.0F);
+            poseStack.scale(-1.0F, -1.0F, 1.0F);
+            poseStack.translate(-0.5F, -0.5F, -0.5F);
+            submitFlowerBlock(poseStack, buffer, packedLight, outlineOnly, state.outlineColor, state.flowerModel, overlayCoords);
+            poseStack.popPose();
+        }
     }
 
     private void submitFlowerBlock(PoseStack poseStack, SubmitNodeCollector buffer, int packedLight, boolean outlineOnly, int outlineColor, BlockModelRenderState model, int overlayCoords) {

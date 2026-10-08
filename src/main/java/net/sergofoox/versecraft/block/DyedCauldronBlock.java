@@ -78,13 +78,13 @@ public class DyedCauldronBlock extends AbstractCauldronBlock implements EntityBl
     @Override
     protected InteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // Попытка налить зелье или воду из бутылочки -> конфликт жидкостей и испарение
-        if (itemStack.has(DataComponents.POTION_CONTENTS)) {
+        if (PotionCauldronBlock.isPotionItem(itemStack)) {
             PotionCauldronBlock.triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
             return InteractionResult.SUCCESS;
         }
 
-        // Попытка налить ведро воды или лавы -> конфликт жидкостей и испарение
-        if (itemStack.is(Items.WATER_BUCKET) || itemStack.is(Items.LAVA_BUCKET)) {
+        // Попытка налить ведро воды, лавы или рыхлого снега -> конфликт жидкостей и испарение
+        if (itemStack.is(Items.WATER_BUCKET) || itemStack.is(Items.LAVA_BUCKET) || itemStack.is(Items.POWDER_SNOW_BUCKET)) {
             PotionCauldronBlock.triggerEvaporation(level, pos, player, hand, itemStack, Items.BUCKET);
             return InteractionResult.SUCCESS;
         }
@@ -101,7 +101,7 @@ public class DyedCauldronBlock extends AbstractCauldronBlock implements EntityBl
                 if (!player.hasInfiniteMaterials()) {
                     itemStack.shrink(1);
                 }
-                level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0f, 1.0f);
+                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
             }
             return InteractionResult.SUCCESS;
         }
@@ -115,7 +115,7 @@ public class DyedCauldronBlock extends AbstractCauldronBlock implements EntityBl
                 }
                 itemStack.set(DataComponents.DYED_COLOR, new DyedItemColor(color));
                 player.awardStat(Stats.ITEM_USED.get(itemStack.getItem()));
-                level.playSound(null, pos, SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
                 lowerFillLevel(state, level, pos);
             }
             return InteractionResult.SUCCESS;
@@ -124,7 +124,7 @@ public class DyedCauldronBlock extends AbstractCauldronBlock implements EntityBl
         // 4. Забор воды пустым ведром при полном котле (уровень 6) -> обычное ведро воды
         if (itemStack.is(Items.BUCKET) && state.getValue(LEVEL) == 6) {
             if (!level.isClientSide()) {
-                player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(Items.WATER_BUCKET)));
+                player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(Items.WATER_BUCKET), false));
                 level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3);
                 level.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
             }
@@ -135,8 +135,8 @@ public class DyedCauldronBlock extends AbstractCauldronBlock implements EntityBl
         if (itemStack.is(Items.GLASS_BOTTLE)) {
             if (!level.isClientSide()) {
                 ItemStack bottle = PotionContents.createItemStack(Items.POTION, Potions.WATER);
-                player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, bottle));
-                level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
+                player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, bottle, false));
+                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
                 
                 int current = state.getValue(LEVEL);
                 int color = DyedCauldronBlockEntity.DEFAULT_WATER_COLOR;

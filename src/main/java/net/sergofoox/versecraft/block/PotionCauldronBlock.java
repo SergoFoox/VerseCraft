@@ -36,6 +36,56 @@ import org.jetbrains.annotations.Nullable;
 
 public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityBlock {
 
+    public enum PotionBottleType {
+        NORMAL(0, Items.POTION),
+        SPLASH(1, Items.SPLASH_POTION),
+        LINGERING(2, Items.LINGERING_POTION);
+
+        private final int id;
+        private final Item item;
+
+        PotionBottleType(int id, Item item) {
+            this.id = id;
+            this.item = item;
+        }
+
+        public int getId() {
+            return this.id;
+        }
+
+        public Item getItem() {
+            return this.item;
+        }
+
+        public static PotionBottleType byId(int id) {
+            for (PotionBottleType type : values()) {
+                if (type.id == id) {
+                    return type;
+                }
+            }
+            return NORMAL;
+        }
+
+        public static @Nullable PotionBottleType byItem(Item item) {
+            if (item == Items.POTION) {
+                return NORMAL;
+            } else if (item == Items.SPLASH_POTION) {
+                return SPLASH;
+            } else if (item == Items.LINGERING_POTION) {
+                return LINGERING;
+            }
+            return null;
+        }
+
+        public static @Nullable PotionBottleType byItemStack(ItemStack stack) {
+            return byItem(stack.getItem());
+        }
+    }
+
+    public static boolean isPotionItem(ItemStack stack) {
+        return stack.is(Items.POTION) || stack.is(Items.SPLASH_POTION) || stack.is(Items.LINGERING_POTION);
+    }
+
     public PotionCauldronBlock(Properties properties) {
         super(Biome.Precipitation.RAIN, CauldronInteractions.EMPTY, properties);
     }
@@ -83,43 +133,43 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
         }
 
         PotionContents cauldronContents = be.getPotionContents();
+        PotionBottleType cauldronBottleType = be.getBottleType();
         int currentLevel = state.getValue(LEVEL);
 
-        // 1. Попытка налить зелье (обычное, взрывное, оседающее)
-        if (itemStack.has(DataComponents.POTION_CONTENTS)) {
+        // 1. Попытка налить зелье (обычное, взрывное, оседающее/туманное)
+        if (isPotionItem(itemStack)) {
             PotionContents heldContents = itemStack.get(DataComponents.POTION_CONTENTS);
-            if (heldContents != null) {
+            PotionBottleType heldBottleType = PotionBottleType.byItemStack(itemStack);
+            if (heldContents != null && heldBottleType != null) {
                 if (heldContents.is(Potions.WATER)) {
                     // Вода в зелье -> испарение со звуком взрыва (смешивание жидкостей)
                     triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
                     return InteractionResult.SUCCESS;
                 }
 
-                if (isSamePotion(cauldronContents, heldContents)) {
+                if (isSamePotion(cauldronContents, heldContents) && cauldronBottleType == heldBottleType) {
                     if (currentLevel < 3) {
                         if (!level.isClientSide()) {
                             level.setBlock(pos, state.setValue(LEVEL, currentLevel + 1), 3);
                             if (level.getBlockEntity(pos) instanceof PotionCauldronBlockEntity newBe) {
-                                newBe.setPotionContents(cauldronContents);
+                                newBe.setPotion(cauldronContents, heldBottleType);
                             }
-                            if (!player.hasInfiniteMaterials()) {
-                                player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(Items.GLASS_BOTTLE)));
-                            }
-                            level.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
+                            player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(Items.GLASS_BOTTLE), false));
+                            level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
                         }
                         return InteractionResult.SUCCESS;
                     }
                     return InteractionResult.PASS;
                 } else {
-                    // Разные зелья -> испарение со звуком взрыва (как в Bedrock)
+                    // Разные зелья или разные типы (обычное / взрывное / туманное) -> испарение со звуком взрыва (как в Bedrock)
                     triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
                     return InteractionResult.SUCCESS;
                 }
             }
         }
 
-        // 2. Попытка налить ведро воды или лавы
-        if (itemStack.is(Items.WATER_BUCKET) || itemStack.is(Items.LAVA_BUCKET)) {
+        // 2. Попытка налить ведро воды, лавы или рыхлого снега
+        if (itemStack.is(Items.WATER_BUCKET) || itemStack.is(Items.LAVA_BUCKET) || itemStack.is(Items.POWDER_SNOW_BUCKET)) {
             triggerEvaporation(level, pos, player, hand, itemStack, Items.BUCKET);
             return InteractionResult.SUCCESS;
         }
@@ -130,18 +180,17 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
                 if (currentLevel > 1) {
                     level.setBlock(pos, state.setValue(LEVEL, currentLevel - 1), 3);
                     if (level.getBlockEntity(pos) instanceof PotionCauldronBlockEntity newBe) {
-                        newBe.setPotionContents(cauldronContents);
+                        newBe.setPotion(cauldronContents, cauldronBottleType);
                     }
                 } else {
                     level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3);
                 }
 
-                ItemStack potionBottle = new ItemStack(Items.POTION);
+                ItemStack potionBottle = new ItemStack(cauldronBottleType.getItem());
                 potionBottle.set(DataComponents.POTION_CONTENTS, cauldronContents);
 
-                // Работает одинаково правильно как в выживании, так и в креативе (как с ведрами воды)
-                player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, potionBottle));
-                level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
+                player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, potionBottle, false));
+                level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
                 player.awardStat(Stats.ITEM_USED.get(Items.GLASS_BOTTLE));
             }
             return InteractionResult.SUCCESS;
@@ -194,7 +243,7 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
                 } else {
                     level.setBlock(pos, state.setValue(LEVEL, newLevel), 3);
                     if (level.getBlockEntity(pos) instanceof PotionCauldronBlockEntity newBe) {
-                        newBe.setPotionContents(cauldronContents);
+                        newBe.setPotion(cauldronContents, cauldronBottleType);
                     }
                 }
 
@@ -212,7 +261,7 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
         if (a == null || b == null) {
             return false;
         }
-        return a.potion().equals(b.potion()) && a.customEffects().equals(b.customEffects());
+        return a.potion().equals(b.potion()) && a.customEffects().equals(b.customEffects()) && a.customColor().equals(b.customColor());
     }
 
     public static void triggerEvaporation(Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack itemStack, @Nullable Item returnItem) {
@@ -224,12 +273,10 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
             }
             level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.0f);
             level.playSound(null, pos, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 0.5f, 1.5f);
-            if (!player.hasInfiniteMaterials()) {
-                if (returnItem != null) {
-                    player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(returnItem)));
-                } else {
-                    itemStack.shrink(1);
-                }
+            if (returnItem != null) {
+                player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(returnItem), false));
+            } else if (!player.hasInfiniteMaterials()) {
+                itemStack.shrink(1);
             }
         }
     }

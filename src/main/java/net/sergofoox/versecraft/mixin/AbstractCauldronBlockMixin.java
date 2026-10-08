@@ -38,22 +38,35 @@ public abstract class AbstractCauldronBlockMixin {
     @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
     private void versecraft$cauldronInteractions(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
         // 1. Наливание зелья в пустой котёл
-        if (state.is(Blocks.CAULDRON) && itemStack.has(DataComponents.POTION_CONTENTS)) {
+        if (state.is(Blocks.CAULDRON) && PotionCauldronBlock.isPotionItem(itemStack)) {
             PotionContents contents = itemStack.get(DataComponents.POTION_CONTENTS);
-            if (contents != null && !contents.is(Potions.WATER)) {
-                if (!level.isClientSide()) {
-                    BlockState newState = RegisterBlocks.POTION_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 1);
-                    level.setBlock(pos, newState, 3);
-                    if (level.getBlockEntity(pos) instanceof PotionCauldronBlockEntity be) {
-                        be.setPotionContents(contents);
+            if (contents != null) {
+                if (contents.is(Potions.WATER)) {
+                    // Обычная бутылочка с водой обрабатывается ванильной CauldronInteraction.FILL_WATER.
+                    // Для взрывной и туманной бутылочек с водой добавляем обработку здесь:
+                    if (itemStack.is(Items.SPLASH_POTION) || itemStack.is(Items.LINGERING_POTION)) {
+                        if (!level.isClientSide()) {
+                            level.setBlock(pos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 1), 3);
+                            player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(Items.GLASS_BOTTLE), false));
+                            level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
+                        }
+                        cir.setReturnValue(InteractionResult.SUCCESS);
+                        return;
                     }
-                    if (!player.hasInfiniteMaterials()) {
-                        player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(Items.GLASS_BOTTLE)));
+                } else {
+                    if (!level.isClientSide()) {
+                        PotionCauldronBlock.PotionBottleType bottleType = PotionCauldronBlock.PotionBottleType.byItemStack(itemStack);
+                        BlockState newState = RegisterBlocks.POTION_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 1);
+                        level.setBlock(pos, newState, 3);
+                        if (level.getBlockEntity(pos) instanceof PotionCauldronBlockEntity be) {
+                            be.setPotion(contents, bottleType != null ? bottleType : PotionCauldronBlock.PotionBottleType.NORMAL);
+                        }
+                        player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(Items.GLASS_BOTTLE), false));
+                        level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
                     }
-                    level.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0f, 1.0f);
+                    cir.setReturnValue(InteractionResult.SUCCESS);
+                    return;
                 }
-                cir.setReturnValue(InteractionResult.SUCCESS);
-                return;
             }
         }
 
@@ -73,27 +86,52 @@ public abstract class AbstractCauldronBlockMixin {
                     if (!player.hasInfiniteMaterials()) {
                         itemStack.shrink(1);
                     }
-                    level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0f, 1.0f);
+                    level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
                 }
                 cir.setReturnValue(InteractionResult.SUCCESS);
                 return;
             }
 
             // Наливание зелья в водный котёл -> взрывное испарение (смешивание разных жидкостей)
-            if (itemStack.has(DataComponents.POTION_CONTENTS)) {
+            if (PotionCauldronBlock.isPotionItem(itemStack)) {
                 PotionContents contents = itemStack.get(DataComponents.POTION_CONTENTS);
-                if (contents != null && !contents.is(Potions.WATER)) {
-                    PotionCauldronBlock.triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
-                    cir.setReturnValue(InteractionResult.SUCCESS);
-                    return;
+                if (contents != null) {
+                    if (contents.is(Potions.WATER)) {
+                        if (itemStack.is(Items.SPLASH_POTION) || itemStack.is(Items.LINGERING_POTION)) {
+                            int levelVal = state.getValue(LayeredCauldronBlock.LEVEL);
+                            if (levelVal < 3) {
+                                if (!level.isClientSide()) {
+                                    level.setBlock(pos, state.setValue(LayeredCauldronBlock.LEVEL, levelVal + 1), 3);
+                                    player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, new ItemStack(Items.GLASS_BOTTLE), false));
+                                    level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.35f, 1.0f);
+                                }
+                                cir.setReturnValue(InteractionResult.SUCCESS);
+                                return;
+                            }
+                        }
+                    } else {
+                        PotionCauldronBlock.triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
+                        cir.setReturnValue(InteractionResult.SUCCESS);
+                        return;
+                    }
                 }
             }
         }
 
         // 3. Наливание зелья в лавовый котёл -> взрывное испарение
-        if (state.is(Blocks.LAVA_CAULDRON) && itemStack.has(DataComponents.POTION_CONTENTS)) {
+        if (state.is(Blocks.LAVA_CAULDRON) && PotionCauldronBlock.isPotionItem(itemStack)) {
             PotionContents contents = itemStack.get(DataComponents.POTION_CONTENTS);
-            if (contents != null && !contents.is(Potions.WATER)) {
+            if (contents != null) {
+                PotionCauldronBlock.triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
+                cir.setReturnValue(InteractionResult.SUCCESS);
+                return;
+            }
+        }
+
+        // 4. Наливание зелья в котёл с рыхлым снегом -> взрывное испарение
+        if (state.is(Blocks.POWDER_SNOW_CAULDRON) && PotionCauldronBlock.isPotionItem(itemStack)) {
+            PotionContents contents = itemStack.get(DataComponents.POTION_CONTENTS);
+            if (contents != null) {
                 PotionCauldronBlock.triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
                 cir.setReturnValue(InteractionResult.SUCCESS);
                 return;

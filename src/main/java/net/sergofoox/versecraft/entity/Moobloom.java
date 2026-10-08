@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,8 +23,7 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -33,6 +31,8 @@ import net.sergofoox.versecraft.entity.ai.MoobloomWaitForBeeGoal;
 import net.sergofoox.versecraft.registry.RegisterBlocks;
 import net.sergofoox.versecraft.registry.RegisterEntityTypes;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class Moobloom extends AbstractCow implements Shearable {
 
@@ -139,11 +139,29 @@ public class Moobloom extends AbstractCow implements Shearable {
             return InteractionResult.SUCCESS;
         }
 
-        if (itemStack.is(BlockItemTags.SMALL_FLOWERS.item())) {
-            Block block = Block.byItem(itemStack.getItem());
-            if (block instanceof FlowerBlock flowerBlock) {
+        if (!this.isBaby()) {
+            Optional<SuspiciousStewEffects> stewEffectsOpt = Optional.ofNullable(SuspiciousEffectHolder.tryGet(itemStack.getItem()))
+                    .map(SuspiciousEffectHolder::getSuspiciousEffects);
+            if (stewEffectsOpt.isPresent()) {
+                if (this.stewEffects != null) {
+                    if (this.level() instanceof ServerLevel serverLevel) {
+                        serverLevel.sendParticles(
+                                ParticleTypes.SMOKE,
+                                this.getX(),
+                                this.getY(0.5),
+                                this.getZ(),
+                                1,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0
+                        );
+                    }
+                    return InteractionResult.SUCCESS;
+                }
+
                 if (!this.level().isClientSide()) {
-                    this.stewEffects = flowerBlock.getSuspiciousEffects();
+                    this.stewEffects = stewEffectsOpt.get();
                     this.playSound(SoundEvents.MOOSHROOM_EAT, 2.0F, 1.0F);
                     itemStack.consume(1, player);
                     SpellParticleOption particle = SpellParticleOption.create(ParticleTypes.EFFECT, -1, 1.0F);

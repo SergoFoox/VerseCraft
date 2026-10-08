@@ -510,10 +510,10 @@ public class RegisterBlocks {
     );
 
     public static final Block SOUL_JACK_O_LANTERN = register("soul_jack_o_lantern",
-            p -> new CarvedPumpkinBlock(p.strength(1.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 10) .pushReaction(PushReaction.POPPED))
+            p -> new CarvedPumpkinBlock(p.strength(1.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 10))
     );
     public static final Block COPPER_JACK_O_LANTERN = register("copper_jack_o_lantern",
-            p -> new CarvedPumpkinBlock(p.strength(1.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 15) .pushReaction(PushReaction.POPPED))
+            p -> new CarvedPumpkinBlock(p.strength(1.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 15))
     );
 
     //Plants
@@ -526,7 +526,7 @@ public class RegisterBlocks {
                     .instabreak()
                     .sound(SoundType.GRASS)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block BLUE_ROSE_CROP = registerBlockWithoutBlockItem("blue_rose_crop",
@@ -535,14 +535,12 @@ public class RegisterBlocks {
                     .randomTicks()
                     .instabreak()
                     .sound(SoundType.CROP)
-                    .pushReaction(PushReaction.PUSH))
+                    .pushReaction(PushReaction.POPPED))
     );
 
     public static final Block POTTED_BLUE_ROSE = registerBlockWithoutBlockItem("potted_blue_rose",
-            properties -> new FlowerPotBlock(BLUE_ROSE, properties
-                    .instabreak()
-                    .noOcclusion()
-                    .pushReaction(PushReaction.PUSH))
+            properties -> new FlowerPotBlock(BLUE_ROSE, properties),
+            Blocks.flowerPotProperties()
     );
 
     public static final Block ICEFLOWER = register("iceflower",
@@ -553,7 +551,7 @@ public class RegisterBlocks {
                     .instabreak()
                     .sound(SoundType.GRASS)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block ICEFLOWER_CROP = register("iceflower_crop",
@@ -563,7 +561,7 @@ public class RegisterBlocks {
                     .randomTicks()
                     .instabreak()
                     .sound(SoundType.CROP)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block POTTED_ICEFLOWER = register("potted_iceflower",
@@ -579,7 +577,7 @@ public class RegisterBlocks {
                     .instabreak()
                     .sound(SoundType.GRASS)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block POTTED_POP_FLOWER = register("potted_pop_flower",
@@ -588,14 +586,14 @@ public class RegisterBlocks {
     );
 
     public static final Block BUTTERCUP = register("buttercup",
-            properties -> new FlowerBlock(MobEffects.SATURATION, 0.0F, properties),
+            properties -> new FlowerBlock(MobEffects.SATURATION, 0.35F, properties),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PLANT)
                     .noCollision()
                     .instabreak()
                     .sound(SoundType.GRASS)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block POTTED_BUTTERCUP = registerBlockWithoutBlockItem("potted_buttercup",
@@ -622,7 +620,7 @@ public class RegisterBlocks {
                     .sound(SoundType.GRASS)
                     .ignitedByLava()
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block TALL_MYCELIUM_GRASS = register("tall_mycelium_grass",
@@ -635,7 +633,7 @@ public class RegisterBlocks {
                     .sound(SoundType.GRASS)
                     .ignitedByLava()
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     //Cauldron

@@ -6,4 +6,6 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 public class MoobloomRenderState extends LivingEntityRenderState {
     public final BlockModelRenderState flowerModel = new BlockModelRenderState();
     public byte flowerMask = 7;
+    public float headEatPositionScale;
+    public float headEatAngleScale;
 }

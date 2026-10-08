@@ -12,6 +12,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.sergofoox.versecraft.registry.RegisterBlocks;
 import net.sergofoox.versecraft.registry.RegisterItems;
 import net.sergofoox.versecraft.tags.VerseBlocksTags;
@@ -500,6 +501,10 @@ public class VerseRecipesProvider extends FabricRecipeProvider {
 
                 woodenBoat(RegisterItems.AZALEA_BOAT, RegisterBlocks.AZALEA_PLANKS);
                 chestBoat(RegisterItems.AZALEA_CHEST_BOAT, RegisterItems.AZALEA_BOAT);
+
+                if (RegisterBlocks.BUTTERCUP instanceof SuspiciousEffectHolder effectHolder) {
+                    suspiciousStew(RegisterBlocks.BUTTERCUP.asItem(), effectHolder);
+                }
             }
         };
     }

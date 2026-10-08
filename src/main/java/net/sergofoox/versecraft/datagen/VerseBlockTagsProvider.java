@@ -280,6 +280,25 @@ public class VerseBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider
 
         tag(BlockTags.WOODEN_TRAPDOORS)
                 .add(key(RegisterBlocks.AZALEA_TRAPDOOR));
+
+        tag(BlockTags.WASHED_AWAY_BY_FLUIDS)
+                .add(key(RegisterBlocks.BLUE_ROSE))
+                .add(key(RegisterBlocks.BLUE_ROSE_CROP))
+                .add(key(RegisterBlocks.POTTED_BLUE_ROSE))
+                .add(key(RegisterBlocks.ICEFLOWER))
+                .add(key(RegisterBlocks.ICEFLOWER_CROP))
+                .add(key(RegisterBlocks.POTTED_ICEFLOWER))
+                .add(key(RegisterBlocks.POP_FLOWER))
+                .add(key(RegisterBlocks.POTTED_POP_FLOWER))
+                .add(key(RegisterBlocks.BUTTERCUP))
+                .add(key(RegisterBlocks.POTTED_BUTTERCUP))
+                .add(key(RegisterBlocks.GLOWSHROOM))
+                .add(key(RegisterBlocks.SHORT_MYCELIUM_GRASS))
+                .add(key(RegisterBlocks.TALL_MYCELIUM_GRASS));
+
+        tag(BlockTags.REPLACEABLE)
+                .add(key(RegisterBlocks.SHORT_MYCELIUM_GRASS))
+                .add(key(RegisterBlocks.TALL_MYCELIUM_GRASS));
     }
 
     private static ResourceKey<Block> key(Block block) {

@@ -1,6 +1,5 @@
 package net.sergofoox.versecraft.client.renderer.entity;
 
-import net.minecraft.client.model.animal.cow.BabyCowModel;
 import net.minecraft.client.model.animal.cow.CowModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.block.BlockModelResolver;
@@ -10,6 +9,8 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.Identifier;
 import net.sergofoox.versecraft.VerseCraft;
 import net.sergofoox.versecraft.client.renderer.entity.layers.MoobloomFlowerLayer;
+import net.sergofoox.versecraft.client.renderer.entity.model.BabyMoobloomModel;
+import net.sergofoox.versecraft.client.renderer.entity.model.MoobloomModel;
 import net.sergofoox.versecraft.client.renderer.entity.state.MoobloomRenderState;
 import net.sergofoox.versecraft.entity.Moobloom;
 import net.sergofoox.versecraft.registry.RegisterBlocks;
@@ -22,7 +23,7 @@ public class MoobloomRenderer extends AgeableMobRenderer<Moobloom, MoobloomRende
     private final BlockModelResolver blockModelResolver;
 
     public MoobloomRenderer(EntityRendererProvider.Context context) {
-        super(context, new CowModel(context.bakeLayer(ModelLayers.MOOSHROOM)), new BabyCowModel(context.bakeLayer(ModelLayers.MOOSHROOM_BABY)), 0.7F);
+        super(context, new MoobloomModel(context.bakeLayer(ModelLayers.MOOSHROOM)), new BabyMoobloomModel(context.bakeLayer(ModelLayers.MOOSHROOM_BABY)), 0.7F);
         this.blockModelResolver = context.getBlockModelResolver();
         this.addLayer(new MoobloomFlowerLayer(this));
     }
@@ -36,6 +37,8 @@ public class MoobloomRenderer extends AgeableMobRenderer<Moobloom, MoobloomRende
     public void extractRenderState(Moobloom entity, MoobloomRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         state.flowerMask = entity.getFlowerMask();
+        state.headEatPositionScale = entity.getHeadEatPositionScale(partialTick);
+        state.headEatAngleScale = entity.getHeadEatAngleScale(partialTick);
         this.blockModelResolver.update(state.flowerModel, RegisterBlocks.BUTTERCUP.defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
     }
 

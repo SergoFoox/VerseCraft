@@ -9,6 +9,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.sergofoox.versecraft.entity.ai.MoobloomEatButtercupGoal;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -53,6 +55,8 @@ public class Moobloom extends AbstractCow implements Shearable {
     @Nullable
     private SuspiciousStewEffects stewEffects;
 
+    private int eatAnimationTick;
+
     private final int[] flowerRegrowTimers = new int[FLOWER_COUNT];
     private final UUID[] flowerReservations = new UUID[FLOWER_COUNT];
     private final Set<UUID> activePollinators = new HashSet<>();
@@ -70,6 +74,7 @@ public class Moobloom extends AbstractCow implements Shearable {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MoobloomWaitForBeeGoal(this));
+        this.goalSelector.addGoal(4, new MoobloomEatButtercupGoal(this, 1.15D, 10));
         super.registerGoals();
     }
 
@@ -213,13 +218,25 @@ public class Moobloom extends AbstractCow implements Shearable {
             this.flowerReservations[slot] = null;
 
             if (this.level() instanceof ServerLevel serverLevel) {
-                Vec3 flowerPos = this.getFlowerWorldPos(slot);
-                serverLevel.sendParticles(
-                        ParticleTypes.HAPPY_VILLAGER,
-                        flowerPos.x, flowerPos.y, flowerPos.z,
-                        6, 0.2, 0.2, 0.2, 0.02
-                );
                 serverLevel.playSound(null, this.blockPosition(), SoundEvents.CHORUS_FLOWER_GROW, SoundSource.NEUTRAL, 0.8F, 1.2F);
+            }
+        }
+    }
+
+    public void onAteButtercup() {
+        if (!this.isAlive() || this.isBaby()) {
+            return;
+        }
+
+        byte mask = this.getFlowerMask();
+        if (mask == ALL_FLOWERS) {
+            return;
+        }
+
+        // Eating one buttercup restores all missing flowers immediately without particles
+        for (int i = 0; i < FLOWER_COUNT; i++) {
+            if ((mask & (1 << i)) == 0) {
+                this.regrowFlower(i);
             }
         }
     }
@@ -232,6 +249,10 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     @Override
     public void aiStep() {
+        if (this.level().isClientSide()) {
+            this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
+        }
+
         super.aiStep();
 
         if (!this.level().isClientSide()) {
@@ -258,6 +279,38 @@ public class Moobloom extends AbstractCow implements Shearable {
     }
 
     @Override
+    public void handleEntityEvent(byte id) {
+        if (id == 10) {
+            this.eatAnimationTick = 40;
+        } else {
+            super.handleEntityEvent(id);
+        }
+    }
+
+    public float getHeadEatPositionScale(float partialTick) {
+        if (this.eatAnimationTick <= 0) {
+            return 0.0F;
+        } else if (this.eatAnimationTick >= 4 && this.eatAnimationTick <= 36) {
+            return 1.0F;
+        } else {
+            return this.eatAnimationTick < 4
+                    ? ((float) this.eatAnimationTick - partialTick) / 4.0F
+                    : -((float) (this.eatAnimationTick - 40) - partialTick) / 4.0F;
+        }
+    }
+
+    public float getHeadEatAngleScale(float partialTick) {
+        if (this.eatAnimationTick > 4 && this.eatAnimationTick <= 36) {
+            float f = ((float) (this.eatAnimationTick - 4) - partialTick) / 32.0F;
+            return (float) (Math.PI / 5) + 0.21991149F * Mth.sin(f * 28.7F);
+        } else if (this.eatAnimationTick > 0) {
+            return (float) (Math.PI / 5) * ((float) this.eatAnimationTick - partialTick) / 4.0F;
+        } else {
+            return 0.0F;
+        }
+    }
+
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.is(Items.BOWL) && !this.isBaby()) {
@@ -266,13 +319,8 @@ public class Moobloom extends AbstractCow implements Shearable {
             if (this.stewEffects != null) {
                 stewStack.set(net.minecraft.core.component.DataComponents.SUSPICIOUS_STEW_EFFECTS, this.stewEffects);
                 this.stewEffects = null;
-            } else {
-                stewStack.set(
-                        net.minecraft.core.component.DataComponents.SUSPICIOUS_STEW_EFFECTS,
-                        new SuspiciousStewEffects(java.util.List.of(
-                                new SuspiciousStewEffects.Entry(net.minecraft.world.effect.MobEffects.SATURATION, 7)
-                        ))
-                );
+            } else if (RegisterBlocks.BUTTERCUP instanceof SuspiciousEffectHolder effectHolder) {
+                stewStack.set(net.minecraft.core.component.DataComponents.SUSPICIOUS_STEW_EFFECTS, effectHolder.getSuspiciousEffects());
             }
 
             ItemStack resultStack = ItemUtils.createFilledResult(itemStack, player, stewStack, false);

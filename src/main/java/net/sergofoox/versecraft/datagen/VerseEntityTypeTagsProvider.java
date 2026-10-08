@@ -41,6 +41,22 @@ public class VerseEntityTypeTagsProvider extends FabricTagsProvider.EntityTypeTa
                 .add(key(EntityTypes.SLIME))
                 .add(key(EntityTypes.ENDERMAN))
                 .add(key(EntityTypes.PHANTOM));
+
+        tag(VerseEntityTypeTags.DISALLOWED_PALE_GARDEN_SURFACE_MONSTERS)
+                .add(key(EntityTypes.ZOMBIE))
+                .add(key(EntityTypes.ZOMBIE_VILLAGER))
+                .add(key(EntityTypes.DROWNED))
+                .add(key(EntityTypes.HUSK))
+                .add(key(EntityTypes.SKELETON))
+                .add(key(EntityTypes.STRAY))
+                .add(key(EntityTypes.BOGGED))
+                .add(key(EntityTypes.CREEPER))
+                .add(key(EntityTypes.SPIDER))
+                .add(key(EntityTypes.CAVE_SPIDER))
+                .add(key(EntityTypes.SLIME))
+                .add(key(EntityTypes.ENDERMAN))
+                .add(key(EntityTypes.WITCH))
+                .add(key(EntityTypes.PHANTOM));
     }
 
     private static ResourceKey<EntityType<?>> key(EntityType<?> entityType) {

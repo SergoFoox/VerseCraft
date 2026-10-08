@@ -8,6 +8,7 @@ import net.sergofoox.versecraft.VerseCraft;
 
 public class VerseEntityTypeTags {
     public static final TagKey<EntityType<?>> DISALLOWED_MANSION_MONSTERS = tag("disallowed_mansion_monsters");
+    public static final TagKey<EntityType<?>> DISALLOWED_PALE_GARDEN_SURFACE_MONSTERS = tag("disallowed_pale_garden_surface_monsters");
 
     private static TagKey<EntityType<?>> tag(String name) {
         return TagKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name));

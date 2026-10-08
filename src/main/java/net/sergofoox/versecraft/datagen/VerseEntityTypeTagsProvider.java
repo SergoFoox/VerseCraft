@@ -7,7 +7,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.sergofoox.versecraft.registry.RegisterEntityTypes;
+import net.sergofoox.versecraft.tags.VerseEntityTypeTags;
 import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,6 +25,22 @@ public class VerseEntityTypeTagsProvider extends FabricTagsProvider.EntityTypeTa
         tag(EntityTypeTags.BOAT)
                 .add(key(RegisterEntityTypes.AZALEA_BOAT))
                 .add(key(RegisterEntityTypes.AZALEA_CHEST_BOAT));
+
+        tag(VerseEntityTypeTags.DISALLOWED_MANSION_MONSTERS)
+                .add(key(EntityTypes.ZOMBIE))
+                .add(key(EntityTypes.ZOMBIE_VILLAGER))
+                .add(key(EntityTypes.DROWNED))
+                .add(key(EntityTypes.HUSK))
+                .add(key(EntityTypes.SKELETON))
+                .add(key(EntityTypes.STRAY))
+                .add(key(EntityTypes.BOGGED))
+                .add(key(EntityTypes.WITHER_SKELETON))
+                .add(key(EntityTypes.CREEPER))
+                .add(key(EntityTypes.SPIDER))
+                .add(key(EntityTypes.CAVE_SPIDER))
+                .add(key(EntityTypes.SLIME))
+                .add(key(EntityTypes.ENDERMAN))
+                .add(key(EntityTypes.PHANTOM));
     }
 
     private static ResourceKey<EntityType<?>> key(EntityType<?> entityType) {

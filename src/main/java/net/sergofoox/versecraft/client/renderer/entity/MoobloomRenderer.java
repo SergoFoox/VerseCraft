@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Blocks;
 import net.sergofoox.versecraft.VerseCraft;
 import net.sergofoox.versecraft.client.renderer.entity.layers.MoobloomFlowerLayer;
 import net.sergofoox.versecraft.client.renderer.entity.model.BabyMoobloomModel;
@@ -23,7 +24,10 @@ public class MoobloomRenderer extends AgeableMobRenderer<Moobloom, MoobloomRende
     private final BlockModelResolver blockModelResolver;
 
     public MoobloomRenderer(EntityRendererProvider.Context context) {
-        super(context, new MoobloomModel(context.bakeLayer(ModelLayers.MOOSHROOM)), new BabyMoobloomModel(context.bakeLayer(ModelLayers.MOOSHROOM_BABY)), 0.7F);
+        super(context,
+                new MoobloomModel(context.bakeLayer(ModelLayers.MOOSHROOM)),
+                new BabyMoobloomModel(context.bakeLayer(ModelLayers.MOOSHROOM_BABY)),
+                0.7F);
         this.blockModelResolver = context.getBlockModelResolver();
         this.addLayer(new MoobloomFlowerLayer(this));
     }
@@ -39,7 +43,12 @@ public class MoobloomRenderer extends AgeableMobRenderer<Moobloom, MoobloomRende
         state.flowerMask = entity.getFlowerMask();
         state.headEatPositionScale = entity.getHeadEatPositionScale(partialTick);
         state.headEatAngleScale = entity.getHeadEatAngleScale(partialTick);
-        this.blockModelResolver.update(state.flowerModel, RegisterBlocks.BUTTERCUP.defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
+        state.isGolden = entity.isGolden();
+        this.blockModelResolver.update(
+                state.flowerModel,
+                (state.isGolden ? Blocks.GOLDEN_DANDELION : RegisterBlocks.BUTTERCUP).defaultBlockState(),
+                BLOCK_DISPLAY_CONTEXT
+        );
     }
 
     @Override

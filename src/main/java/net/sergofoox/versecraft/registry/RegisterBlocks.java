@@ -586,7 +586,7 @@ public class RegisterBlocks {
     );
 
     public static final Block BUTTERCUP = register("buttercup",
-            properties -> new FlowerBlock(MobEffects.SATURATION, 0.35F, properties),
+            properties -> new FlowerBlock(MobEffects.POISON, 11.0F, properties),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PLANT)
                     .noCollision()

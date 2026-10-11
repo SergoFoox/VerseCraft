@@ -3,7 +3,7 @@
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 16
+      "chance": 6
     },
     {
       "type": "minecraft:in_square"
@@ -17,26 +17,26 @@
     },
     {
       "type": "minecraft:count",
-      "count": 32
+      "count": 40
     },
     {
       "type": "minecraft:offset",
       "x": {
         "type": "minecraft:trapezoid",
-        "max": 7,
-        "min": -7,
+        "max": 6,
+        "min": -6,
         "plateau": 0
       },
       "y": {
         "type": "minecraft:trapezoid",
-        "max": 3,
-        "min": -3,
+        "max": 2,
+        "min": -2,
         "plateau": 0
       },
       "z": {
         "type": "minecraft:trapezoid",
-        "max": 7,
-        "min": -7,
+        "max": 6,
+        "min": -6,
         "plateau": 0
       }
     },

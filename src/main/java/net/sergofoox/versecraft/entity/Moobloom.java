@@ -1,7 +1,11 @@
 package net.sergofoox.versecraft.entity;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SpellParticleOption;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -14,6 +18,7 @@ import net.sergofoox.versecraft.entity.ai.MoobloomEatButtercupGoal;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.ConversionParams;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -27,9 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -40,7 +43,6 @@ import net.sergofoox.versecraft.registry.RegisterEntityTypes;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -51,6 +53,10 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     private static final EntityDataAccessor<Byte> DATA_FLOWER_MASK =
             SynchedEntityData.defineId(Moobloom.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DATA_IS_GOLDEN =
+            SynchedEntityData.defineId(Moobloom.class, EntityDataSerializers.BOOLEAN);
+
+    public static final UUID TRIPLY_UUID = UUID.fromString("b94dd588-5220-4ef2-9a64-8fbffb361f78");
 
     @Nullable
     private SuspiciousStewEffects stewEffects;
@@ -69,6 +75,7 @@ public class Moobloom extends AbstractCow implements Shearable {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_FLOWER_MASK, ALL_FLOWERS);
+        builder.define(DATA_IS_GOLDEN, false);
     }
 
     @Override
@@ -76,6 +83,14 @@ public class Moobloom extends AbstractCow implements Shearable {
         this.goalSelector.addGoal(1, new MoobloomWaitForBeeGoal(this));
         this.goalSelector.addGoal(4, new MoobloomEatButtercupGoal(this, 1.15D, 10));
         super.registerGoals();
+    }
+
+    public boolean isGolden() {
+        return this.entityData.get(DATA_IS_GOLDEN);
+    }
+
+    public void setGolden(boolean golden) {
+        this.entityData.set(DATA_IS_GOLDEN, golden);
     }
 
     public byte getFlowerMask() {
@@ -313,21 +328,47 @@ public class Moobloom extends AbstractCow implements Shearable {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (itemStack.is(Items.BOWL) && !this.isBaby()) {
-            boolean hasStew = this.stewEffects != null;
-            ItemStack stewStack = new ItemStack(Items.SUSPICIOUS_STEW);
-            if (this.stewEffects != null) {
-                stewStack.set(net.minecraft.core.component.DataComponents.SUSPICIOUS_STEW_EFFECTS, this.stewEffects);
-                this.stewEffects = null;
-            } else if (RegisterBlocks.BUTTERCUP instanceof SuspiciousEffectHolder effectHolder) {
-                stewStack.set(net.minecraft.core.component.DataComponents.SUSPICIOUS_STEW_EFFECTS, effectHolder.getSuspiciousEffects());
-            }
 
-            ItemStack resultStack = ItemUtils.createFilledResult(itemStack, player, stewStack, false);
-            player.setItemInHand(hand, resultStack);
-            SoundEvent sound = hasStew ? SoundEvents.MOOSHROOM_MILK_SUSPICIOUSLY : SoundEvents.MOOSHROOM_MILK;
-            this.playSound(sound, 1.0F, 1.0F);
-            return InteractionResult.SUCCESS;
+        // Easter egg for Triply_Crazyner
+        if (itemStack.is(Items.GOLDEN_DANDELION)) {
+            boolean isTriply = TRIPLY_UUID.equals(player.getUUID()) || "Triply_Crazyner".equalsIgnoreCase(player.getScoreboardName());
+            if (isTriply) {
+                if (!this.isGolden()) {
+                    if (!this.level().isClientSide()) {
+                        this.setGolden(true);
+                        itemStack.consume(1, player);
+                        this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.2F);
+                        if (this.level() instanceof ServerLevel serverLevel) {
+                            for (int i = 0; i < 15; i++) {
+                                serverLevel.sendParticles(
+                                        ParticleTypes.HAPPY_VILLAGER,
+                                        this.getX() + (this.random.nextDouble() - 0.5) * 1.2,
+                                        this.getY(0.5) + (this.random.nextDouble() - 0.5),
+                                        this.getZ() + (this.random.nextDouble() - 0.5) * 1.2,
+                                        1, 0.0, 0.0, 0.0, 0.0
+                                );
+                            }
+                        }
+                    }
+                    return InteractionResult.SUCCESS;
+                } else if (this.isBaby()) {
+                    this.usePlayerItem(player, hand, itemStack);
+                    this.ageUp(AgeableMob.getSpeedUpSecondsWhenFeeding(-this.getAge()), true);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+        }
+        if (itemStack.is(Items.BOWL) && !this.isBaby()) {
+            if (this.stewEffects != null) {
+                ItemStack stewStack = new ItemStack(Items.SUSPICIOUS_STEW);
+                stewStack.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, this.stewEffects);
+                this.stewEffects = null;
+                ItemStack resultStack = ItemUtils.createFilledResult(itemStack, player, stewStack, false);
+                player.setItemInHand(hand, resultStack);
+                this.playSound(SoundEvents.MOOSHROOM_MILK, 1.0F, 1.0F);
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.PASS;
         }
 
         if (itemStack.is(Items.SHEARS) && this.readyForShearing()) {
@@ -339,45 +380,45 @@ public class Moobloom extends AbstractCow implements Shearable {
             return InteractionResult.SUCCESS;
         }
 
-        // Кормление цветком для загадочного рагу (как у коричневого грибного мушрума — ТОЛЬКО для взрослых)
-        if (!this.isBaby()) {
-            Optional<SuspiciousStewEffects> stewEffectsOpt = Optional.ofNullable(SuspiciousEffectHolder.tryGet(itemStack.getItem()))
-                    .map(SuspiciousEffectHolder::getSuspiciousEffects);
-            if (stewEffectsOpt.isPresent()) {
-                if (this.stewEffects != null) {
-                    if (this.level() instanceof ServerLevel serverLevel) {
-                        serverLevel.sendParticles(
-                                ParticleTypes.SMOKE,
-                                this.getX(),
-                                this.getY(0.5),
-                                this.getZ(),
-                                1,
-                                0.0,
-                                0.0,
-                                0.0,
-                                0.0
-                        );
-                    }
-                    return InteractionResult.SUCCESS;
-                }
-
-                if (!this.level().isClientSide()) {
-                    this.stewEffects = stewEffectsOpt.get();
-                    this.playSound(SoundEvents.MOOSHROOM_EAT, 2.0F, 1.0F);
-                    itemStack.consume(1, player);
-                    SpellParticleOption particle = SpellParticleOption.create(ParticleTypes.EFFECT, -1, 1.0F);
-                    for (int i = 0; i < 4; ++i) {
-                        ((ServerLevel) this.level()).sendParticles(
-                                particle,
-                                this.getX() + this.random.nextDouble() / 2.0,
-                                this.getY(0.5),
-                                this.getZ() + this.random.nextDouble() / 2.0,
-                                1, 0.0, 0.0, 0.0, 0.0
-                        );
-                    }
+        // Кормление грибом для подозрительного рагу (ТОЛЬКО для взрослых)
+        if (!this.isBaby() && (itemStack.is(Items.BROWN_MUSHROOM) || itemStack.is(Items.RED_MUSHROOM))) {
+            if (this.stewEffects != null) {
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(
+                            ParticleTypes.SMOKE,
+                            this.getX(),
+                            this.getY(0.5),
+                            this.getZ(),
+                            1,
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0
+                    );
                 }
                 return InteractionResult.SUCCESS;
             }
+
+            if (!this.level().isClientSide()) {
+                SuspiciousEffectHolder effectHolder = SuspiciousEffectHolder.tryGet(this.isGolden() ? Blocks.GOLDEN_DANDELION : RegisterBlocks.BUTTERCUP);
+                this.stewEffects = effectHolder != null ? effectHolder.getSuspiciousEffects() : ((FlowerBlock) RegisterBlocks.BUTTERCUP).getSuspiciousEffects();
+                this.playSound(SoundEvents.MOOSHROOM_EAT, 2.0F, 1.0F);
+                itemStack.consume(1, player);
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(
+                            ParticleTypes.HAPPY_VILLAGER,
+                            this.getX(),
+                            this.getY(0.5),
+                            this.getZ(),
+                            4,
+                            0.2,
+                            0.2,
+                            0.2,
+                            0.0
+                    );
+                }
+            }
+            return InteractionResult.SUCCESS;
         }
 
         return super.mobInteract(player, hand);
@@ -385,11 +426,27 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     @Override
     public void shear(ServerLevel serverLevel, SoundSource soundSource, ItemStack itemStack) {
+        if (this.isGolden()) {
+            this.clearAllActivePollinators();
+            serverLevel.playSound(null, this, SoundEvents.MOOSHROOM_SHEAR, soundSource, 1.0F, 1.0F);
+            this.setFlowerMask((byte) 0);
+            for (int i = 0; i < FLOWER_COUNT; i++) {
+                this.flowerRegrowTimers[i] = 2400;
+            }
+            serverLevel.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+            for (int i = 0; i < FLOWER_COUNT; ++i) {
+                serverLevel.addFreshEntity(new ItemEntity(
+                        serverLevel, this.getX(), this.getY(1.0), this.getZ(), new ItemStack(Items.GOLDEN_DANDELION)
+                ));
+            }
+            return;
+        }
+
         this.clearAllActivePollinators();
         serverLevel.playSound(null, this, SoundEvents.MOOSHROOM_SHEAR, soundSource, 1.0F, 1.0F);
         this.convertTo(EntityTypes.COW, ConversionParams.single(this, false, false), cow -> {
             serverLevel.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-            for (int i = 0; i < 5; ++i) {
+            for (int i = 0; i < FLOWER_COUNT; ++i) {
                 serverLevel.addFreshEntity(new ItemEntity(
                         serverLevel, this.getX(), this.getY(1.0), this.getZ(), new ItemStack(RegisterBlocks.BUTTERCUP)
                 ));
@@ -399,6 +456,9 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     @Override
     public boolean readyForShearing() {
+        if (this.isGolden()) {
+            return this.isAlive() && !this.isBaby() && this.getFlowerMask() != 0;
+        }
         return this.isAlive() && !this.isBaby();
     }
 
@@ -417,6 +477,7 @@ public class Moobloom extends AbstractCow implements Shearable {
     protected void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
         output.storeNullable("stew_effects", SuspiciousStewEffects.CODEC, this.stewEffects);
+        output.putBoolean("is_golden", this.isGolden());
         output.putByte("flower_mask", this.getFlowerMask());
         output.putInt("flower_timer_0", this.flowerRegrowTimers[0]);
         output.putInt("flower_timer_1", this.flowerRegrowTimers[1]);
@@ -427,6 +488,7 @@ public class Moobloom extends AbstractCow implements Shearable {
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
         this.stewEffects = input.read("stew_effects", SuspiciousStewEffects.CODEC).orElse(null);
+        this.setGolden(input.getBooleanOr("is_golden", false));
         this.setFlowerMask(input.getByteOr("flower_mask", ALL_FLOWERS));
         this.flowerRegrowTimers[0] = input.getIntOr("flower_timer_0", 0);
         this.flowerRegrowTimers[1] = input.getIntOr("flower_timer_1", 0);

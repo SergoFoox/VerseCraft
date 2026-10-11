@@ -33,7 +33,7 @@ public class RegisterWorldgen {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WINDSWEPT_SAVANNA),MobCategory.CREATURE,EntityTypes.LLAMA,8,1,4);
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SPARSE_JUNGLE),MobCategory.CREATURE,EntityTypes.PARROT,40,1,2);
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SPARSE_JUNGLE),MobCategory.CREATURE,EntityTypes.OCELOT,30,1,2);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.FLOWER_FOREST), MobCategory.CREATURE, RegisterEntityTypes.MOOBLOOM, 5, 1, 4);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.FLOWER_FOREST), MobCategory.CREATURE, RegisterEntityTypes.MOOBLOOM, 8, 2, 4);
     }
 
 }

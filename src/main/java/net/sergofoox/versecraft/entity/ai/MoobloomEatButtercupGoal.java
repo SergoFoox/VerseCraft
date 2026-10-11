@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.sergofoox.versecraft.entity.Moobloom;
 import net.sergofoox.versecraft.registry.RegisterBlocks;
@@ -25,10 +26,13 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
         if (!this.moobloom.isAlive() || this.moobloom.isBaby()) {
             return false;
         }
+        if (this.moobloom.isWaitingForBee()) {
+            return false;
+        }
         if (this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
             return false;
         }
-        if (this.moobloom.isWaitingForBee()) {
+        if (this.nextStartTick > 0) {
             return false;
         }
         return super.canUse();
@@ -69,6 +73,9 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
     @Override
     protected boolean isValidTarget(LevelReader level, BlockPos pos) {
+        if (this.moobloom.isGolden() && level.getBlockState(pos).is(Blocks.GOLDEN_DANDELION)) {
+            return true;
+        }
         return level.getBlockState(pos).is(RegisterBlocks.BUTTERCUP);
     }
 
@@ -113,7 +120,9 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
             if (this.eatingTicks == 32) {
                 if (this.moobloom.level() instanceof ServerLevel serverLevel) {
-                    if (serverLevel.getBlockState(this.blockPos).is(RegisterBlocks.BUTTERCUP)) {
+                    boolean isButtercup = serverLevel.getBlockState(this.blockPos).is(RegisterBlocks.BUTTERCUP);
+                    boolean isGoldenDandelion = this.moobloom.isGolden() && serverLevel.getBlockState(this.blockPos).is(Blocks.GOLDEN_DANDELION);
+                    if (isButtercup || isGoldenDandelion) {
                         boolean mobGriefing = serverLevel.getGameRules().get(GameRules.MOB_GRIEFING);
                         if (mobGriefing) {
                             serverLevel.destroyBlock(this.blockPos, false);

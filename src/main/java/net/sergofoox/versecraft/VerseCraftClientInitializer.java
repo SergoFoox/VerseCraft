@@ -63,7 +63,7 @@ public class VerseCraftClientInitializer implements ClientModInitializer {
                 List.of(new BlockTintSource() {
                     @Override
                     public int color(BlockState state) {
-                        return 0xFF000000 | (PotionContents.BASE_POTION_COLOR & 0xFFFFFF);
+                        return PotionContents.getColorOptional(List.of()).orElse(0x385DC6);
                     }
 
                     @Override
@@ -73,7 +73,7 @@ public class VerseCraftClientInitializer implements ClientModInitializer {
                                 return be.getColor();
                             }
                         }
-                        return 0xFF000000 | (PotionContents.BASE_POTION_COLOR & 0xFFFFFF);
+                        return PotionContents.getColorOptional(List.of()).orElse(0x385DC6);
                     }
                 }),
                 RegisterBlocks.POTION_CAULDRON

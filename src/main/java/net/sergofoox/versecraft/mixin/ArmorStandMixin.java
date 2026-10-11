@@ -46,7 +46,6 @@ public abstract class ArmorStandMixin extends LivingEntity implements ArmorStand
     @Unique
     private int versecraft$lastRedstoneSignal = 0;
 
-    // Быстрый и плавный переход как в Bedrock (180 мс с Ease-Out)
     @Unique private static final long VERSECRAFT$TRANSITION_DURATION_MS = 180L;
     @Unique private long versecraft$transitionStartTime = 0L;
 
@@ -74,7 +73,6 @@ public abstract class ArmorStandMixin extends LivingEntity implements ArmorStand
             Rotations leftLeg
     ) {}
 
-    // Точная очерёдность 13 поз из Minecraft Bedrock Edition (0–12)
     @Unique
     private static final BedrockPose[] VERSECRAFT$BEDROCK_POSES = new BedrockPose[]{
             // 0. Default (animation.armor_stand.default_pose)
@@ -109,7 +107,6 @@ public abstract class ArmorStandMixin extends LivingEntity implements ArmorStand
         super(entityType, level);
     }
 
-
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At("TAIL"))
     private void versecraft$initShowArms(EntityType<? extends ArmorStand> type, Level level, CallbackInfo ci) {
         this.setShowArms(true);
@@ -132,14 +129,12 @@ public abstract class ArmorStandMixin extends LivingEntity implements ArmorStand
         }
     }
 
-
     @Inject(method = "onSyncedDataUpdated", at = @At("TAIL"))
     private void versecraft$onSyncedDataUpdated(EntityDataAccessor<?> key, CallbackInfo ci) {
         if (this.level().isClientSide()) {
             this.versecraft$checkPoseChanged();
         }
     }
-
 
     @Override
     public void tick() {
@@ -211,7 +206,6 @@ public abstract class ArmorStandMixin extends LivingEntity implements ArmorStand
         long now = System.currentTimeMillis();
         float currentFactor = this.versecraft$getCurrentEasedFactor(now);
 
-        // Подхватываем текущую позицию конечностей прямо из воздуха
         this.versecraft$startHead = versecraft$lerp(this.versecraft$startHead, this.versecraft$targetHead, currentFactor);
         this.versecraft$startBody = versecraft$lerp(this.versecraft$startBody, this.versecraft$targetBody, currentFactor);
         this.versecraft$startLeftArm = versecraft$lerp(this.versecraft$startLeftArm, this.versecraft$targetLeftArm, currentFactor);
@@ -235,7 +229,6 @@ public abstract class ArmorStandMixin extends LivingEntity implements ArmorStand
         long elapsed = now - this.versecraft$transitionStartTime;
         if (elapsed >= VERSECRAFT$TRANSITION_DURATION_MS) return 1.0f;
         float t = (float) elapsed / (float) VERSECRAFT$TRANSITION_DURATION_MS;
-        // Ease-Out Cubic: мгновенный старт на клик и мягкая естественная доводка
         float inv = 1.0f - t;
         return 1.0f - inv * inv * inv;
     }

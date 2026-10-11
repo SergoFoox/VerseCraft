@@ -98,17 +98,14 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
 
     @Override
     public void handlePrecipitation(BlockState state, Level level, BlockPos pos, Biome.Precipitation precipitation) {
-        // В Bedrock Edition дождь не влияет на котлы с зельем
     }
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isInside) {
-        // В Bedrock Edition зелья в котле не тушат огонь и не накладывают эффекты на сущностей
     }
 
     @Override
     protected boolean canReceiveStalactiteDrip(Fluid fluid) {
-        // Капельники не наполняют и не разбавляют котлы с зельями
         return false;
     }
 
@@ -136,13 +133,11 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
         PotionBottleType cauldronBottleType = be.getBottleType();
         int currentLevel = state.getValue(LEVEL);
 
-        // 1. Попытка налить зелье (обычное, взрывное, оседающее/туманное)
         if (isPotionItem(itemStack)) {
             PotionContents heldContents = itemStack.get(DataComponents.POTION_CONTENTS);
             PotionBottleType heldBottleType = PotionBottleType.byItemStack(itemStack);
             if (heldContents != null && heldBottleType != null) {
                 if (heldContents.is(Potions.WATER)) {
-                    // Вода в зелье -> испарение со звуком взрыва (смешивание жидкостей)
                     triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
                     return InteractionResult.SUCCESS;
                 }
@@ -161,20 +156,17 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
                     }
                     return InteractionResult.PASS;
                 } else {
-                    // Разные зелья или разные типы (обычное / взрывное / туманное) -> испарение со звуком взрыва (как в Bedrock)
                     triggerEvaporation(level, pos, player, hand, itemStack, Items.GLASS_BOTTLE);
                     return InteractionResult.SUCCESS;
                 }
             }
         }
 
-        // 2. Попытка налить ведро воды, лавы или рыхлого снега
         if (itemStack.is(Items.WATER_BUCKET) || itemStack.is(Items.LAVA_BUCKET) || itemStack.is(Items.POWDER_SNOW_BUCKET)) {
             triggerEvaporation(level, pos, player, hand, itemStack, Items.BUCKET);
             return InteractionResult.SUCCESS;
         }
 
-        // 3. Забор зелья пустой бутылочкой
         if (itemStack.is(Items.GLASS_BOTTLE)) {
             if (!level.isClientSide()) {
                 if (currentLevel > 1) {
@@ -196,13 +188,12 @@ public class PotionCauldronBlock extends LayeredCauldronBlock implements EntityB
             return InteractionResult.SUCCESS;
         }
 
-        // 4. Окунание стрел (создание стрел с эффектами зелья, эксклюзив Bedrock)
         if (itemStack.is(Items.ARROW)) {
             if (!level.isClientSide()) {
                 int heldCount = itemStack.getCount();
                 int maxDippable;
                 if (currentLevel == 3) {
-                    maxDippable = 64; // Полный котёл позволяет окунуть полный стак (64 стрелы)
+                    maxDippable = 64;
                 } else if (currentLevel == 2) {
                     maxDippable = 32;
                 } else {

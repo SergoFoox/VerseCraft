@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.sergofoox.versecraft.registry.RegisterBlocks;
 import net.sergofoox.versecraft.tags.VerseBlocksTags;
 import org.jspecify.annotations.NonNull;
@@ -299,6 +300,25 @@ public class VerseBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider
         tag(BlockTags.REPLACEABLE)
                 .add(key(RegisterBlocks.SHORT_MYCELIUM_GRASS))
                 .add(key(RegisterBlocks.TALL_MYCELIUM_GRASS));
+
+        tag(VerseBlocksTags.Blocks.IMMOVABLE)
+                .add(key(Blocks.SPAWNER))
+                .add(key(Blocks.TRIAL_SPAWNER))
+                .add(key(Blocks.VAULT))
+                .add(key(Blocks.BEACON))
+                .add(key(Blocks.CONDUIT))
+                .add(key(Blocks.END_PORTAL))
+                .add(key(Blocks.END_GATEWAY))
+                .add(key(Blocks.CREAKING_HEART))
+                .add(key(Blocks.ENCHANTING_TABLE))
+                .add(key(Blocks.ENDER_CHEST))
+                .add(key(Blocks.JUKEBOX))
+                .add(key(Blocks.SCULK_SENSOR))
+                .add(key(Blocks.CALIBRATED_SCULK_SENSOR))
+                .add(key(Blocks.SCULK_CATALYST))
+                .add(key(Blocks.SCULK_SHRIEKER))
+                .add(key(Blocks.GRINDSTONE))
+                .add(key(Blocks.LODESTONE));
     }
 
     private static ResourceKey<Block> key(Block block) {

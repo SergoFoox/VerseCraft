@@ -10,10 +10,16 @@
     "SwampHutPieceMixin",
     "ChunkGeneratorMixin",
     "BeeMixin",
-    "BeeInvoker"
+    "BeeInvoker",
+    "PistonBaseBlockMixin",
+    "PistonMovingBlockEntityMixin",
+    "BlockStateBaseMixin",
+    "LecternBlockEntityMixin"
   ],
   "client": [
-    "ArmorStandRendererMixin"
+    "ArmorStandRendererMixin",
+    "PistonHeadRenderStateMixin",
+    "PistonHeadRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

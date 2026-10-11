@@ -37,13 +37,10 @@ public abstract class AbstractCauldronBlockMixin {
 
     @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
     private void versecraft$cauldronInteractions(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
-        // 1. Наливание зелья в пустой котёл
         if (state.is(Blocks.CAULDRON) && PotionCauldronBlock.isPotionItem(itemStack)) {
             PotionContents contents = itemStack.get(DataComponents.POTION_CONTENTS);
             if (contents != null) {
                 if (contents.is(Potions.WATER)) {
-                    // Обычная бутылочка с водой обрабатывается ванильной CauldronInteraction.FILL_WATER.
-                    // Для взрывной и туманной бутылочек с водой добавляем обработку здесь:
                     if (itemStack.is(Items.SPLASH_POTION) || itemStack.is(Items.LINGERING_POTION)) {
                         if (!level.isClientSide()) {
                             level.setBlock(pos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 1), 3);
@@ -70,9 +67,7 @@ public abstract class AbstractCauldronBlockMixin {
             }
         }
 
-        // 2. Взаимодействие с водным котлом
         if (state.is(Blocks.WATER_CAULDRON)) {
-            // Краситель (или костная мука, лазурит, какао-бобы, чернильный мешок) -> Окрашивание воды (Bedrock mechanic)
             DyeColor dyeColor = DyedCauldronBlock.getDyeColor(itemStack);
             if (dyeColor != null) {
                 if (!level.isClientSide()) {
@@ -92,7 +87,6 @@ public abstract class AbstractCauldronBlockMixin {
                 return;
             }
 
-            // Наливание зелья в водный котёл -> взрывное испарение (смешивание разных жидкостей)
             if (PotionCauldronBlock.isPotionItem(itemStack)) {
                 PotionContents contents = itemStack.get(DataComponents.POTION_CONTENTS);
                 if (contents != null) {
@@ -118,7 +112,6 @@ public abstract class AbstractCauldronBlockMixin {
             }
         }
 
-        // 3. Наливание зелья в лавовый котёл -> взрывное испарение
         if (state.is(Blocks.LAVA_CAULDRON) && PotionCauldronBlock.isPotionItem(itemStack)) {
             PotionContents contents = itemStack.get(DataComponents.POTION_CONTENTS);
             if (contents != null) {
@@ -128,7 +121,6 @@ public abstract class AbstractCauldronBlockMixin {
             }
         }
 
-        // 4. Наливание зелья в котёл с рыхлым снегом -> взрывное испарение
         if (state.is(Blocks.POWDER_SNOW_CAULDRON) && PotionCauldronBlock.isPotionItem(itemStack)) {
             PotionContents contents = itemStack.get(DataComponents.POTION_CONTENTS);
             if (contents != null) {

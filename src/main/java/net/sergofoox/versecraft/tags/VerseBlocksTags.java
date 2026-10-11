@@ -12,6 +12,7 @@ public class VerseBlocksTags {
 
     public static class Blocks {
         public static final TagKey<Block> AZALEA_LOGS = tag("azalea_logs");
+        public static final TagKey<Block> IMMOVABLE = tag("immovable");
 
         private static TagKey<Block> tag(String name) {
             return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name));

@@ -125,14 +125,12 @@ public class Moobloom extends AbstractCow implements Shearable {
         byte mask = this.getFlowerMask();
         UUID beeUuid = bee.getUUID();
 
-        // If this bee already has a reservation, return it
         for (int i = 0; i < FLOWER_COUNT; i++) {
             if ((mask & (1 << i)) != 0 && beeUuid.equals(this.flowerReservations[i])) {
                 return i;
             }
         }
 
-        // Find the first available unreserved flower
         for (int i = 0; i < FLOWER_COUNT; i++) {
             if ((mask & (1 << i)) != 0 && this.flowerReservations[i] == null) {
                 this.flowerReservations[i] = beeUuid;
@@ -192,12 +190,10 @@ public class Moobloom extends AbstractCow implements Shearable {
             return new Vec3(x + offX, y + 1.85, z + offZ);
         }
 
-        // Back flowers: rotated along body yaw
         float bodyRad = (float) Math.toRadians(this.yBodyRot);
         double cos = Math.cos(bodyRad);
         double sin = Math.sin(bodyRad);
 
-        // Slot 0: back right, Slot 1: back left
         double localX = (slot == 0) ? 0.25 : -0.2;
         double localZ = (slot == 0) ? -0.35 : 0.15;
 
@@ -211,7 +207,7 @@ public class Moobloom extends AbstractCow implements Shearable {
         if (slot >= 0 && slot < FLOWER_COUNT) {
             byte newMask = (byte) (this.getFlowerMask() & ~(1 << slot));
             this.setFlowerMask(newMask);
-            this.flowerRegrowTimers[slot] = 2400; // 2 minutes
+            this.flowerRegrowTimers[slot] = 2400;
             this.flowerReservations[slot] = null;
 
             if (this.level() instanceof ServerLevel serverLevel) {
@@ -248,7 +244,6 @@ public class Moobloom extends AbstractCow implements Shearable {
             return;
         }
 
-        // Eating one buttercup restores all missing flowers immediately without particles
         for (int i = 0; i < FLOWER_COUNT; i++) {
             if ((mask & (1 << i)) == 0) {
                 this.regrowFlower(i);
@@ -329,7 +324,6 @@ public class Moobloom extends AbstractCow implements Shearable {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
 
-        // Easter egg for Triply_Crazyner
         if (itemStack.is(Items.GOLDEN_DANDELION)) {
             boolean isTriply = TRIPLY_UUID.equals(player.getUUID()) || "Triply_Crazyner".equalsIgnoreCase(player.getScoreboardName());
             if (isTriply) {
@@ -380,7 +374,6 @@ public class Moobloom extends AbstractCow implements Shearable {
             return InteractionResult.SUCCESS;
         }
 
-        // Кормление грибом для подозрительного рагу (ТОЛЬКО для взрослых)
         if (!this.isBaby() && (itemStack.is(Items.BROWN_MUSHROOM) || itemStack.is(Items.RED_MUSHROOM))) {
             if (this.stewEffects != null) {
                 if (this.level() instanceof ServerLevel serverLevel) {

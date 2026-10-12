@@ -23,6 +23,7 @@ public class VerseCraft implements ModInitializer {
         RegisterItems.registerItems();
         RegisterEntityTypes.registerEntitiesTypes();
         RegisterWorldgen.init();
+        RegisterLootConditions.registerLootConditions();
         LOGGER.info("Hello Fabric world!");
     }
 

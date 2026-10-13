@@ -27,7 +27,6 @@ public class MoobloomFlowerLayer extends RenderLayer<MoobloomRenderState, CowMod
         }
         int overlayCoords = LivingEntityRenderer.getOverlayCoords(state, 0.0F);
 
-        // Flower 0: Back Right
         if ((state.flowerMask & (1 << 0)) != 0) {
             poseStack.pushPose();
             poseStack.translate(0.2F, -0.35F, 0.5F);
@@ -38,7 +37,6 @@ public class MoobloomFlowerLayer extends RenderLayer<MoobloomRenderState, CowMod
             poseStack.popPose();
         }
 
-        // Flower 1: Back Left
         if ((state.flowerMask & (1 << 1)) != 0) {
             poseStack.pushPose();
             poseStack.translate(0.2F, -0.35F, 0.5F);
@@ -51,7 +49,6 @@ public class MoobloomFlowerLayer extends RenderLayer<MoobloomRenderState, CowMod
             poseStack.popPose();
         }
 
-        // Flower 2: Head
         if ((state.flowerMask & (1 << 2)) != 0) {
             poseStack.pushPose();
             this.getParentModel().getHead().translateAndRotate(poseStack);

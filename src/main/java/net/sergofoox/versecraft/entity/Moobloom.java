@@ -10,7 +10,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -18,7 +17,6 @@ import net.sergofoox.versecraft.entity.ai.MoobloomEatButtercupGoal;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.ConversionParams;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -43,20 +41,19 @@ import net.sergofoox.versecraft.registry.RegisterEntityTypes;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 public class Moobloom extends AbstractCow implements Shearable {
 
     public static final int FLOWER_COUNT = 3;
-    public static final byte ALL_FLOWERS = 0b111; // 7
+    public static final byte ALL_FLOWERS = 0b111;
 
     private static final EntityDataAccessor<Byte> DATA_FLOWER_MASK =
             SynchedEntityData.defineId(Moobloom.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_IS_GOLDEN =
             SynchedEntityData.defineId(Moobloom.class, EntityDataSerializers.BOOLEAN);
-
-    public static final UUID TRIPLY_UUID = UUID.fromString("b94dd588-5220-4ef2-9a64-8fbffb361f78");
 
     @Nullable
     private SuspiciousStewEffects stewEffects;
@@ -91,6 +88,22 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     public void setGolden(boolean golden) {
         this.entityData.set(DATA_IS_GOLDEN, golden);
+    }
+
+    public void turnGolden() {
+        this.setGolden(true);
+        if (this.level() instanceof ServerLevel serverLevel) {
+            for (int i = 0; i < 15; i++) {
+                serverLevel.sendParticles(
+                        ParticleTypes.HAPPY_VILLAGER,
+                        this.getX() + (this.random.nextDouble() - 0.5) * 1.2,
+                        this.getY(0.5) + (this.random.nextDouble() - 0.5),
+                        this.getZ() + (this.random.nextDouble() - 0.5) * 1.2,
+                        1, 0.0, 0.0, 0.0, 0.0
+                );
+            }
+        }
+        this.onAteButtercup();
     }
 
     public byte getFlowerMask() {
@@ -180,7 +193,6 @@ public class Moobloom extends AbstractCow implements Shearable {
         double z = this.getZ();
 
         if (slot == 2) {
-            // Head flower: projects forward along head yaw
             float headRad = (float) Math.toRadians(this.yHeadRot);
             double cos = Math.cos(headRad);
             double sin = Math.sin(headRad);
@@ -201,6 +213,20 @@ public class Moobloom extends AbstractCow implements Shearable {
         double offZ = cos * localZ + sin * localX;
 
         return new Vec3(x + offX, y + 1.8, z + offZ);
+    }
+
+    public void onPollinationSuccess(int slot, Bee bee) {
+        if (this.isGolden()) {
+            bee.setBaby(true);
+            if (slot >= 0 && slot < FLOWER_COUNT) {
+                this.flowerReservations[slot] = null;
+            }
+            if (this.level() instanceof ServerLevel serverLevel) {
+                serverLevel.playSound(null, this.blockPosition(), SoundEvents.BEE_POLLINATE, SoundSource.NEUTRAL, 1.0F, 1.2F);
+            }
+            return;
+        }
+        this.onPollinationSuccess(slot);
     }
 
     public void onPollinationSuccess(int slot) {
@@ -266,19 +292,20 @@ public class Moobloom extends AbstractCow implements Shearable {
         super.aiStep();
 
         if (!this.level().isClientSide()) {
-            byte mask = this.getFlowerMask();
-            for (int i = 0; i < FLOWER_COUNT; i++) {
-                if ((mask & (1 << i)) == 0) {
-                    if (this.flowerRegrowTimers[i] > 0) {
-                        this.flowerRegrowTimers[i]--;
-                        if (this.flowerRegrowTimers[i] <= 0) {
-                            this.regrowFlower(i);
+            if (!this.isGolden()) {
+                byte mask = this.getFlowerMask();
+                for (int i = 0; i < FLOWER_COUNT; i++) {
+                    if ((mask & (1 << i)) == 0) {
+                        if (this.flowerRegrowTimers[i] > 0) {
+                            this.flowerRegrowTimers[i]--;
+                            if (this.flowerRegrowTimers[i] <= 0) {
+                                this.regrowFlower(i);
+                            }
                         }
                     }
                 }
             }
 
-            // Cleanup any active pollinators that died or moved far away
             if (!this.activePollinators.isEmpty() && this.tickCount % 20 == 0) {
                 this.activePollinators.removeIf(uuid -> {
                     Entity entity = ((ServerLevel) this.level()).getEntity(uuid);
@@ -324,34 +351,6 @@ public class Moobloom extends AbstractCow implements Shearable {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
 
-        if (itemStack.is(Items.GOLDEN_DANDELION)) {
-            boolean isTriply = TRIPLY_UUID.equals(player.getUUID()) || "Triply_Crazyner".equalsIgnoreCase(player.getScoreboardName());
-            if (isTriply) {
-                if (!this.isGolden()) {
-                    if (!this.level().isClientSide()) {
-                        this.setGolden(true);
-                        itemStack.consume(1, player);
-                        this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.2F);
-                        if (this.level() instanceof ServerLevel serverLevel) {
-                            for (int i = 0; i < 15; i++) {
-                                serverLevel.sendParticles(
-                                        ParticleTypes.HAPPY_VILLAGER,
-                                        this.getX() + (this.random.nextDouble() - 0.5) * 1.2,
-                                        this.getY(0.5) + (this.random.nextDouble() - 0.5),
-                                        this.getZ() + (this.random.nextDouble() - 0.5) * 1.2,
-                                        1, 0.0, 0.0, 0.0, 0.0
-                                );
-                            }
-                        }
-                    }
-                    return InteractionResult.SUCCESS;
-                } else if (this.isBaby()) {
-                    this.usePlayerItem(player, hand, itemStack);
-                    this.ageUp(AgeableMob.getSpeedUpSecondsWhenFeeding(-this.getAge()), true);
-                    return InteractionResult.SUCCESS;
-                }
-            }
-        }
         if (itemStack.is(Items.BOWL) && !this.isBaby()) {
             if (this.stewEffects != null) {
                 ItemStack stewStack = new ItemStack(Items.SUSPICIOUS_STEW);
@@ -419,29 +418,15 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     @Override
     public void shear(ServerLevel serverLevel, SoundSource soundSource, ItemStack itemStack) {
-        if (this.isGolden()) {
-            this.clearAllActivePollinators();
-            serverLevel.playSound(null, this, SoundEvents.MOOSHROOM_SHEAR, soundSource, 1.0F, 1.0F);
-            this.setFlowerMask((byte) 0);
-            for (int i = 0; i < FLOWER_COUNT; i++) {
-                this.flowerRegrowTimers[i] = 2400;
-            }
-            serverLevel.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-            for (int i = 0; i < FLOWER_COUNT; ++i) {
-                serverLevel.addFreshEntity(new ItemEntity(
-                        serverLevel, this.getX(), this.getY(1.0), this.getZ(), new ItemStack(Items.GOLDEN_DANDELION)
-                ));
-            }
-            return;
-        }
-
         this.clearAllActivePollinators();
         serverLevel.playSound(null, this, SoundEvents.MOOSHROOM_SHEAR, soundSource, 1.0F, 1.0F);
+        boolean golden = this.isGolden();
         this.convertTo(EntityTypes.COW, ConversionParams.single(this, false, false), cow -> {
             serverLevel.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(0.5), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+            ItemStack dropItem = new ItemStack(golden ? Items.GOLDEN_DANDELION : RegisterBlocks.BUTTERCUP);
             for (int i = 0; i < FLOWER_COUNT; ++i) {
                 serverLevel.addFreshEntity(new ItemEntity(
-                        serverLevel, this.getX(), this.getY(1.0), this.getZ(), new ItemStack(RegisterBlocks.BUTTERCUP)
+                        serverLevel, this.getX(), this.getY(1.0), this.getZ(), dropItem.copy()
                 ));
             }
         });
@@ -449,9 +434,6 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     @Override
     public boolean readyForShearing() {
-        if (this.isGolden()) {
-            return this.isAlive() && !this.isBaby() && this.getFlowerMask() != 0;
-        }
         return this.isAlive() && !this.isBaby();
     }
 
@@ -470,6 +452,7 @@ public class Moobloom extends AbstractCow implements Shearable {
     protected void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
         output.storeNullable("stew_effects", SuspiciousStewEffects.CODEC, this.stewEffects);
+        output.putString("Type", this.isGolden() ? "golden" : "buttercup");
         output.putBoolean("is_golden", this.isGolden());
         output.putByte("flower_mask", this.getFlowerMask());
         output.putInt("flower_timer_0", this.flowerRegrowTimers[0]);
@@ -481,7 +464,12 @@ public class Moobloom extends AbstractCow implements Shearable {
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
         this.stewEffects = input.read("stew_effects", SuspiciousStewEffects.CODEC).orElse(null);
-        this.setGolden(input.getBooleanOr("is_golden", false));
+        Optional<String> typeOpt = input.getString("Type");
+        if (typeOpt.isPresent()) {
+            this.setGolden("golden".equalsIgnoreCase(typeOpt.get()));
+        } else {
+            this.setGolden(input.getBooleanOr("is_golden", false));
+        }
         this.setFlowerMask(input.getByteOr("flower_mask", ALL_FLOWERS));
         this.flowerRegrowTimers[0] = input.getIntOr("flower_timer_0", 0);
         this.flowerRegrowTimers[1] = input.getIntOr("flower_timer_1", 0);

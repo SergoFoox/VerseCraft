@@ -20,6 +20,8 @@ public class MoobloomRenderer extends AgeableMobRenderer<Moobloom, MoobloomRende
 
     private static final Identifier TEXTURE = VerseCraft.id("textures/entity/moobloom/moobloom.png");
     private static final Identifier BABY_TEXTURE = VerseCraft.id("textures/entity/moobloom/moobloom_baby.png");
+    private static final Identifier GOLDEN_TEXTURE = VerseCraft.id("textures/entity/moobloom/moobloom_golden.png");
+    private static final Identifier GOLDEN_BABY_TEXTURE = VerseCraft.id("textures/entity/moobloom/moobloom_golden_baby.png");
     private static final BlockDisplayContext BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
     private final BlockModelResolver blockModelResolver;
 
@@ -53,6 +55,9 @@ public class MoobloomRenderer extends AgeableMobRenderer<Moobloom, MoobloomRende
 
     @Override
     public Identifier getTextureLocation(MoobloomRenderState state) {
+        if (state.isGolden) {
+            return state.isBaby ? GOLDEN_BABY_TEXTURE : GOLDEN_TEXTURE;
+        }
         return state.isBaby ? BABY_TEXTURE : TEXTURE;
     }
 }

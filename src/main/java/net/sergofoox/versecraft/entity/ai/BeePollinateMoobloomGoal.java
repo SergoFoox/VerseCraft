@@ -30,7 +30,7 @@ public class BeePollinateMoobloomGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.bee.hasNectar() || this.bee.hasStung() || this.bee.isAngry()) {
+        if (this.bee.hasNectar() || this.bee.hasStung() || this.bee.isAngry() || this.bee.isBaby()) {
             return false;
         }
         if (this.searchCooldown-- > 0) {
@@ -73,7 +73,7 @@ public class BeePollinateMoobloomGoal extends Goal {
         if (!this.targetMoobloom.isFlowerReservedBy(this.targetFlowerSlot, this.bee)) {
             return false;
         }
-        if (this.bee.hasNectar() || this.bee.hasStung() || this.bee.isAngry()) {
+        if (this.bee.hasNectar() || this.bee.hasStung() || this.bee.isAngry() || this.bee.isBaby()) {
             return false;
         }
         return this.timeToLive > 0;
@@ -118,33 +118,26 @@ public class BeePollinateMoobloomGoal extends Goal {
         Vec3 hoverPos = this.targetMoobloom.getFlowerWorldPos(this.targetFlowerSlot);
         double distSq = this.bee.distanceToSqr(hoverPos);
 
-        // When approaching within ~4 blocks, tell Moobloom to stop and wait
         if (distSq < 18.0) {
             this.targetMoobloom.addActivePollinator(this.bee);
         }
 
         if (distSq > 1.2) {
-            // Approach the air position directly above the specific flower
             this.bee.getNavigation().moveTo(hoverPos.x, hoverPos.y, hoverPos.z, 1.2);
             this.bee.getLookControl().setLookAt(hoverPos.x, hoverPos.y, hoverPos.z, 30.0F, 30.0F);
         } else {
-            // Close range: stop path navigation to prevent ground/side clipping
             this.bee.getNavigation().stop();
 
             this.pollinatingTicks++;
 
-            // Gentle hovering animation above the specific flower
             double bobY = hoverPos.y + Math.sin(this.pollinatingTicks * 0.25) * 0.05;
             this.bee.getMoveControl().setWantedPosition(hoverPos.x, bobY, hoverPos.z, 0.4);
 
-            // Dampen horizontal drift so bee stays centered over the flower
             Vec3 delta = this.bee.getDeltaMovement();
             this.bee.setDeltaMovement(delta.x * 0.6, delta.y * 0.8, delta.z * 0.6);
 
-            // Look down directly at the flower
             this.bee.getLookControl().setLookAt(hoverPos.x, hoverPos.y - 0.5, hoverPos.z, 30.0F, 30.0F);
 
-            // Particles falling from bee onto the flower
             if (this.bee.level() instanceof ServerLevel serverLevel) {
                 if (this.pollinatingTicks % 4 == 0) {
                     serverLevel.sendParticles(
@@ -161,7 +154,6 @@ public class BeePollinateMoobloomGoal extends Goal {
                 this.bee.playSound(SoundEvents.BEE_POLLINATE, 0.8F, 1.0F + this.bee.getRandom().nextFloat() * 0.2F);
             }
 
-            // Completed pollination after ~3.5 seconds
             if (this.pollinatingTicks >= 70) {
                 if (this.bee instanceof BeeInvoker invoker) {
                     invoker.versecraft$invokeSetHasNectar(true);
@@ -174,7 +166,7 @@ public class BeePollinateMoobloomGoal extends Goal {
                 this.targetMoobloom = null;
 
                 moobloom.removeActivePollinator(this.bee);
-                moobloom.onPollinationSuccess(slot);
+                moobloom.onPollinationSuccess(slot, this.bee);
             }
         }
     }

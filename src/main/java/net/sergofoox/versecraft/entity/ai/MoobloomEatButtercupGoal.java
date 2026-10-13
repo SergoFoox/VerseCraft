@@ -23,16 +23,13 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
     @Override
     public boolean canUse() {
+        if (this.moobloom.isGolden()) {
+            return false;
+        }
         if (!this.moobloom.isAlive() || this.moobloom.isBaby()) {
             return false;
         }
         if (this.moobloom.isWaitingForBee()) {
-            return false;
-        }
-        if (this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
-            return false;
-        }
-        if (this.nextStartTick > 0) {
             return false;
         }
         return super.canUse();
@@ -40,6 +37,9 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
     @Override
     public boolean canContinueToUse() {
+        if (this.moobloom.isGolden()) {
+            return false;
+        }
         if (this.hasEaten) {
             return false;
         }
@@ -50,7 +50,9 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
             return false;
         }
         if (this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
-            return false;
+            if (!this.moobloom.level().getBlockState(this.blockPos).is(Blocks.GOLDEN_DANDELION)) {
+                return false;
+            }
         }
         if (this.eatingTicks > 0) {
             return this.eatingTicks <= 40;
@@ -73,10 +75,14 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
     @Override
     protected boolean isValidTarget(LevelReader level, BlockPos pos) {
-        if (this.moobloom.isGolden() && level.getBlockState(pos).is(Blocks.GOLDEN_DANDELION)) {
+        if (this.moobloom.isGolden()) {
+            return false;
+        }
+        boolean isGoldenDandelion = level.getBlockState(pos).is(Blocks.GOLDEN_DANDELION);
+        if (isGoldenDandelion) {
             return true;
         }
-        return level.getBlockState(pos).is(RegisterBlocks.BUTTERCUP);
+        return this.moobloom.getFlowerMask() != Moobloom.ALL_FLOWERS && level.getBlockState(pos).is(RegisterBlocks.BUTTERCUP);
     }
 
     @Override
@@ -121,13 +127,17 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
             if (this.eatingTicks == 32) {
                 if (this.moobloom.level() instanceof ServerLevel serverLevel) {
                     boolean isButtercup = serverLevel.getBlockState(this.blockPos).is(RegisterBlocks.BUTTERCUP);
-                    boolean isGoldenDandelion = this.moobloom.isGolden() && serverLevel.getBlockState(this.blockPos).is(Blocks.GOLDEN_DANDELION);
+                    boolean isGoldenDandelion = serverLevel.getBlockState(this.blockPos).is(Blocks.GOLDEN_DANDELION);
                     if (isButtercup || isGoldenDandelion) {
                         boolean mobGriefing = serverLevel.getGameRules().get(GameRules.MOB_GRIEFING);
                         if (mobGriefing) {
                             serverLevel.destroyBlock(this.blockPos, false);
                         }
-                        this.moobloom.onAteButtercup();
+                        if (isGoldenDandelion && !this.moobloom.isGolden()) {
+                            this.moobloom.turnGolden();
+                        } else {
+                            this.moobloom.onAteButtercup();
+                        }
                     }
                 }
             } else if (this.eatingTicks >= 40) {

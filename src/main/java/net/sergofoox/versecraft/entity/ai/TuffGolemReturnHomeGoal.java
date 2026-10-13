@@ -63,15 +63,13 @@ public class TuffGolemReturnHomeGoal extends Goal {
         double dz = pos.z - targetZ;
         double horizDistSq = dx * dx + dz * dz;
         double dy = Math.abs(pos.y - targetY);
-        BlockPos currentPos = this.golem.blockPosition();
 
-        boolean arrived = (horizDistSq <= 0.06D && dy < 0.5D)
-                || (currentPos.equals(home) && horizDistSq <= 0.16D && dy < 0.5D)
-                || (currentPos.equals(home) && dy < 0.5D && this.golem.getDeltaMovement().horizontalDistanceSqr() < 0.0005D)
-                || (horizDistSq <= 0.64D && dy < 0.5D && (this.golem.getNavigation().isDone() || this.golem.getNavigation().isStuck()));
+        boolean atCenter = (horizDistSq <= 0.09D && dy < 0.5D);
+        boolean stoppedAtHome = (this.golem.blockPosition().equals(home) && horizDistSq <= 0.18D && dy < 0.5D && this.golem.getDeltaMovement().horizontalDistanceSqr() < 0.0005D);
+        boolean stuckAtHome = (horizDistSq <= 0.36D && dy < 0.5D && this.golem.getNavigation().isStuck());
 
-        if (arrived) {
-            if (this.golem.shouldYieldToDeeperGolem() && this.yieldTicks < 300) {
+        if (atCenter || stoppedAtHome || stuckAtHome) {
+            if (this.golem.shouldYieldToDeeperGolem() && this.yieldTicks < 60) {
                 this.yieldTicks++;
                 this.golem.getNavigation().stop();
                 this.golem.setDeltaMovement(Vec3.ZERO);
@@ -81,13 +79,13 @@ public class TuffGolemReturnHomeGoal extends Goal {
             return;
         }
 
-        if (horizDistSq <= 3.0D && dy < 1.0D) {
+        if (horizDistSq <= 2.25D && dy < 1.0D) {
             this.golem.getMoveControl().setWantedPosition(targetX, targetY, targetZ, this.speedModifier);
         } else {
             if (this.repathCooldown > 0) {
                 this.repathCooldown--;
             } else if (this.golem.getNavigation().isDone() || this.golem.getNavigation().getPath() == null) {
-                this.repathCooldown = 20;
+                this.repathCooldown = 15;
                 this.golem.getNavigation().moveTo(targetX, targetY, targetZ, this.speedModifier);
             }
         }

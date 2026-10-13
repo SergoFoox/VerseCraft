@@ -16,7 +16,6 @@ import net.sergofoox.versecraft.registry.RegisterEntityTypes;
 
 public class TuffGolemSpawn {
 
-    // Постройка для спавна
     public static void register() {
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (world.isClientSide()) {

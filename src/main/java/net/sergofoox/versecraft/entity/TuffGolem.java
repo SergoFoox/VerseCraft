@@ -30,8 +30,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.sergofoox.versecraft.block.entity.TuffGolemBlockEntity;
 import net.sergofoox.versecraft.entity.ai.TuffGolemReturnHomeGoal;
@@ -57,6 +59,7 @@ public class TuffGolem extends AbstractGolem {
     public final AnimationState sleepOverAnimationState = new AnimationState();
 
     private int animTicks = 0;
+    private int awakeTicks = 0;
 
     @Nullable
     private BlockPos originPos;
@@ -121,18 +124,58 @@ public class TuffGolem extends AbstractGolem {
         return s == STATE_SLEEP_START || s == STATE_SLEEP_OVER;
     }
 
+    public boolean wantsToSleep() {
+        return !this.getMainHandItem().isEmpty() || this.awakeTicks >= 600;
+    }
+
+    public boolean shouldYieldToDeeperGolem() {
+        if (this.originPos == null) {
+            return false;
+        }
+
+        AABB searchBox = this.getBoundingBox().inflate(24.0D, 8.0D, 24.0D);
+        List<TuffGolem> nearby = this.level().getEntitiesOfClass(
+                TuffGolem.class,
+                searchBox,
+                other -> other != this
+                        && other.isAlive()
+                        && !other.isBusyWithAnim()
+                        && other.wantsToSleep()
+                        && other.getOriginPos() != null
+                        && !other.getOriginPos().equals(this.originPos)
+        );
+
+        if (nearby.isEmpty()) {
+            return false;
+        }
+
+        for (TuffGolem other : nearby) {
+            BlockPos otherHome = other.getOriginPos();
+            if (otherHome == null) {
+                continue;
+            }
+
+            Path path = other.getNavigation().createPath(otherHome, 0);
+            if (path != null) {
+                for (int i = 0; i < path.getNodeCount(); i++) {
+                    BlockPos nodePos = path.getNodePos(i);
+                    if (nodePos.equals(this.originPos) || nodePos.closerThan(this.originPos, 1.25D)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void startSleeping() {
         if (!this.level().isClientSide()) {
             this.entityData.set(DATA_ANIM_STATE, STATE_SLEEP_START);
             this.animTicks = 23;
+            this.awakeTicks = 0;
             this.getNavigation().stop();
             this.setDeltaMovement(Vec3.ZERO);
-            if (this.originPos != null) {
-                Direction facing = this.originFacing != null ? this.originFacing : this.getDirection();
-                this.snapTo(this.originPos.getX() + 0.5D, this.originPos.getY(), this.originPos.getZ() + 0.5D, facing.toYRot(), 0.0F);
-                this.setYHeadRot(facing.toYRot());
-                this.setYBodyRot(facing.toYRot());
-            }
         }
     }
 
@@ -140,10 +183,11 @@ public class TuffGolem extends AbstractGolem {
         if (!this.level().isClientSide()) {
             this.entityData.set(DATA_ANIM_STATE, STATE_SLEEP_OVER);
             this.animTicks = 24;
+            this.awakeTicks = 0;
             this.getNavigation().stop();
             this.setDeltaMovement(Vec3.ZERO);
             if (this.originFacing != null) {
-                this.snapTo(this.getX(), this.getY(), this.getZ(), this.originFacing.toYRot(), 0.0F);
+                this.setYRot(this.originFacing.toYRot());
                 this.setYHeadRot(this.originFacing.toYRot());
                 this.setYBodyRot(this.originFacing.toYRot());
             }
@@ -202,6 +246,13 @@ public class TuffGolem extends AbstractGolem {
 
             if (state == STATE_SLEEP_START) {
                 this.setDeltaMovement(0.0D, this.getDeltaMovement().y, 0.0D);
+                if (this.originPos != null) {
+                    double targetX = this.originPos.getX() + 0.5D;
+                    double targetZ = this.originPos.getZ() + 0.5D;
+                    double curX = this.getX();
+                    double curZ = this.getZ();
+                    this.setPos(curX + (targetX - curX) * 0.25D, this.getY(), curZ + (targetZ - curZ) * 0.25D);
+                }
                 if (this.originFacing != null) {
                     this.setYRot(this.originFacing.toYRot());
                     this.setYHeadRot(this.originFacing.toYRot());
@@ -210,6 +261,15 @@ public class TuffGolem extends AbstractGolem {
                 this.animTicks--;
                 if (this.animTicks <= 0) {
                     BlockPos home = this.originPos != null ? this.originPos : this.blockPosition();
+                    if (!this.level().getBlockState(home).canBeReplaced()) {
+                        for (Direction dir : Direction.Plane.HORIZONTAL) {
+                            BlockPos adjacent = home.relative(dir);
+                            if (this.level().getBlockState(adjacent).canBeReplaced() && !this.level().getBlockState(adjacent.below()).isAir()) {
+                                home = adjacent;
+                                break;
+                            }
+                        }
+                    }
                     Direction facing = this.originFacing != null ? this.originFacing : this.getDirection();
                     BlockState statueState = RegisterBlocks.TUFF_GOLEM_BLOCK.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing);
                     this.level().setBlock(home, statueState, Block.UPDATE_ALL);
@@ -234,11 +294,12 @@ public class TuffGolem extends AbstractGolem {
                     this.entityData.set(DATA_ANIM_STATE, STATE_IDLE);
                 }
             } else {
-                // Instant pickup if any item touches or is right next to golem
+                this.awakeTicks++;
+
                 if (this.getMainHandItem().isEmpty()) {
                     List<ItemEntity> nearby = this.level().getEntitiesOfClass(
                             ItemEntity.class,
-                            this.getBoundingBox().inflate(1.2D, 0.8D, 1.2D),
+                            this.getBoundingBox().inflate(1.5D, 1.0D, 1.5D),
                             item -> item.isAlive() && !item.getItem().isEmpty()
                     );
                     if (!nearby.isEmpty()) {
@@ -339,6 +400,7 @@ public class TuffGolem extends AbstractGolem {
         output.putString("origin_facing", this.originFacing.getName());
         output.putByte("anim_state", this.entityData.get(DATA_ANIM_STATE));
         output.putInt("anim_ticks", this.animTicks);
+        output.putInt("awake_ticks", this.awakeTicks);
     }
 
     @Override
@@ -355,5 +417,6 @@ public class TuffGolem extends AbstractGolem {
         this.originFacing = facing != null ? facing : Direction.NORTH;
         this.entityData.set(DATA_ANIM_STATE, input.getByteOr("anim_state", STATE_IDLE));
         this.animTicks = input.getIntOr("anim_ticks", 0);
+        this.awakeTicks = input.getIntOr("awake_ticks", 0);
     }
 }

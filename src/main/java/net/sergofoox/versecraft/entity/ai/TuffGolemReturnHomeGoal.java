@@ -12,6 +12,7 @@ public class TuffGolemReturnHomeGoal extends Goal {
     private final TuffGolem golem;
     private final double speedModifier;
     private int repathCooldown = 0;
+    private int yieldTicks = 0;
 
     public TuffGolemReturnHomeGoal(TuffGolem golem, double speedModifier) {
         this.golem = golem;
@@ -21,7 +22,7 @@ public class TuffGolemReturnHomeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return !this.golem.isBusyWithAnim() && !this.golem.getMainHandItem().isEmpty() && this.golem.getOriginPos() != null;
+        return !this.golem.isBusyWithAnim() && this.golem.wantsToSleep() && this.golem.getOriginPos() != null;
     }
 
     @Override
@@ -32,6 +33,7 @@ public class TuffGolemReturnHomeGoal extends Goal {
     @Override
     public void start() {
         this.repathCooldown = 0;
+        this.yieldTicks = 0;
         BlockPos home = this.golem.getOriginPos();
         if (home != null) {
             this.golem.getNavigation().moveTo(home.getX() + 0.5D, home.getY(), home.getZ() + 0.5D, this.speedModifier);
@@ -63,25 +65,29 @@ public class TuffGolemReturnHomeGoal extends Goal {
         double dy = Math.abs(pos.y - targetY);
         BlockPos currentPos = this.golem.blockPosition();
 
-        // Arrival detection:
-        // Must be standing inside home block and centered (within 0.28 blocks of center)
-        boolean arrived = (currentPos.equals(home) && horizDistSq <= 0.08D && dy < 0.5D)
-                || (currentPos.equals(home) && horizDistSq <= 0.16D && dy < 0.5D && this.golem.getNavigation().isDone());
+        boolean arrived = (horizDistSq <= 0.06D && dy < 0.5D)
+                || (currentPos.equals(home) && horizDistSq <= 0.16D && dy < 0.5D)
+                || (currentPos.equals(home) && dy < 0.5D && this.golem.getDeltaMovement().horizontalDistanceSqr() < 0.0005D)
+                || (horizDistSq <= 0.64D && dy < 0.5D && (this.golem.getNavigation().isDone() || this.golem.getNavigation().isStuck()));
 
         if (arrived) {
+            if (this.golem.shouldYieldToDeeperGolem() && this.yieldTicks < 300) {
+                this.yieldTicks++;
+                this.golem.getNavigation().stop();
+                this.golem.setDeltaMovement(Vec3.ZERO);
+                return;
+            }
             this.golem.startSleeping();
             return;
         }
 
-        // Close to home (< 2.5 blocks): direct MoveControl guides golem smoothly to the exact center
-        if (horizDistSq <= 6.25D && dy < 1.0D) {
+        if (horizDistSq <= 3.0D && dy < 1.0D) {
             this.golem.getMoveControl().setWantedPosition(targetX, targetY, targetZ, this.speedModifier);
         } else {
-            // Further away: use navigation path, only repathing when path finishes or every 30 ticks
             if (this.repathCooldown > 0) {
                 this.repathCooldown--;
-            } else if (this.golem.getNavigation().isDone()) {
-                this.repathCooldown = 30;
+            } else if (this.golem.getNavigation().isDone() || this.golem.getNavigation().getPath() == null) {
+                this.repathCooldown = 20;
                 this.golem.getNavigation().moveTo(targetX, targetY, targetZ, this.speedModifier);
             }
         }

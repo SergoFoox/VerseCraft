@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
 import net.sergofoox.versecraft.entity.TuffGolem;
 
 import java.util.EnumSet;
@@ -49,22 +50,24 @@ public class TuffGolemWanderNearHomeGoal extends Goal {
 
         Level level = this.golem.level();
 
-        // Search 3D area around home for a sturdy ground spot (indoor & outdoor compatible)
         BlockPos target = null;
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 10; i++) {
             double angle = this.golem.getRandom().nextDouble() * Math.PI * 2.0;
-            double radius = 2.5 + this.golem.getRandom().nextDouble() * 4.5;
+            double radius = 2.0 + this.golem.getRandom().nextDouble() * 4.0;
 
             int x = (int) Math.floor(home.getX() + 0.5 + Math.cos(angle) * radius);
             int z = (int) Math.floor(home.getZ() + 0.5 + Math.sin(angle) * radius);
 
-            for (int dy = 3; dy >= -3; dy--) {
+            for (int dy = 2; dy >= -2; dy--) {
                 BlockPos check = new BlockPos(x, home.getY() + dy, z);
                 BlockState state = level.getBlockState(check);
                 BlockState below = level.getBlockState(check.below());
                 if (state.canBeReplaced() && !below.isAir() && below.isFaceSturdy(level, check.below(), Direction.UP)) {
-                    target = check;
-                    break;
+                    Path path = this.golem.getNavigation().createPath(check, 0);
+                    if (path != null && path.canReach()) {
+                        target = check;
+                        break;
+                    }
                 }
             }
             if (target != null) {
@@ -81,8 +84,7 @@ public class TuffGolemWanderNearHomeGoal extends Goal {
 
     @Override
     public void stop() {
-        // Short pause between walks: 10 to 25 ticks (0.5 to 1.25 seconds)
-        this.idleCooldown = 10 + this.golem.getRandom().nextInt(15);
+        this.idleCooldown = 15 + this.golem.getRandom().nextInt(20);
         this.golem.getNavigation().stop();
     }
 }

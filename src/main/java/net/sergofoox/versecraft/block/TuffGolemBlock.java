@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -33,14 +34,15 @@ import org.jetbrains.annotations.Nullable;
 public class TuffGolemBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
     private static final VoxelShape BASE_SHAPE = Shapes.or(
-            Block.box(3.0, 4.0, 3.0, 13.0, 20.0, 13.0), // Body & head (up to Y=20)
-            Block.box(3.5, 0.0, 6.0, 12.5, 4.0, 10.0),  // Legs
-            Block.box(3.0, 3.0, -5.0, 13.0, 9.0, 3.0),  // Front tray / apron
-            Block.box(7.0, 11.0, 1.0, 9.0, 15.0, 3.0),  // Nose
-            Block.box(-1.0, 3.0, 3.0, 3.0, 14.0, 10.0), // Left arm
-            Block.box(13.0, 3.0, 3.0, 17.0, 14.0, 10.0) // Right arm
+            Block.box(3.0, 4.0, 3.0, 13.0, 16.0, 13.0),
+            Block.box(3.5, 0.0, 6.0, 12.5, 4.0, 10.0),
+            Block.box(3.0, 3.0, 0.0, 13.0, 9.0, 3.0),
+            Block.box(7.0, 11.0, 1.0, 9.0, 15.0, 3.0),
+            Block.box(0.0, 3.0, 3.0, 3.0, 14.0, 10.0),
+            Block.box(13.0, 3.0, 3.0, 16.0, 14.0, 10.0)
     );
     private static final Map<Direction, VoxelShape> SHAPES = Shapes.rotateHorizontal(BASE_SHAPE);
+    private static final VoxelShape COLLISION_SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 15.0, 15.0);
 
     public TuffGolemBlock(Properties properties) {
         super(properties);
@@ -65,7 +67,12 @@ public class TuffGolemBlock extends HorizontalDirectionalBlock implements Entity
 
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return this.getShape(state, level, pos, context);
+        return COLLISION_SHAPE;
+    }
+
+    @Override
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+        return false;
     }
 
     @Override
@@ -98,9 +105,8 @@ public class TuffGolemBlock extends HorizontalDirectionalBlock implements Entity
             ItemStack heldItem = be.getItem().copy();
             ItemStack playerHand = player.getItemInHand(hand);
 
-            // If statue has an item, return it and awake golem
             if (!heldItem.isEmpty()) {
-                be.setItem(ItemStack.EMPTY); // prevent dropping on remove
+                be.setItem(ItemStack.EMPTY);
                 if (!player.getInventory().add(heldItem)) {
                     Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), heldItem);
                 }
@@ -121,14 +127,12 @@ public class TuffGolemBlock extends HorizontalDirectionalBlock implements Entity
                 level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.5F, 1.0F);
                 return InteractionResult.SUCCESS;
             } else {
-                // If statue is empty and player holds an item, place item on pedestal
                 if (!playerHand.isEmpty()) {
                     ItemStack placed = playerHand.split(1);
                     be.setItem(placed);
                     level.playSound(null, pos, SoundEvents.ARMOR_STAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                     return InteractionResult.SUCCESS;
                 } else {
-                    // Empty hand on empty statue -> awake golem directly
                     Direction facing = state.getValue(FACING);
                     level.removeBlock(pos, false);
 

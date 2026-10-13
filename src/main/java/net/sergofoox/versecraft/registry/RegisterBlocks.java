@@ -91,8 +91,8 @@ public class RegisterBlocks {
 
     public static final Block AZALEA_SHELF = register("azalea_shelf",
             properties -> new ShelfBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_SHELF)
-                    .mapColor(AZALEA_PLANKS.defaultMapColor())
-                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, "azalea_shelf"))))
+                    .mapColor(AZALEA_PLANKS.defaultMapColor()
+                    ).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, "azalea_shelf"))))
     );
 
     public static final Block AZALEA_SIGN = registerBlockWithoutBlockItem("azalea_sign",
@@ -201,7 +201,7 @@ public class RegisterBlocks {
 
     //Jungle Mosaic
 
-    public static final Block CHISELED_JUNGLE_MOSAIC = null; // placeholder if needed
+    public static final Block CHISELED_JUNGLE_MOSAIC = null;
 
     public static final Block JUNGLE_MOSAIC = register("jungle_mosaic",
             properties -> new Block(properties.strength(2f,3f)
@@ -297,6 +297,10 @@ public class RegisterBlocks {
     public static final Block CRACKED_TUFF_BRICKS = register("cracked_tuff_bricks",
             properties -> new Block(properties.strength(1.5f,6f)
                     .sound(SoundType.TUFF_BRICKS).requiresCorrectToolForDrops()));
+
+    public static final Block TUFF_GOLEM_BLOCK = register("tuff_golem_block",
+            properties -> new TuffGolemBlock(properties.strength(1.5f, 6.0f).sound(SoundType.TUFF).noOcclusion().requiresCorrectToolForDrops())
+    );
 
     //Calcite
 

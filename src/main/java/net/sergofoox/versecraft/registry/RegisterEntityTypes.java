@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.sergofoox.versecraft.VerseCraft;
 import net.sergofoox.versecraft.entity.Moobloom;
+import net.sergofoox.versecraft.entity.TuffGolem;
 
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -43,6 +44,15 @@ public class RegisterEntityTypes {
             0.9F, 1.4F, 1.3F, 1.36F, 10
     );
 
+    public static final EntityType<TuffGolem> TUFF_GOLEM = registerMob(
+            "tuff_golem",
+            TuffGolem::new,
+            MobCategory.CREATURE,
+            builder -> builder
+                    .defaultAttributes(TuffGolem::createAttributes)
+                    .spawnPlacement(SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules),
+            0.6F, 0.9F, 0.7F, 0.8F, 10
+    );
 
     private static EntityType<Boat> registerBoat(String name, Supplier<Item> dropItem) {
         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, VerseCraft.id(name));

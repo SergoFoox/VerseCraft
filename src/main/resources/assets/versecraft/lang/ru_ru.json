@@ -173,5 +173,8 @@
   "block.versecraft.copper_campfire": "Медный костёр",
   "block.versecraft.soul_jack_o_lantern": "Светильник джека душ",
   "block.versecraft.dyed_water_cauldron": "Котёл с окрашенной водой",
-  "block.versecraft.potion_cauldron": "Котёл с зельем"
+  "block.versecraft.potion_cauldron": "Котёл с зельем",
+  "block.versecraft.tuff_golem_block": "Туфовый голем",
+  "entity.versecraft.tuff_golem": "Туфовый голем",
+  "item.versecraft.tuff_golem_spawn_egg": "Яйцо призыва туфового голема"
 }

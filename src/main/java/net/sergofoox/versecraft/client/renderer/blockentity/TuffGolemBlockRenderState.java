@@ -1,0 +1,14 @@
+package net.sergofoox.versecraft.client.renderer.blockentity;
+
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.core.Direction;
+
+public class TuffGolemBlockRenderState extends BlockEntityRenderState {
+    public Direction facing = Direction.NORTH;
+    public boolean isBlock = false;
+    public boolean isBed = false;
+    public boolean isBanner = false;
+    public boolean isSpike = false;
+    public final ItemStackRenderState item = new ItemStackRenderState();
+}

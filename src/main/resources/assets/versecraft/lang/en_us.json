@@ -1,4 +1,4 @@
-﻿{
+{
   "block.versecraft.azalea_log": "Azalea Log",
   "block.versecraft.azalea_wood": "Azalea Wood",
   "block.versecraft.stripped_azalea_log": "Stripped Azalea Log",
@@ -172,5 +172,8 @@
   "block.versecraft.copper_campfire": "Copper Campfire",
   "block.versecraft.soul_jack_o_lantern": "Soul Jack o'Lantern",
   "block.versecraft.dyed_water_cauldron": "Dyed Water Cauldron",
-  "block.versecraft.potion_cauldron": "Potion Cauldron"
+  "block.versecraft.potion_cauldron": "Potion Cauldron",
+  "block.versecraft.tuff_golem_block": "Tuff Golem",
+  "entity.versecraft.tuff_golem": "Tuff Golem",
+  "item.versecraft.tuff_golem_spawn_egg": "Tuff Golem Spawn Egg"
 }

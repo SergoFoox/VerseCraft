@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "versecraft:block/tuff_golem_block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "versecraft:block/tuff_golem_block"
+    },
+    "facing=south": {
+      "model": "versecraft:block/tuff_golem_block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "versecraft:block/tuff_golem_block",
+      "y": 270
+    }
+  }
+}

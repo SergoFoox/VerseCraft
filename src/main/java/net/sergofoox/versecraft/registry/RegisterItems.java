@@ -64,6 +64,10 @@ public class RegisterItems {
             properties -> new SpawnEggItem(properties.spawnEgg(RegisterEntityTypes.MOOBLOOM))
     );
 
+    public static final Item TUFF_GOLEM_SPAWN_EGG = registerItem("tuff_golem_spawn_egg",
+            properties -> new SpawnEggItem(properties.spawnEgg(RegisterEntityTypes.TUFF_GOLEM))
+    );
+
     private static Item registerItem(String name, Function<Item.Properties, Item> function) {
         return Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name),
                 function.apply(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name)))));

@@ -2,6 +2,7 @@ package net.sergofoox.versecraft;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.color.block.BlockTintSource;
@@ -14,7 +15,11 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.sergofoox.versecraft.block.entity.DyedCauldronBlockEntity;
 import net.sergofoox.versecraft.block.entity.PotionCauldronBlockEntity;
+import net.sergofoox.versecraft.client.renderer.blockentity.TuffGolemBlockEntityRenderer;
 import net.sergofoox.versecraft.client.renderer.entity.MoobloomRenderer;
+import net.sergofoox.versecraft.entity.model.TuffGolemModel;
+import net.sergofoox.versecraft.entity.model.TuffGolemRenderer;
+import net.sergofoox.versecraft.registry.RegisterBlockEntities;
 import net.sergofoox.versecraft.registry.RegisterBlocks;
 import net.sergofoox.versecraft.registry.RegisterEntityTypes;
 
@@ -34,10 +39,14 @@ public class VerseCraftClientInitializer implements ClientModInitializer {
 
         ModelLayerRegistry.registerModelLayer(AZALEA_BOAT_LAYER, BoatModel::createBoatModel);
         ModelLayerRegistry.registerModelLayer(AZALEA_CHEST_BOAT_LAYER, BoatModel::createChestBoatModel);
+        ModelLayerRegistry.registerModelLayer(TuffGolemModel.TUFF_GOLEM, TuffGolemModel::getTexturedModelData);
 
         EntityRendererRegistry.register(RegisterEntityTypes.AZALEA_BOAT, context -> new BoatRenderer(context, AZALEA_BOAT_LAYER));
         EntityRendererRegistry.register(RegisterEntityTypes.AZALEA_CHEST_BOAT, context -> new BoatRenderer(context, AZALEA_CHEST_BOAT_LAYER));
         EntityRendererRegistry.register(RegisterEntityTypes.MOOBLOOM, MoobloomRenderer::new);
+        EntityRendererRegistry.register(RegisterEntityTypes.TUFF_GOLEM, TuffGolemRenderer::new);
+
+        BlockEntityRendererRegistry.register(RegisterBlockEntities.TUFF_GOLEM_BLOCK_ENTITY, TuffGolemBlockEntityRenderer::new);
 
         BlockColorRegistry.register(
                 List.of(new BlockTintSource() {

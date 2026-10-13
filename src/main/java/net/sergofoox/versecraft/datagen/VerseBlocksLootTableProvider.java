@@ -63,6 +63,7 @@ public class VerseBlocksLootTableProvider extends FabricBlockLootSubProvider {
 
         //Tuff
         dropSelf(RegisterBlocks.CRACKED_TUFF_BRICKS);
+        dropSelf(RegisterBlocks.TUFF_GOLEM_BLOCK);
 
         //Calcite
         dropSelf(RegisterBlocks.CALCITE_STAIRS);

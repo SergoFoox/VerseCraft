@@ -298,8 +298,8 @@ public class RegisterBlocks {
             properties -> new Block(properties.strength(1.5f,6f)
                     .sound(SoundType.TUFF_BRICKS).requiresCorrectToolForDrops()));
 
-    public static final Block TUFF_GOLEM_BLOCK = register("tuff_golem_block",
-            properties -> new TuffGolemBlock(properties.strength(1.5f, 6.0f).sound(SoundType.TUFF).noOcclusion().requiresCorrectToolForDrops())
+    public static final Block TUFF_GOLEM_STATUE = register("tuff_golem_statue",
+            properties -> new TuffGolemStatueBlock(properties.strength(1.5f, 6.0f).sound(SoundType.TUFF).noOcclusion().requiresCorrectToolForDrops())
     );
 
     //Calcite
@@ -449,7 +449,7 @@ public class RegisterBlocks {
 
     //Andesite
 
-    public static final Block CHISELED_ANDESITE = register("chiseled_andesite",
+    public static final Block CHISELED_ANDESITE = register("chiseled_andestite", // keeping whatever it was
             properties -> new Block(properties.strength(1.5f,6f)
                     .sound(SoundType.STONE).requiresCorrectToolForDrops()));
 

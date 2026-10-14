@@ -26,7 +26,7 @@ public class VerseBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(key(RegisterBlocks.CRACKED_TUFF_BRICKS))
-                .add(key(RegisterBlocks.TUFF_GOLEM_BLOCK))
+                .add(key(RegisterBlocks.TUFF_GOLEM_STATUE))
                 .add(key(RegisterBlocks.DRIPSTONE_STAIRS))
                 .add(key(RegisterBlocks.DRIPSTONE_SLAB))
                 .add(key(RegisterBlocks.DRIPSTONE_WALL))

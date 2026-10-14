@@ -3,8 +3,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "versecraft:block/tuff_golem_block",
-		"particle": "versecraft:block/tuff_golem_block"
+		"0": "versecraft:block/tuff_golem_statue",
+		"particle": "versecraft:block/tuff_golem_statue"
 	},
 	"elements": [
 		{
@@ -79,8 +79,7 @@
 			"name": "body",
 			"from": [3, 9, -5],
 			"to": [13, 9, 3],
-			"rotation": {"angle": 0, "axis": "y", "origin": [4, 2, 4]},
-			"faces": {
+			"rotation": {"angle": 0, "axis": "y", "origin": [4, 2, 4]},\t\t\t"faces": {
 				"up": {"uv": [13.75, 14.5, 11.25, 12.5], "texture": "#0"},
 				"down": {"uv": [13.75, 12.5, 11.25, 14.5], "texture": "#0"}
 			}

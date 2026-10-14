@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.sergofoox.versecraft.VerseCraft;
 import net.sergofoox.versecraft.block.entity.DyedCauldronBlockEntity;
 import net.sergofoox.versecraft.block.entity.PotionCauldronBlockEntity;
-import net.sergofoox.versecraft.block.entity.TuffGolemBlockEntity;
+import net.sergofoox.versecraft.block.entity.TuffGolemStatueBlockEntity;
 
 import java.util.Set;
 
@@ -24,10 +24,10 @@ public class RegisterBlockEntities {
             new BlockEntityType<>(PotionCauldronBlockEntity::new, Set.of(RegisterBlocks.POTION_CAULDRON))
     );
 
-    public static final BlockEntityType<TuffGolemBlockEntity> TUFF_GOLEM_BLOCK_ENTITY = Registry.register(
+    public static final BlockEntityType<TuffGolemStatueBlockEntity> TUFF_GOLEM_STATUE = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
-            VerseCraft.id("tuff_golem_block"),
-            new BlockEntityType<>(TuffGolemBlockEntity::new, Set.of(RegisterBlocks.TUFF_GOLEM_BLOCK))
+            VerseCraft.id("tuff_golem_statue"),
+            new BlockEntityType<>(TuffGolemStatueBlockEntity::new, Set.of(RegisterBlocks.TUFF_GOLEM_STATUE))
     );
 
     public static void registerBlockEntities() {

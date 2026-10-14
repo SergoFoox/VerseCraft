@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.Direction;
 
-public class TuffGolemBlockRenderState extends BlockEntityRenderState {
+public class TuffGolemStatueBlockRenderState extends BlockEntityRenderState {
     public Direction facing = Direction.NORTH;
     public boolean isBlock = false;
     public boolean isBed = false;

@@ -19,9 +19,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.AbstractBedBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.Vec3;
-import net.sergofoox.versecraft.block.entity.TuffGolemBlockEntity;
+import net.sergofoox.versecraft.block.entity.TuffGolemStatueBlockEntity;
 
-public class TuffGolemBlockEntityRenderer implements BlockEntityRenderer<TuffGolemBlockEntity, TuffGolemBlockRenderState> {
+public class TuffGolemStatueBlockEntityRenderer implements BlockEntityRenderer<TuffGolemStatueBlockEntity, TuffGolemStatueBlockRenderState> {
 
     // === Параметры для 3D блоков ===
     public static final float BLOCK_X_OFFSET = 0.0F;
@@ -58,17 +58,17 @@ public class TuffGolemBlockEntityRenderer implements BlockEntityRenderer<TuffGol
 
     private final ItemModelResolver itemModelResolver;
 
-    public TuffGolemBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+    public TuffGolemStatueBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         this.itemModelResolver = context.itemModelResolver();
     }
 
     @Override
-    public TuffGolemBlockRenderState createRenderState() {
-        return new TuffGolemBlockRenderState();
+    public TuffGolemStatueBlockRenderState createRenderState() {
+        return new TuffGolemStatueBlockRenderState();
     }
 
     @Override
-    public void extractRenderState(TuffGolemBlockEntity blockEntity, TuffGolemBlockRenderState renderState, float partialTick, Vec3 cameraPos, ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(TuffGolemStatueBlockEntity blockEntity, TuffGolemStatueBlockRenderState renderState, float partialTick, Vec3 cameraPos, ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderState.extractBase(blockEntity, renderState, crumblingOverlay);
         if (blockEntity.getBlockState().hasProperty(HorizontalDirectionalBlock.FACING)) {
             renderState.facing = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
@@ -95,7 +95,7 @@ public class TuffGolemBlockEntityRenderer implements BlockEntityRenderer<TuffGol
     }
 
     @Override
-    public void submit(TuffGolemBlockRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+    public void submit(TuffGolemStatueBlockRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         if (!renderState.item.isEmpty()) {
             poseStack.pushPose();
             // Центр блока

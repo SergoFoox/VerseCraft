@@ -198,7 +198,7 @@ public class RegisterCreativeInventorySorting {
 
             //Other
             output.insertAfter(Blocks.CAMPFIRE, RegisterBlocks.COPPER_CAMPFIRE);
-            output.insertAfter(RegisterBlocks.COPPER_CAMPFIRE, RegisterBlocks.TUFF_GOLEM_BLOCK);
+            output.insertAfter(RegisterBlocks.COPPER_CAMPFIRE, RegisterBlocks.TUFF_GOLEM_STATUE);
 
         });
 

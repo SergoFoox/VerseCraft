@@ -15,7 +15,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.sergofoox.versecraft.block.entity.DyedCauldronBlockEntity;
 import net.sergofoox.versecraft.block.entity.PotionCauldronBlockEntity;
-import net.sergofoox.versecraft.client.renderer.blockentity.TuffGolemBlockEntityRenderer;
+import net.sergofoox.versecraft.client.renderer.blockentity.TuffGolemStatueBlockEntityRenderer;
 import net.sergofoox.versecraft.client.renderer.entity.MoobloomRenderer;
 import net.sergofoox.versecraft.entity.model.TuffGolemModel;
 import net.sergofoox.versecraft.entity.model.TuffGolemRenderer;
@@ -46,7 +46,7 @@ public class VerseCraftClientInitializer implements ClientModInitializer {
         EntityRendererRegistry.register(RegisterEntityTypes.MOOBLOOM, MoobloomRenderer::new);
         EntityRendererRegistry.register(RegisterEntityTypes.TUFF_GOLEM, TuffGolemRenderer::new);
 
-        BlockEntityRendererRegistry.register(RegisterBlockEntities.TUFF_GOLEM_BLOCK_ENTITY, TuffGolemBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(RegisterBlockEntities.TUFF_GOLEM_STATUE, TuffGolemStatueBlockEntityRenderer::new);
 
         BlockColorRegistry.register(
                 List.of(new BlockTintSource() {

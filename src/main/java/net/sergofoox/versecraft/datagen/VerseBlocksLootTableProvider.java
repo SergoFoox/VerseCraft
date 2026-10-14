@@ -63,7 +63,7 @@ public class VerseBlocksLootTableProvider extends FabricBlockLootSubProvider {
 
         //Tuff
         dropSelf(RegisterBlocks.CRACKED_TUFF_BRICKS);
-        dropSelf(RegisterBlocks.TUFF_GOLEM_BLOCK);
+        dropSelf(RegisterBlocks.TUFF_GOLEM_STATUE);
 
         //Calcite
         dropSelf(RegisterBlocks.CALCITE_STAIRS);
@@ -157,9 +157,9 @@ public class VerseBlocksLootTableProvider extends FabricBlockLootSubProvider {
                 applyExplosionCondition(
                         block,
                         LootItem.lootTableItem(Items.RAW_COPPER)
-                                .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(2)))
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(2))
                 )
-        ).setRandomSequence(block.getLootTable().orElseThrow().identifier()));
+        )).setRandomSequence(block.getLootTable().orElseThrow().identifier()));
 
         dropPottedContents(RegisterBlocks.POTTED_BLUE_ROSE);
         dropPottedContents(RegisterBlocks.POTTED_ICEFLOWER);

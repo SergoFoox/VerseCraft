@@ -174,7 +174,7 @@
   "block.versecraft.soul_jack_o_lantern": "Светильник Джека душ",
   "block.versecraft.dyed_water_cauldron": "Котёл с окрашенной водой",
   "block.versecraft.potion_cauldron": "Котёл с зельем",
-  "block.versecraft.tuff_golem_block": "Статуя туфового голема",
+  "block.versecraft.tuff_golem_statue": "Статуя туфового голема",
   "entity.versecraft.tuff_golem": "Туфовый голем",
   "item.versecraft.tuff_golem_spawn_egg": "Яйцо призыва туфового голема"
 }

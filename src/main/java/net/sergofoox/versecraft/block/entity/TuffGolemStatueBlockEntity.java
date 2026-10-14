@@ -15,12 +15,12 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.sergofoox.versecraft.registry.RegisterBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
-public class TuffGolemBlockEntity extends BlockEntity {
+public class TuffGolemStatueBlockEntity extends BlockEntity {
 
     private ItemStack item = ItemStack.EMPTY;
 
-    public TuffGolemBlockEntity(BlockPos pos, BlockState state) {
-        super(RegisterBlockEntities.TUFF_GOLEM_BLOCK_ENTITY, pos, state);
+    public TuffGolemStatueBlockEntity(BlockPos pos, BlockState state) {
+        super(RegisterBlockEntities.TUFF_GOLEM_STATUE, pos, state);
     }
 
     public ItemStack getItem() {

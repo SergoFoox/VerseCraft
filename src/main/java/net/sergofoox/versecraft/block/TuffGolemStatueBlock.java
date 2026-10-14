@@ -26,12 +26,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sergofoox.versecraft.block.entity.TuffGolemBlockEntity;
+import net.sergofoox.versecraft.block.entity.TuffGolemStatueBlockEntity;
 import net.sergofoox.versecraft.entity.TuffGolem;
 import net.sergofoox.versecraft.registry.RegisterEntityTypes;
 import org.jetbrains.annotations.Nullable;
 
-public class TuffGolemBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class TuffGolemStatueBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
     private static final VoxelShape BASE_SHAPE = Shapes.or(
             Block.box(3.0, 4.0, 3.0, 13.0, 16.0, 13.0),
@@ -44,7 +44,7 @@ public class TuffGolemBlock extends HorizontalDirectionalBlock implements Entity
     private static final Map<Direction, VoxelShape> SHAPES = Shapes.rotateHorizontal(BASE_SHAPE);
     private static final VoxelShape COLLISION_SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 15.0, 15.0);
 
-    public TuffGolemBlock(Properties properties) {
+    public TuffGolemStatueBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
@@ -83,7 +83,7 @@ public class TuffGolemBlock extends HorizontalDirectionalBlock implements Entity
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TuffGolemBlockEntity(pos, state);
+        return new TuffGolemStatueBlockEntity(pos, state);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class TuffGolemBlock extends HorizontalDirectionalBlock implements Entity
             return InteractionResult.SUCCESS;
         }
 
-        if (level.getBlockEntity(pos) instanceof TuffGolemBlockEntity be) {
+        if (level.getBlockEntity(pos) instanceof TuffGolemStatueBlockEntity be) {
             ItemStack heldItem = be.getItem().copy();
             ItemStack playerHand = player.getItemInHand(hand);
 
@@ -156,7 +156,7 @@ public class TuffGolemBlock extends HorizontalDirectionalBlock implements Entity
 
     @Override
     protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
-        if (level.getBlockEntity(pos) instanceof TuffGolemBlockEntity be) {
+        if (level.getBlockEntity(pos) instanceof TuffGolemStatueBlockEntity be) {
             if (!be.getItem().isEmpty()) {
                 Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), be.getItem());
             }

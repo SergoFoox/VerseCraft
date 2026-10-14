@@ -35,7 +35,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.sergofoox.versecraft.block.entity.TuffGolemBlockEntity;
+import net.sergofoox.versecraft.block.entity.TuffGolemStatueBlockEntity;
 import net.sergofoox.versecraft.entity.ai.TuffGolemReturnHomeGoal;
 import net.sergofoox.versecraft.entity.ai.TuffGolemSearchItemGoal;
 import net.sergofoox.versecraft.entity.ai.TuffGolemWanderNearHomeGoal;
@@ -316,10 +316,10 @@ public class TuffGolem extends AbstractGolem {
                         }
                     }
                     Direction facing = this.originFacing != null ? this.originFacing : this.getDirection();
-                    BlockState statueState = RegisterBlocks.TUFF_GOLEM_BLOCK.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing);
+                    BlockState statueState = RegisterBlocks.TUFF_GOLEM_STATUE.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing);
                     this.level().setBlock(home, statueState, Block.UPDATE_ALL);
 
-                    if (this.level().getBlockEntity(home) instanceof TuffGolemBlockEntity be) {
+                    if (this.level().getBlockEntity(home) instanceof TuffGolemStatueBlockEntity be) {
                         be.setItem(this.getMainHandItem().copy());
                     }
 

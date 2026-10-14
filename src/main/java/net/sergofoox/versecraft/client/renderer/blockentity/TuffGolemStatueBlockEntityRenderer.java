@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.AbstractBedBlock;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.Vec3;
 import net.sergofoox.versecraft.block.entity.TuffGolemStatueBlockEntity;
@@ -49,6 +50,13 @@ public class TuffGolemStatueBlockEntityRenderer implements BlockEntityRenderer<T
     public static final float SPIKE_SCALE = 0.5F;
     public static final float SPIKE_X_ROTATION = 90.0F;
 
+    // === Параметры для дверей ===
+    public static final float DOOR_X_OFFSET = 0.0F;
+    public static final float DOOR_Y_OFFSET = 0.5825F;
+    public static final float DOOR_Z_OFFSET = -0.55F;
+    public static final float DOOR_SCALE = 0.42F;
+    public static final float DOOR_X_ROTATION = 90.0F;
+
     // === Параметры для плоских предметов (2D items, инструменты, еда, ведра и др.) ===
     public static final float ITEM_X_OFFSET = 0.0F;
     public static final float ITEM_Y_OFFSET = 0.5825F;
@@ -79,18 +87,16 @@ public class TuffGolemStatueBlockEntityRenderer implements BlockEntityRenderer<T
             renderState.isBanner = stack.getItem() instanceof BannerItem;
             renderState.isBed = (stack.getItem() instanceof BlockItem blockItem) && (blockItem.getBlock() instanceof AbstractBedBlock);
             renderState.isSpike = stack.is(Items.POINTED_DRIPSTONE) || stack.is(Items.SULFUR_SPIKE);
-            // 3D-блоками считаются:
-            // 1. Модели с объемным затенением (usesBlockLight)
-            // 2. Либо BlockItem с достаточной 3D-толщиной модели (zSize > 0.15), как например калиброванный скалк-сенсор с gui_light: front
-            // Исключения: ведра (DispensibleContainerItem, в т.ч. ведро со снегом), кровати, флаги и шипы (обрабатываются отдельно)
+            renderState.isDoor = (stack.getItem() instanceof BlockItem blockItem) && (blockItem.getBlock() instanceof DoorBlock);
             boolean is3dGeometry = renderState.item.usesBlockLight() || (stack.getItem() instanceof BlockItem && renderState.item.getModelBoundingBox().getZsize() > 0.15);
-            renderState.isBlock = is3dGeometry && !(stack.getItem() instanceof DispensibleContainerItem) && !renderState.isBed && !renderState.isBanner && !renderState.isSpike;
+            renderState.isBlock = is3dGeometry && !(stack.getItem() instanceof DispensibleContainerItem) && !renderState.isBed && !renderState.isBanner && !renderState.isSpike && !renderState.isDoor;
         } else {
             renderState.item.clear();
             renderState.isBlock = false;
             renderState.isBed = false;
             renderState.isBanner = false;
             renderState.isSpike = false;
+            renderState.isDoor = false;
         }
     }
 
@@ -118,6 +124,11 @@ public class TuffGolemStatueBlockEntityRenderer implements BlockEntityRenderer<T
                 poseStack.translate(BED_X_OFFSET, BED_Y_OFFSET, BED_Z_OFFSET);
                 poseStack.rotateDegrees(Axis.XP, 90.0F);
                 poseStack.scale(BED_SCALE, BED_SCALE, BED_SCALE);
+            } else if (renderState.isDoor) {
+                // Дверь: лежит на коврике, выдвинута вперед и отмасштабирована, чтобы не врезаться в нос
+                poseStack.translate(DOOR_X_OFFSET, DOOR_Y_OFFSET, DOOR_Z_OFFSET);
+                poseStack.rotateDegrees(Axis.XP, DOOR_X_ROTATION);
+                poseStack.scale(DOOR_SCALE, DOOR_SCALE, DOOR_SCALE);
             } else if (renderState.isBlock) {
                 // 3D блок: стоит вертикально на коврике
                 poseStack.translate(BLOCK_X_OFFSET, BLOCK_Y_OFFSET, BLOCK_Z_OFFSET);

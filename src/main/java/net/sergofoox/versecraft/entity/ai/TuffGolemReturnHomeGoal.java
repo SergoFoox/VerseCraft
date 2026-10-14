@@ -22,12 +22,12 @@ public class TuffGolemReturnHomeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return !this.golem.isBusyWithAnim() && this.golem.wantsToSleep() && this.golem.getOriginPos() != null;
+        return this.golem.isAlive() && !this.golem.isDeadOrDying() && !this.golem.isBusyWithAnim() && this.golem.wantsToSleep() && this.golem.getOriginPos() != null;
     }
 
     @Override
     public boolean canContinueToUse() {
-        return !this.golem.isBusyWithAnim() && this.canUse();
+        return this.golem.isAlive() && !this.golem.isDeadOrDying() && !this.golem.isBusyWithAnim() && this.canUse();
     }
 
     @Override
@@ -47,6 +47,11 @@ public class TuffGolemReturnHomeGoal extends Goal {
 
     @Override
     public void tick() {
+        if (!this.golem.isAlive() || this.golem.isDeadOrDying()) {
+            this.stop();
+            return;
+        }
+
         BlockPos home = this.golem.getOriginPos();
         if (home == null) {
             return;
@@ -75,7 +80,7 @@ public class TuffGolemReturnHomeGoal extends Goal {
                 this.golem.setDeltaMovement(Vec3.ZERO);
                 return;
             }
-            this.golem.startSleeping();
+            this.golem.startGoingToSleep();
             return;
         }
 

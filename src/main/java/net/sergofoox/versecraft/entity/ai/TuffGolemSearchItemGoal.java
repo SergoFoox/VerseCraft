@@ -30,7 +30,7 @@ public class TuffGolemSearchItemGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.golem.isBusyWithAnim() || !this.golem.getMainHandItem().isEmpty()) {
+        if (!this.golem.isAlive() || this.golem.isDeadOrDying() || this.golem.isBusyWithAnim() || !this.golem.getMainHandItem().isEmpty()) {
             return false;
         }
 
@@ -88,7 +88,9 @@ public class TuffGolemSearchItemGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !this.golem.isBusyWithAnim()
+        return this.golem.isAlive()
+                && !this.golem.isDeadOrDying()
+                && !this.golem.isBusyWithAnim()
                 && this.targetItem != null
                 && this.targetItem.isAlive()
                 && !this.targetItem.getItem().isEmpty()
@@ -115,7 +117,7 @@ public class TuffGolemSearchItemGoal extends Goal {
 
     @Override
     public void tick() {
-        if (this.targetItem == null || !this.targetItem.isAlive() || this.targetItem.getItem().isEmpty()) {
+        if (!this.golem.isAlive() || this.golem.isDeadOrDying() || this.targetItem == null || !this.targetItem.isAlive() || this.targetItem.getItem().isEmpty()) {
             this.stop();
             return;
         }

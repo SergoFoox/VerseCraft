@@ -62,13 +62,13 @@ public class TuffGolem extends AbstractGolem {
     private int awakeTicks = 0;
     private boolean targetingItem = false;
     @Nullable
-    private ItemEntity targetedItem;
+    private ItemEntity targetedItem = null;
 
     @Nullable
-    private BlockPos originPos;
+    private BlockPos originPos = null;
     private Direction originFacing = Direction.NORTH;
 
-    public TuffGolem(EntityType<? extends TuffGolem> entityType, Level level) {
+    public TuffGolem(EntityType<? extends AbstractGolem> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -81,58 +81,69 @@ public class TuffGolem extends AbstractGolem {
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.18D)
-                .add(Attributes.STEP_HEIGHT, 0.6D)
-                .add(Attributes.FOLLOW_RANGE, 64.0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
+                .add(Attributes.MOVEMENT_SPEED, 0.2D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D)
+                .add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new TuffGolemSearchItemGoal(this, 1.15D));
-        this.goalSelector.addGoal(2, new TuffGolemReturnHomeGoal(this, 1.05D));
-        this.goalSelector.addGoal(3, new TuffGolemWanderNearHomeGoal(this, 1.0D));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
-            @Override
-            public boolean canUse() {
-                return !TuffGolem.this.isBusyWithAnim() && super.canUse();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return !TuffGolem.this.isBusyWithAnim() && super.canContinueToUse();
-            }
-        });
+        this.goalSelector.addGoal(1, new TuffGolemSearchItemGoal(this, 1.25D));
+        this.goalSelector.addGoal(2, new TuffGolemReturnHomeGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new TuffGolemWanderNearHomeGoal(this, 0.8D));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
     }
 
-    @Override
-    public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
-        if (slot == EquipmentSlot.MAINHAND && stack.getCount() > 1) {
-            stack = stack.copyWithCount(1);
-        }
-        super.setItemSlot(slot, stack);
+    public boolean isBusyWithAnim() {
+        byte state = this.entityData.get(DATA_ANIM_STATE);
+        return state == STATE_SLEEP_START || state == STATE_SLEEP_OVER;
     }
 
     public boolean isSleepingAnim() {
         return this.entityData.get(DATA_ANIM_STATE) == STATE_SLEEP_START;
     }
 
-    public boolean isWakingUpAnim() {
-        return this.entityData.get(DATA_ANIM_STATE) == STATE_SLEEP_OVER;
+    public void startGoingToSleep() {
+        this.entityData.set(DATA_ANIM_STATE, STATE_SLEEP_START);
+        this.animTicks = 40;
+        this.getNavigation().stop();
+        this.setDeltaMovement(Vec3.ZERO);
+        if (this.originFacing != null) {
+            this.setYRot(this.originFacing.toYRot());
+            this.setYHeadRot(this.originFacing.toYRot());
+            this.setYBodyRot(this.originFacing.toYRot());
+        }
+        if (!this.level().isClientSide()) {
+            this.level().playSound(null, this.blockPosition(), SoundEvents.TUFF_STEP, SoundSource.NEUTRAL, 1.0F, 0.8F);
+        }
     }
 
-    public boolean isBusyWithAnim() {
-        byte s = this.entityData.get(DATA_ANIM_STATE);
-        return s == STATE_SLEEP_START || s == STATE_SLEEP_OVER;
+    public void startWakingUp() {
+        this.entityData.set(DATA_ANIM_STATE, STATE_SLEEP_OVER);
+        this.animTicks = 40;
+        this.awakeTicks = 0;
+        this.getNavigation().stop();
+        this.setDeltaMovement(Vec3.ZERO);
+        if (this.originFacing != null) {
+            this.setYRot(this.originFacing.toYRot());
+            this.setYHeadRot(this.originFacing.toYRot());
+            this.setYBodyRot(this.originFacing.toYRot());
+        }
+        if (!this.level().isClientSide()) {
+            this.level().playSound(null, this.blockPosition(), SoundEvents.TUFF_STEP, SoundSource.NEUTRAL, 1.0F, 1.2F);
+        }
     }
 
     public boolean isTargetingItem() {
         return this.targetingItem;
     }
 
-    public void setTargetingItem(boolean targetingItem) {
-        this.targetingItem = targetingItem;
+    public void setTargetingItem(boolean targeting) {
+        this.targetingItem = targeting;
+        if (!targeting) {
+            this.targetedItem = null;
+        }
     }
 
     @Nullable
@@ -140,12 +151,16 @@ public class TuffGolem extends AbstractGolem {
         return this.targetedItem;
     }
 
-    public void setTargetedItem(@Nullable ItemEntity targetedItem) {
-        this.targetedItem = targetedItem;
+    public void setTargetedItem(@Nullable ItemEntity item) {
+        this.targetedItem = item;
+    }
+
+    public int getAwakeTicks() {
+        return this.awakeTicks;
     }
 
     public boolean hasNearbyItemToCollect() {
-        if (!this.getMainHandItem().isEmpty()) {
+        if (!this.isAlive() || this.isDeadOrDying() || !this.getMainHandItem().isEmpty()) {
             return false;
         }
         AABB box = this.getBoundingBox().inflate(16.0D, 6.0D, 16.0D);
@@ -198,44 +213,47 @@ public class TuffGolem extends AbstractGolem {
 
             Path path = other.getNavigation().getPath();
             if (path == null) {
-                path = other.getNavigation().createPath(otherHome, 0);
+                continue;
             }
-            if (path != null && path.canReach()) {
-                int count = path.getNodeCount();
-                for (int i = path.getNextNodeIndex(); i < count - 1; i++) {
-                    BlockPos nodePos = path.getNodePos(i);
-                    if (nodePos.equals(this.originPos)) {
+
+            for (int i = path.getNextNodeIndex(); i < path.getNodeCount(); i++) {
+                BlockPos nodePos = path.getNode(i).asBlockPos();
+                if (nodePos.distSqr(this.originPos) <= 2.25D) {
+                    double myDistToOtherHomeSq = this.distanceToSqr(Vec3.atBottomCenterOf(otherHome));
+                    if (otherDistToHomeSq > myDistToOtherHomeSq) {
                         return true;
                     }
                 }
             }
         }
-
         return false;
     }
 
-    public void startSleeping() {
-        if (!this.level().isClientSide()) {
-            this.entityData.set(DATA_ANIM_STATE, STATE_SLEEP_START);
-            this.animTicks = 23;
-            this.awakeTicks = 0;
-            this.targetingItem = false;
-            this.targetedItem = null;
-            this.getNavigation().stop();
-            this.setDeltaMovement(Vec3.ZERO);
-            if (this.originPos != null) {
-                this.setPos(this.originPos.getX() + 0.5D, this.originPos.getY(), this.originPos.getZ() + 0.5D);
-            }
+    public boolean isHomeBlockedByOtherGolem() {
+        if (this.originPos == null) {
+            return false;
         }
+        AABB homeBox = new AABB(this.originPos).inflate(0.5D);
+        List<TuffGolem> atHome = this.level().getEntitiesOfClass(
+                TuffGolem.class,
+                homeBox,
+                g -> g != this && g.isAlive()
+        );
+        return !atHome.isEmpty();
     }
 
-    public void startWakingUp() {
-        if (!this.level().isClientSide()) {
-            this.entityData.set(DATA_ANIM_STATE, STATE_SLEEP_OVER);
-            this.animTicks = 24;
-            this.awakeTicks = 0;
-            this.targetingItem = false;
-            this.targetedItem = null;
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        if (this.isSleepingAnim()) {
+            this.startWakingUp();
+        }
+        return super.hurtServer(level, source, amount);
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.isBusyWithAnim()) {
             this.getNavigation().stop();
             this.setDeltaMovement(Vec3.ZERO);
             if (this.originFacing != null) {
@@ -270,6 +288,10 @@ public class TuffGolem extends AbstractGolem {
     @Override
     public void tick() {
         super.tick();
+
+        if (this.isDeadOrDying() || !this.isAlive()) {
+            return;
+        }
 
         if (this.level().isClientSide()) {
             byte state = this.entityData.get(DATA_ANIM_STATE);
@@ -366,6 +388,48 @@ public class TuffGolem extends AbstractGolem {
     }
 
     @Override
+    public void die(DamageSource damageSource) {
+        this.targetingItem = false;
+        this.targetedItem = null;
+        super.die(damageSource);
+    }
+
+    @Override
+    public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
+        if ((!this.isAlive() || this.isDeadOrDying()) && !stack.isEmpty()) {
+            return;
+        }
+        if (slot == EquipmentSlot.MAINHAND && stack.getCount() > 1) {
+            stack = stack.copyWithCount(1);
+        }
+        super.setItemSlot(slot, stack);
+    }
+
+    @Override
+    public boolean wantsToPickUp(ServerLevel level, ItemStack stack) {
+        if (!this.isAlive() || this.isDeadOrDying() || this.isBusyWithAnim() || !this.getMainHandItem().isEmpty()) {
+            return false;
+        }
+        return super.wantsToPickUp(level, stack);
+    }
+
+    @Override
+    public boolean canHoldItem(ItemStack stack) {
+        if (!this.isAlive() || this.isDeadOrDying()) {
+            return false;
+        }
+        return super.canHoldItem(stack);
+    }
+
+    @Override
+    protected void pickUpItem(ServerLevel level, ItemEntity itemEntity) {
+        if (!this.isAlive() || this.isDeadOrDying() || this.isBusyWithAnim()) {
+            return;
+        }
+        super.pickUpItem(level, itemEntity);
+    }
+
+    @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack playerItem = player.getItemInHand(hand);
         ItemStack golemItem = this.getMainHandItem();
@@ -455,15 +519,17 @@ public class TuffGolem extends AbstractGolem {
     @Override
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
-        if (input.contains("origin_x") && input.contains("origin_y") && input.contains("origin_z")) {
+        if (input.getInt("origin_x").isPresent() && input.getInt("origin_y").isPresent() && input.getInt("origin_z").isPresent()) {
             this.originPos = new BlockPos(
                     input.getIntOr("origin_x", 0),
                     input.getIntOr("origin_y", 0),
                     input.getIntOr("origin_z", 0)
             );
         }
-        Direction facing = Direction.byName(input.getStringOr("origin_facing", "north"));
-        this.originFacing = facing != null ? facing : Direction.NORTH;
+        this.originFacing = Direction.byName(input.getStringOr("origin_facing", "north"));
+        if (this.originFacing == null) {
+            this.originFacing = Direction.NORTH;
+        }
         this.entityData.set(DATA_ANIM_STATE, input.getByteOr("anim_state", STATE_IDLE));
         this.animTicks = input.getIntOr("anim_ticks", 0);
         this.awakeTicks = input.getIntOr("awake_ticks", 0);

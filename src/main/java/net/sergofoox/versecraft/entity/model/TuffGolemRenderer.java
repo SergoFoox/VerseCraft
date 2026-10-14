@@ -5,6 +5,11 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.AbstractBedBlock;
+import net.minecraft.world.level.block.DoorBlock;
 import net.sergofoox.versecraft.VerseCraft;
 import net.sergofoox.versecraft.entity.TuffGolem;
 
@@ -31,6 +36,31 @@ public class TuffGolemRenderer extends MobRenderer<TuffGolem, TuffGolemRenderSta
     public void extractRenderState(TuffGolem entity, TuffGolemRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         ArmedEntityRenderState.extractArmedEntityRenderState(entity, state, this.itemModelResolver, partialTick);
+
+        ItemStack rightStack = state.rightHandItemStack;
+        boolean rightIsDoor = !rightStack.isEmpty()
+                && (rightStack.getItem() instanceof BlockItem blockItem)
+                && (blockItem.getBlock() instanceof DoorBlock);
+
+        state.isRightHandDoor = rightIsDoor;
+        state.isRightHandBlock = !rightStack.isEmpty()
+                && (rightStack.getItem() instanceof BlockItem blockItem)
+                && !(blockItem.getBlock() instanceof AbstractBedBlock)
+                && !(blockItem.getBlock() instanceof DoorBlock)
+                && !(rightStack.getItem() instanceof BannerItem);
+
+        ItemStack leftStack = state.leftHandItemStack;
+        boolean leftIsDoor = !leftStack.isEmpty()
+                && (leftStack.getItem() instanceof BlockItem blockItem)
+                && (blockItem.getBlock() instanceof DoorBlock);
+
+        state.isLeftHandDoor = leftIsDoor;
+        state.isLeftHandBlock = !leftStack.isEmpty()
+                && (leftStack.getItem() instanceof BlockItem blockItem)
+                && !(blockItem.getBlock() instanceof AbstractBedBlock)
+                && !(blockItem.getBlock() instanceof DoorBlock)
+                && !(leftStack.getItem() instanceof BannerItem);
+
         state.idleAnimationState.copyFrom(entity.idleAnimationState);
         state.walkingAnimationState.copyFrom(entity.walkingAnimationState);
         state.sleepStartAnimationState.copyFrom(entity.sleepStartAnimationState);

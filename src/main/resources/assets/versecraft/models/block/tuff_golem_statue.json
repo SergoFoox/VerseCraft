@@ -79,7 +79,8 @@
 			"name": "body",
 			"from": [3, 9, -5],
 			"to": [13, 9, 3],
-			"rotation": {"angle": 0, "axis": "y", "origin": [4, 2, 4]},\t\t\t"faces": {
+			"rotation": {"angle": 0, "axis": "y", "origin": [4, 2, 4]},
+			"faces": {
 				"up": {"uv": [13.75, 14.5, 11.25, 12.5], "texture": "#0"},
 				"down": {"uv": [13.75, 12.5, 11.25, 14.5], "texture": "#0"}
 			}

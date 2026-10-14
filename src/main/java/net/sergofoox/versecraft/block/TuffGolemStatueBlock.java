@@ -156,11 +156,6 @@ public class TuffGolemStatueBlock extends HorizontalDirectionalBlock implements 
 
     @Override
     protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
-        if (level.getBlockEntity(pos) instanceof TuffGolemStatueBlockEntity be) {
-            if (!be.getItem().isEmpty()) {
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), be.getItem());
-            }
-        }
         super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
     }
 }

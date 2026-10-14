@@ -24,7 +24,7 @@ public class TuffGolemWanderNearHomeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.golem.isBusyWithAnim() || !this.golem.getMainHandItem().isEmpty()) {
+        if (!this.golem.isAlive() || this.golem.isDeadOrDying() || this.golem.isBusyWithAnim() || !this.golem.getMainHandItem().isEmpty()) {
             return false;
         }
 
@@ -38,7 +38,7 @@ public class TuffGolemWanderNearHomeGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !this.golem.isBusyWithAnim() && !this.golem.getNavigation().isDone() && this.golem.getMainHandItem().isEmpty();
+        return this.golem.isAlive() && !this.golem.isDeadOrDying() && !this.golem.isBusyWithAnim() && !this.golem.getNavigation().isDone() && this.golem.getMainHandItem().isEmpty();
     }
 
     @Override

@@ -10,5 +10,6 @@ public class TuffGolemStatueBlockRenderState extends BlockEntityRenderState {
     public boolean isBed = false;
     public boolean isBanner = false;
     public boolean isSpike = false;
+    public boolean isDoor = false;
     public final ItemStackRenderState item = new ItemStackRenderState();
 }

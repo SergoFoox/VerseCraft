@@ -449,7 +449,7 @@ public class RegisterBlocks {
 
     //Andesite
 
-    public static final Block CHISELED_ANDESITE = register("chiseled_andestite", // keeping whatever it was
+    public static final Block CHISELED_ANDESITE = register("chiseled_andesite",
             properties -> new Block(properties.strength(1.5f,6f)
                     .sound(SoundType.STONE).requiresCorrectToolForDrops()));
 

@@ -8,4 +8,9 @@ public class TuffGolemRenderState extends ArmedEntityRenderState {
     public final AnimationState walkingAnimationState = new AnimationState();
     public final AnimationState sleepStartAnimationState = new AnimationState();
     public final AnimationState sleepOverAnimationState = new AnimationState();
+
+    public boolean isRightHandBlock = false;
+    public boolean isLeftHandBlock = false;
+    public boolean isRightHandDoor = false;
+    public boolean isLeftHandDoor = false;
 }

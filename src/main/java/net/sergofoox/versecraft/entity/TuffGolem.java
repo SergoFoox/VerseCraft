@@ -20,7 +20,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.animal.golem.AbstractGolem;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -88,7 +87,6 @@ public class TuffGolem extends AbstractGolem {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new TuffGolemSearchItemGoal(this, 1.25D));
         this.goalSelector.addGoal(2, new TuffGolemReturnHomeGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TuffGolemWanderNearHomeGoal(this, 0.8D));
@@ -109,6 +107,9 @@ public class TuffGolem extends AbstractGolem {
         this.animTicks = 40;
         this.getNavigation().stop();
         this.setDeltaMovement(Vec3.ZERO);
+        if (this.originPos != null) {
+            this.setPos(this.originPos.getX() + 0.5D, this.getY(), this.originPos.getZ() + 0.5D);
+        }
         if (this.originFacing != null) {
             this.setYRot(this.originFacing.toYRot());
             this.setYHeadRot(this.originFacing.toYRot());
@@ -476,6 +477,11 @@ public class TuffGolem extends AbstractGolem {
 
     public void setOriginFacing(Direction facing) {
         this.originFacing = facing != null ? facing : Direction.NORTH;
+    }
+
+    @Override
+    protected int decreaseAirSupply(int air) {
+        return air;
     }
 
     @Override

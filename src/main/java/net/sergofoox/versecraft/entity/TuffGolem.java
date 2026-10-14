@@ -84,7 +84,8 @@ public class TuffGolem extends AbstractGolem {
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D)
-                .add(Attributes.STEP_HEIGHT, 1.0D);
+                .add(Attributes.STEP_HEIGHT, 1.0D)
+                .add(Attributes.FALL_DAMAGE_MULTIPLIER, 0.0D);
     }
 
     @Override
@@ -489,6 +490,11 @@ public class TuffGolem extends AbstractGolem {
     @Override
     protected int decreaseAirSupply(int air) {
         return air;
+    }
+
+    @Override
+    public boolean causeFallDamage(double fallDistance, float damageMultiplier, DamageSource damageSource) {
+        return false;
     }
 
     @Override

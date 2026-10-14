@@ -1,13 +1,13 @@
-﻿{
+{
   "block.versecraft.azalea_log": "Азалиевое бревно",
-  "block.versecraft.azalea_wood": "Азалиевое дерево",
+  "block.versecraft.azalea_wood": "Азалиевая древесина",
   "block.versecraft.stripped_azalea_log": "Обтёсанное азалиевое бревно",
   "block.versecraft.stripped_azalea_wood": "Обтёсанная азалиевая древесина",
   "block.versecraft.azalea_planks": "Азалиевые доски",
   "block.versecraft.azalea_stairs": "Азалиевые ступеньки",
   "block.versecraft.azalea_slab": "Азалиевая плита",
   "block.versecraft.azalea_fence": "Азалиевый забор",
-  "block.versecraft.azalea_fence_gate": "Азалиевая калитка",
+  "block.versecraft.azalea_fence_gate": "Азалиевые ворота",
   "block.versecraft.azalea_door": "Азалиевая дверь",
   "block.versecraft.azalea_trapdoor": "Азалиевый люк",
   "block.versecraft.azalea_pressure_plate": "Азалиевая нажимная плита",
@@ -54,12 +54,12 @@
   "block.versecraft.crimson_mosaic_slab": "Плита из багровой мозаики",
 
   "block.versecraft.dark_oak_mosaic": "Тёмно дубовая мозаика",
-  "block.versecraft.dark_oak_mosaic_stairs": "Ступеньки из тёмного дубовой мозаики",
-  "block.versecraft.dark_oak_mosaic_slab": "Плита из тёмного дубовой мозаики",
+  "block.versecraft.dark_oak_mosaic_stairs": "Ступеньки из тёмно дубовой мозаики",
+  "block.versecraft.dark_oak_mosaic_slab": "Плита из тёмно дубовой мозаики",
 
-  "block.versecraft.jungle_mosaic": "Тропическая мозаика",
-  "block.versecraft.jungle_mosaic_stairs": "Ступеньки из тропической мозаики",
-  "block.versecraft.jungle_mosaic_slab": "Плита из тропической мозаики",
+  "block.versecraft.jungle_mosaic": "Джунглевая мозаика",
+  "block.versecraft.jungle_mosaic_stairs": "Ступеньки из джунглевой мозаики",
+  "block.versecraft.jungle_mosaic_slab": "Плита из джунглевой мозаики",
 
   "block.versecraft.mangrove_mosaic": "Мангровая мозаика",
   "block.versecraft.mangrove_mosaic_stairs": "Ступеньки из мангровой мозаики",
@@ -152,7 +152,7 @@
   "block.versecraft.iceflower": "Ледянок",
   "block.versecraft.iceflower_crop": "Ледянок посажен",
   "block.versecraft.potted_iceflower": "Горшечный ледянок",
-  "item.versecraft.iceflower_seeds": "Семена ледянока",
+  "item.versecraft.iceflower_seeds": "Семя ледянока",
 
   "block.versecraft.blue_rose": "Голубая роза",
   "block.versecraft.blue_rose_crop": "Голубая роза посажена",
@@ -162,19 +162,19 @@
   "block.versecraft.short_mycelium_grass": "Низкая мицеливая трава ",
   "block.versecraft.tall_mycelium_grass": "Высокая мицеливая трава",
   "block.versecraft.pop_flower": "Скачущий цветок",
-  "block.versecraft.glowshroom": "Светящийся грибы",
+  "block.versecraft.glowshroom": "Светящиеся грибы",
 
   "block.versecraft.buttercup": "Лютик",
   "block.versecraft.potted_buttercup": "Лютик в горшке",
   "entity.versecraft.moobloom": "Мублум",
   "item.versecraft.moobloom_spawn_egg": "Яйцо призыва мублума",
 
-  "block.versecraft.copper_jack_o_lantern": "Медный светильник джека",
+  "block.versecraft.copper_jack_o_lantern": "Медный светильник Джека",
   "block.versecraft.copper_campfire": "Медный костёр",
-  "block.versecraft.soul_jack_o_lantern": "Светильник джека душ",
+  "block.versecraft.soul_jack_o_lantern": "Светильник Джека душ",
   "block.versecraft.dyed_water_cauldron": "Котёл с окрашенной водой",
   "block.versecraft.potion_cauldron": "Котёл с зельем",
-  "block.versecraft.tuff_golem_block": "Туфовый голем",
+  "block.versecraft.tuff_golem_block": "Статуя туфового голема",
   "entity.versecraft.tuff_golem": "Туфовый голем",
   "item.versecraft.tuff_golem_spawn_egg": "Яйцо призыва туфового голема"
 }

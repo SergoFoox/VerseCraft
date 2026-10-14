@@ -14,7 +14,6 @@ public class TuffGolemReturnHomeGoal extends Goal {
     private final double speedModifier;
     private int repathCooldown = 0;
     private int yieldTicks = 0;
-    private int stuckTicks = 0;
 
     public TuffGolemReturnHomeGoal(TuffGolem golem, double speedModifier) {
         this.golem = golem;
@@ -36,7 +35,6 @@ public class TuffGolemReturnHomeGoal extends Goal {
     public void start() {
         this.repathCooldown = 0;
         this.yieldTicks = 0;
-        this.stuckTicks = 0;
         BlockPos home = this.golem.getOriginPos();
         if (home != null) {
             this.golem.getNavigation().moveTo(home.getX() + 0.5D, home.getY(), home.getZ() + 0.5D, this.speedModifier);
@@ -46,7 +44,6 @@ public class TuffGolemReturnHomeGoal extends Goal {
     @Override
     public void stop() {
         this.golem.getNavigation().stop();
-        this.stuckTicks = 0;
     }
 
     @Override
@@ -71,7 +68,19 @@ public class TuffGolemReturnHomeGoal extends Goal {
         double horizDistSq = toTargetX * toTargetX + toTargetZ * toTargetZ;
         double dy = Math.abs(pos.y - targetY);
 
-        if (this.golem.shouldYieldToDeeperGolem() && this.yieldTicks < 60) {
+        boolean onHomeBlock = (this.golem.blockPosition().equals(home) && horizDistSq <= 0.16D && dy < 0.5D);
+        boolean closeEnough = (horizDistSq <= 0.04D && dy < 0.5D);
+        boolean stuckNearHome = (horizDistSq <= 0.36D && dy < 0.5D && this.golem.getNavigation().isStuck());
+
+        // Arrived at home position: immediately begin sleep without delay
+        if (onHomeBlock || closeEnough || stuckNearHome) {
+            this.golem.getNavigation().stop();
+            this.golem.setDeltaMovement(Vec3.ZERO);
+            this.golem.startGoingToSleep();
+            return;
+        }
+
+        if (this.golem.shouldYieldToDeeperGolem() && this.yieldTicks < 40) {
             this.yieldTicks++;
             this.golem.getNavigation().stop();
             this.golem.setDeltaMovement(Vec3.ZERO);
@@ -85,24 +94,6 @@ public class TuffGolemReturnHomeGoal extends Goal {
             this.golem.getLookControl().setLookAt(pos.x + lookVec.x * 2.0D, pos.y + 0.5D, pos.z + lookVec.z * 2.0D, 30.0F, 30.0F);
         } else {
             this.golem.getLookControl().setLookAt(targetX, targetY + 0.5D, targetZ, 30.0F, 30.0F);
-        }
-
-        boolean reachedExactCenter = (horizDistSq <= 0.02D && dy < 0.5D);
-        boolean stoppedNearCenter = (this.golem.blockPosition().equals(home) && horizDistSq <= 0.06D && dy < 0.5D && this.golem.getDeltaMovement().horizontalDistanceSqr() < 0.001D);
-
-        if (this.golem.blockPosition().equals(home) && horizDistSq <= 0.25D && dy < 0.5D && this.golem.getDeltaMovement().horizontalDistanceSqr() < 0.0005D) {
-            this.stuckTicks++;
-        } else if (horizDistSq <= 0.36D && dy < 0.5D && this.golem.getNavigation().isStuck()) {
-            this.stuckTicks++;
-        } else {
-            this.stuckTicks = 0;
-        }
-
-        if (reachedExactCenter || stoppedNearCenter || this.stuckTicks >= 20) {
-            this.golem.getNavigation().stop();
-            this.golem.setDeltaMovement(Vec3.ZERO);
-            this.golem.startGoingToSleep();
-            return;
         }
 
         this.golem.getMoveControl().setWantedPosition(targetX, targetY, targetZ, this.speedModifier);

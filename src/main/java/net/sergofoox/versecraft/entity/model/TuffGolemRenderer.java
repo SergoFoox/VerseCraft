@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.BlockItem;
@@ -36,6 +37,15 @@ public class TuffGolemRenderer extends MobRenderer<TuffGolem, TuffGolemRenderSta
     public void extractRenderState(TuffGolem entity, TuffGolemRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         ArmedEntityRenderState.extractArmedEntityRenderState(entity, state, this.itemModelResolver, partialTick);
+
+        if (entity.isBusyWithAnim()) {
+            Direction facing = entity.getOriginFacing();
+            if (facing != null) {
+                float targetYaw = facing.toYRot();
+                state.bodyRot = targetYaw;
+                state.yRot = targetYaw;
+            }
+        }
 
         ItemStack rightStack = state.rightHandItemStack;
         boolean rightIsDoor = !rightStack.isEmpty()

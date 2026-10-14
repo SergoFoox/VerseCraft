@@ -51,6 +51,8 @@ public class TuffGolem extends AbstractGolem {
 
     private static final EntityDataAccessor<Byte> DATA_ANIM_STATE =
             SynchedEntityData.defineId(TuffGolem.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Direction> DATA_ORIGIN_FACING =
+            SynchedEntityData.defineId(TuffGolem.class, EntityDataSerializers.DIRECTION);
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState walkingAnimationState = new AnimationState();
@@ -65,7 +67,6 @@ public class TuffGolem extends AbstractGolem {
 
     @Nullable
     private BlockPos originPos = null;
-    private Direction originFacing = Direction.NORTH;
 
     public TuffGolem(EntityType<? extends AbstractGolem> entityType, Level level) {
         super(entityType, level);
@@ -75,6 +76,7 @@ public class TuffGolem extends AbstractGolem {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIM_STATE, STATE_IDLE);
+        builder.define(DATA_ORIGIN_FACING, Direction.NORTH);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -110,10 +112,11 @@ public class TuffGolem extends AbstractGolem {
         if (this.originPos != null) {
             this.setPos(this.originPos.getX() + 0.5D, this.getY(), this.originPos.getZ() + 0.5D);
         }
-        if (this.originFacing != null) {
-            this.setYRot(this.originFacing.toYRot());
-            this.setYHeadRot(this.originFacing.toYRot());
-            this.setYBodyRot(this.originFacing.toYRot());
+        Direction facing = this.getOriginFacing();
+        if (facing != null) {
+            this.setYRot(facing.toYRot());
+            this.setYHeadRot(facing.toYRot());
+            this.setYBodyRot(facing.toYRot());
         }
         if (!this.level().isClientSide()) {
             this.level().playSound(null, this.blockPosition(), SoundEvents.TUFF_STEP, SoundSource.NEUTRAL, 1.0F, 0.8F);
@@ -126,10 +129,11 @@ public class TuffGolem extends AbstractGolem {
         this.awakeTicks = 0;
         this.getNavigation().stop();
         this.setDeltaMovement(Vec3.ZERO);
-        if (this.originFacing != null) {
-            this.setYRot(this.originFacing.toYRot());
-            this.setYHeadRot(this.originFacing.toYRot());
-            this.setYBodyRot(this.originFacing.toYRot());
+        Direction facing = this.getOriginFacing();
+        if (facing != null) {
+            this.setYRot(facing.toYRot());
+            this.setYHeadRot(facing.toYRot());
+            this.setYBodyRot(facing.toYRot());
         }
         if (!this.level().isClientSide()) {
             this.level().playSound(null, this.blockPosition(), SoundEvents.TUFF_STEP, SoundSource.NEUTRAL, 1.0F, 1.2F);
@@ -257,10 +261,11 @@ public class TuffGolem extends AbstractGolem {
         if (this.isBusyWithAnim()) {
             this.getNavigation().stop();
             this.setDeltaMovement(Vec3.ZERO);
-            if (this.originFacing != null) {
-                this.setYRot(this.originFacing.toYRot());
-                this.setYHeadRot(this.originFacing.toYRot());
-                this.setYBodyRot(this.originFacing.toYRot());
+            Direction facing = this.getOriginFacing();
+            if (facing != null) {
+                this.setYRot(facing.toYRot());
+                this.setYHeadRot(facing.toYRot());
+                this.setYBodyRot(facing.toYRot());
             }
         }
     }
@@ -314,17 +319,18 @@ public class TuffGolem extends AbstractGolem {
         } else {
             if (this.originPos == null) {
                 this.originPos = this.blockPosition();
-                this.originFacing = this.getDirection();
+                this.setOriginFacing(this.getDirection());
             }
 
             byte state = this.entityData.get(DATA_ANIM_STATE);
 
             if (state == STATE_SLEEP_START) {
                 this.setDeltaMovement(0.0D, this.getDeltaMovement().y, 0.0D);
-                if (this.originFacing != null) {
-                    this.setYRot(this.originFacing.toYRot());
-                    this.setYHeadRot(this.originFacing.toYRot());
-                    this.setYBodyRot(this.originFacing.toYRot());
+                Direction facing = this.getOriginFacing();
+                if (facing != null) {
+                    this.setYRot(facing.toYRot());
+                    this.setYHeadRot(facing.toYRot());
+                    this.setYBodyRot(facing.toYRot());
                 }
                 this.animTicks--;
                 if (this.animTicks <= 0) {
@@ -338,8 +344,8 @@ public class TuffGolem extends AbstractGolem {
                             }
                         }
                     }
-                    Direction facing = this.originFacing != null ? this.originFacing : this.getDirection();
-                    BlockState statueState = RegisterBlocks.TUFF_GOLEM_STATUE.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing);
+                    Direction statueFacing = facing != null ? facing : this.getDirection();
+                    BlockState statueState = RegisterBlocks.TUFF_GOLEM_STATUE.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, statueFacing);
                     this.level().setBlock(home, statueState, Block.UPDATE_ALL);
 
                     if (this.level().getBlockEntity(home) instanceof TuffGolemStatueBlockEntity be) {
@@ -352,10 +358,11 @@ public class TuffGolem extends AbstractGolem {
                 }
             } else if (state == STATE_SLEEP_OVER) {
                 this.setDeltaMovement(0.0D, this.getDeltaMovement().y, 0.0D);
-                if (this.originFacing != null) {
-                    this.setYRot(this.originFacing.toYRot());
-                    this.setYHeadRot(this.originFacing.toYRot());
-                    this.setYBodyRot(this.originFacing.toYRot());
+                Direction facing = this.getOriginFacing();
+                if (facing != null) {
+                    this.setYRot(facing.toYRot());
+                    this.setYHeadRot(facing.toYRot());
+                    this.setYBodyRot(facing.toYRot());
                 }
                 this.animTicks--;
                 if (this.animTicks <= 0) {
@@ -472,11 +479,11 @@ public class TuffGolem extends AbstractGolem {
     }
 
     public Direction getOriginFacing() {
-        return this.originFacing;
+        return this.entityData.get(DATA_ORIGIN_FACING);
     }
 
     public void setOriginFacing(Direction facing) {
-        this.originFacing = facing != null ? facing : Direction.NORTH;
+        this.entityData.set(DATA_ORIGIN_FACING, facing != null ? facing : Direction.NORTH);
     }
 
     @Override
@@ -516,7 +523,7 @@ public class TuffGolem extends AbstractGolem {
             output.putInt("origin_y", this.originPos.getY());
             output.putInt("origin_z", this.originPos.getZ());
         }
-        output.putString("origin_facing", this.originFacing.getName());
+        output.putString("origin_facing", this.getOriginFacing().getName());
         output.putByte("anim_state", this.entityData.get(DATA_ANIM_STATE));
         output.putInt("anim_ticks", this.animTicks);
         output.putInt("awake_ticks", this.awakeTicks);
@@ -532,10 +539,8 @@ public class TuffGolem extends AbstractGolem {
                     input.getIntOr("origin_z", 0)
             );
         }
-        this.originFacing = Direction.byName(input.getStringOr("origin_facing", "north"));
-        if (this.originFacing == null) {
-            this.originFacing = Direction.NORTH;
-        }
+        Direction loadedFacing = Direction.byName(input.getStringOr("origin_facing", "north"));
+        this.setOriginFacing(loadedFacing != null ? loadedFacing : Direction.NORTH);
         this.entityData.set(DATA_ANIM_STATE, input.getByteOr("anim_state", STATE_IDLE));
         this.animTicks = input.getIntOr("anim_ticks", 0);
         this.awakeTicks = input.getIntOr("awake_ticks", 0);

@@ -84,15 +84,34 @@ public abstract class RaiderMixin {
             return;
         }
 
-        AABB pickupBox = self.getBoundingBox().inflate(1.5, 1.0, 1.5);
+        AABB searchBox = self.getBoundingBox().inflate(3.0, 1.5, 3.0);
         List<ItemEntity> nearbyBanners = serverLevel.getEntitiesOfClass(
                 ItemEntity.class,
-                pickupBox,
+                searchBox,
                 itemEntity -> !itemEntity.isRemoved() && versecraft$isPlainWhiteBanner(itemEntity.getItem())
         );
 
-        if (!nearbyBanners.isEmpty()) {
-            ItemEntity bannerEntity = nearbyBanners.get(0);
+        if (nearbyBanners.isEmpty()) {
+            return;
+        }
+
+        ItemEntity bannerEntity = null;
+        double minDistanceSq = Double.MAX_VALUE;
+        for (ItemEntity candidate : nearbyBanners) {
+            double distSq = self.distanceToSqr(candidate);
+            if (distSq < minDistanceSq) {
+                minDistanceSq = distSq;
+                bannerEntity = candidate;
+            }
+        }
+
+        if (bannerEntity == null) {
+            return;
+        }
+
+        self.setTarget(null);
+
+        if (minDistanceSq <= 0.81D || self.getBoundingBox().inflate(0.5, 0.5, 0.5).intersects(bannerEntity.getBoundingBox())) {
             ItemStack singleBanner = bannerEntity.getItem().split(1);
             if (bannerEntity.getItem().isEmpty()) {
                 bannerEntity.discard();
@@ -116,17 +135,10 @@ public abstract class RaiderMixin {
             return;
         }
 
-        AABB searchBox = self.getBoundingBox().inflate(6.0, 2.0, 6.0);
-        List<ItemEntity> reachableBanners = serverLevel.getEntitiesOfClass(
-                ItemEntity.class,
-                searchBox,
-                itemEntity -> !itemEntity.isRemoved() && versecraft$isPlainWhiteBanner(itemEntity.getItem())
-        );
-
-        if (!reachableBanners.isEmpty()) {
-            ItemEntity bannerEntity = reachableBanners.get(0);
-            self.setTarget(null);
-            self.getNavigation().moveTo(bannerEntity, 1.1);
+        self.getLookControl().setLookAt(bannerEntity, 30.0F, 30.0F);
+        self.getMoveControl().setWantedPosition(bannerEntity.getX(), bannerEntity.getY(), bannerEntity.getZ(), 1.0);
+        if (self.getNavigation().isDone() || self.tickCount % 10 == 0) {
+            self.getNavigation().moveTo(bannerEntity, 1.0);
         }
     }
 

@@ -75,31 +75,18 @@ public abstract class ArmorStandMixin extends LivingEntity implements ArmorStand
 
     @Unique
     private static final BedrockPose[] VERSECRAFT$BEDROCK_POSES = new BedrockPose[]{
-            // 0. Default (animation.armor_stand.default_pose)
             new BedrockPose(new Rotations(0.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(-15.0f, 0.0f, 10.0f), new Rotations(-10.0f, 0.0f, -10.0f), new Rotations(1.0f, 0.0f, 1.0f), new Rotations(-1.0f, 0.0f, -1.0f)),
-            // 1. No Pose (animation.armor_stand.no_pose)
             new BedrockPose(new Rotations(0.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f)),
-            // 2. Solemn (animation.armor_stand.solemn_pose)
             new BedrockPose(new Rotations(15.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 2.0f), new Rotations(-60.0f, -20.0f, -10.0f), new Rotations(-30.0f, 15.0f, 15.0f), new Rotations(1.0f, 0.0f, 1.0f), new Rotations(-1.0f, 0.0f, -1.0f)),
-            // 3. Athena (animation.armor_stand.athena_pose)
             new BedrockPose(new Rotations(-5.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 2.0f), new Rotations(-60.0f, 20.0f, -10.0f), new Rotations(10.0f, 0.0f, -5.0f), new Rotations(3.0f, 3.0f, 3.0f), new Rotations(-3.0f, -3.0f, -3.0f)),
-            // 4. Brandish (animation.armor_stand.brandish_pose)
             new BedrockPose(new Rotations(-15.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, -2.0f), new Rotations(-110.0f, 50.0f, 0.0f), new Rotations(20.0f, 0.0f, -10.0f), new Rotations(-5.0f, 3.0f, 3.0f), new Rotations(5.0f, -3.0f, -3.0f)),
-            // 5. Honor (animation.armor_stand.honor_pose)
             new BedrockPose(new Rotations(-15.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(-110.0f, -35.0f, 0.0f), new Rotations(-110.0f, 35.0f, 0.0f), new Rotations(-5.0f, 3.0f, 3.0f), new Rotations(5.0f, -3.0f, -3.0f)),
-            // 6. Entertain (animation.armor_stand.entertain_pose)
             new BedrockPose(new Rotations(-15.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(-110.0f, 35.0f, 0.0f), new Rotations(-110.0f, -35.0f, 0.0f), new Rotations(-5.0f, 3.0f, 3.0f), new Rotations(5.0f, -3.0f, -3.0f)),
-            // 7. Salute (animation.armor_stand.salute_pose)
             new BedrockPose(new Rotations(0.0f, 0.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(-70.0f, -40.0f, 0.0f), new Rotations(10.0f, 0.0f, -5.0f), new Rotations(1.0f, 0.0f, 1.0f), new Rotations(-1.0f, 0.0f, -1.0f)),
-            // 8. Riposte (animation.armor_stand.riposte_pose)
             new BedrockPose(new Rotations(16.0f, 20.0f, 0.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(-114.0f, 0.0f, 89.0f), new Rotations(4.0f, 8.0f, -123.0f), new Rotations(8.0f, 20.0f, 4.0f), new Rotations(-14.0f, -18.0f, -16.0f)),
-            // 9. Zombie (animation.armor_stand.zombie_pose)
             new BedrockPose(new Rotations(-10.0f, 0.0f, -5.0f), new Rotations(0.0f, 0.0f, 0.0f), new Rotations(-100.0f, 0.0f, 0.0f), new Rotations(-105.0f, 0.0f, 0.0f), new Rotations(-46.0f, 0.0f, 0.0f), new Rotations(7.0f, 0.0f, 0.0f)),
-            // 10. Can-can A (animation.armor_stand.cancan_a_pose)
             new BedrockPose(new Rotations(-5.0f, 18.0f, 0.0f), new Rotations(0.0f, 22.0f, 0.0f), new Rotations(0.0f, 84.0f, 111.0f), new Rotations(8.0f, 0.0f, -114.0f), new Rotations(0.0f, 23.0f, -13.0f), new Rotations(-111.0f, 55.0f, 0.0f)),
-            // 11. Can-can B (animation.armor_stand.cancan_b_pose)
             new BedrockPose(new Rotations(-10.0f, -20.0f, 0.0f), new Rotations(0.0f, -18.0f, 0.0f), new Rotations(8.0f, 90.0f, 111.0f), new Rotations(0.0f, 0.0f, -112.0f), new Rotations(-119.0f, -42.0f, 0.0f), new Rotations(0.0f, 0.0f, 13.0f)),
-            // 12. Hero (animation.armor_stand.hero_pose)
             new BedrockPose(new Rotations(-4.0f, 67.0f, 0.0f), new Rotations(0.0f, 8.0f, 0.0f), new Rotations(-99.0f, 63.0f, 0.0f), new Rotations(16.0f, 32.0f, -8.0f), new Rotations(4.0f, 63.0f, 8.0f), new Rotations(0.0f, -75.0f, -8.0f))
     };
 

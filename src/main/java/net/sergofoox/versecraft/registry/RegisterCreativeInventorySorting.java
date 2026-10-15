@@ -198,7 +198,7 @@ public class RegisterCreativeInventorySorting {
 
             //Other
             output.insertAfter(Blocks.CAMPFIRE, RegisterBlocks.COPPER_CAMPFIRE);
-            output.insertAfter(RegisterBlocks.COPPER_CAMPFIRE, RegisterBlocks.TUFF_GOLEM_STATUE);
+            output.insertAfter(Items.COPPER_GOLEM_STATUE.waxed().oxidized(), RegisterBlocks.TUFF_GOLEM_STATUE);
 
         });
 
@@ -240,7 +240,7 @@ public class RegisterCreativeInventorySorting {
 
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(output -> {
             output.insertAfter(Items.MOOSHROOM_SPAWN_EGG, RegisterItems.MOOBLOOM_SPAWN_EGG);
-            output.insertAfter(RegisterItems.MOOBLOOM_SPAWN_EGG, RegisterItems.TUFF_GOLEM_SPAWN_EGG);
+            output.insertAfter(Items.SNOW_GOLEM_SPAWN_EGG, RegisterItems.TUFF_GOLEM_SPAWN_EGG);
         });
     }
 }

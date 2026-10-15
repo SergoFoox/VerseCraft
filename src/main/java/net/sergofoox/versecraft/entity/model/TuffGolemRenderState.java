@@ -13,4 +13,6 @@ public class TuffGolemRenderState extends ArmedEntityRenderState {
     public boolean isLeftHandBlock = false;
     public boolean isRightHandDoor = false;
     public boolean isLeftHandDoor = false;
+    public boolean isRightHandCopperGolemStatue = false;
+    public boolean isLeftHandCopperGolemStatue = false;
 }

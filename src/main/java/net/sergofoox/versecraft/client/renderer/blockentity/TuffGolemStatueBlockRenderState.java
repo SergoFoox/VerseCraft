@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 public class TuffGolemStatueBlockRenderState extends BlockEntityRenderState {
     public Direction facing = Direction.NORTH;
     public boolean isBlock = false;
+    public boolean isCopperGolemStatue = false;
     public boolean isBed = false;
     public boolean isBanner = false;
     public boolean isSpike = false;

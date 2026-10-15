@@ -90,17 +90,28 @@ public class TuffGolemModel extends EntityModel<TuffGolemRenderState> implements
         } else {
             this.walkingAnimation.applyWalk(state.walkAnimationPos, state.walkAnimationSpeed, 2.5F, 2.5F);
             this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
+        }
 
-            if (!state.rightHandItemState.isEmpty() || !state.rightHandItemStack.isEmpty()) {
+        boolean hasRightItem = !state.rightHandItemState.isEmpty() || !state.rightHandItemStack.isEmpty();
+        boolean hasLeftItem = !state.leftHandItemState.isEmpty() || !state.leftHandItemStack.isEmpty();
+
+        if (hasRightItem) {
+            if (state.sleepStartAnimationState.isStarted() || state.sleepOverAnimationState.isStarted()) {
+                this.arm_r.xRot = -0.35F;
+            } else {
                 this.arm_r.xRot = this.arm_r.xRot * 0.5F - 0.35F;
-                this.arm_r.yRot = 0.0F;
-                this.arm_r.zRot = 0.0F;
             }
-            if (!state.leftHandItemState.isEmpty() || !state.leftHandItemStack.isEmpty()) {
+            this.arm_r.yRot = 0.0F;
+            this.arm_r.zRot = 0.0F;
+        }
+        if (hasLeftItem) {
+            if (state.sleepStartAnimationState.isStarted() || state.sleepOverAnimationState.isStarted()) {
+                this.arm_l.xRot = -0.35F;
+            } else {
                 this.arm_l.xRot = this.arm_l.xRot * 0.5F - 0.35F;
-                this.arm_l.yRot = 0.0F;
-                this.arm_l.zRot = 0.0F;
             }
+            this.arm_l.yRot = 0.0F;
+            this.arm_l.zRot = 0.0F;
         }
     }
 
@@ -111,17 +122,18 @@ public class TuffGolemModel extends EntityModel<TuffGolemRenderState> implements
         ModelPart armPart = arm == HumanoidArm.RIGHT ? this.arm_r : this.arm_l;
         armPart.translateAndRotate(poseStack);
 
+        boolean isCopperGolem = arm == HumanoidArm.RIGHT ? state.isRightHandCopperGolemStatue : state.isLeftHandCopperGolemStatue;
         boolean isBlock = arm == HumanoidArm.RIGHT ? state.isRightHandBlock : state.isLeftHandBlock;
         boolean isDoor = arm == HumanoidArm.RIGHT ? state.isRightHandDoor : state.isLeftHandDoor;
         float sign = arm == HumanoidArm.RIGHT ? 1.0F : -1.0F;
 
-        if (isBlock) {
+        if (isCopperGolem) {
+            poseStack.translate(-sign * 1.0F / 16.0F, -6.0F / 16.0F, 0.75F / 16.0F);
+        } else if (isBlock) {
             poseStack.translate(-sign * 1.0F / 16.0F, -3.5F / 16.0F, 0.5F / 16.0F);
         } else if (isDoor) {
-            // Опускаем дверь ниже по руке прямо в кулак (чтобы она не висела вверху руки)
             poseStack.translate(-sign * 1.0F / 16.0F, -1.0F / 16.0F, 1.0F / 16.0F);
         } else {
-            // Обычные предметы и инструменты
             poseStack.translate(-sign * 1.0F / 16.0F, -2.5F / 16.0F, 1.0F / 16.0F);
         }
     }

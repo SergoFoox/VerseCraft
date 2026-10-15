@@ -36,7 +36,6 @@ public abstract class ChunkGeneratorMixin {
             return;
         }
 
-        // 1. Woodland Mansion: remove unwanted monsters
         StructureStart start = structureManager.getStructureWithPieceAt(pos, holder -> holder.is(BuiltinStructures.WOODLAND_MANSION));
         if (start != null && start.isValid()) {
             List<Weighted<MobSpawnSettings.SpawnerData>> filtered = original.unwrap().stream()
@@ -47,7 +46,6 @@ public abstract class ChunkGeneratorMixin {
             return;
         }
 
-        // 2. Pale Garden (Surface only): keep eerie silence above ground, don't affect underground caves
         if (level.getBiome(pos).is(Biomes.PALE_GARDEN) && versecraft$isSurfacePosition(level, pos)) {
             List<Weighted<MobSpawnSettings.SpawnerData>> filtered = original.unwrap().stream()
                     .filter(entry -> !versecraft$isDisallowedPaleGardenSurfaceMonster(entry.value().type()))

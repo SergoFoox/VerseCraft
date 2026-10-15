@@ -72,7 +72,6 @@ public class TuffGolemReturnHomeGoal extends Goal {
         boolean closeEnough = (horizDistSq <= 0.04D && dy < 0.5D);
         boolean stuckNearHome = (horizDistSq <= 0.36D && dy < 0.5D && this.golem.getNavigation().isStuck());
 
-        // Arrived at home position: immediately begin sleep without delay
         if (onHomeBlock || closeEnough || stuckNearHome) {
             this.golem.getNavigation().stop();
             this.golem.setDeltaMovement(Vec3.ZERO);

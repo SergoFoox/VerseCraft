@@ -68,7 +68,6 @@ public abstract class RaiderMixin {
             return;
         }
 
-        // If holding a white banner, ensure it remains peaceful and unaggressive
         if (self.getMainHandItem().is(Items.BANNER.white())) {
             self.setAggressive(false);
             if (self.getTarget() != null) {
@@ -77,17 +76,14 @@ public abstract class RaiderMixin {
             return;
         }
 
-        // Only Pillagers holding a crossbow can surrender by picking up a white banner
         if (!(self instanceof Pillager) || !self.isHolding(Items.CROSSBOW)) {
             return;
         }
 
-        // Check periodically (every 4 ticks) to conserve performance
         if (self.tickCount % 4 != 0) {
             return;
         }
 
-        // 1. Immediate pickup range (within 1.5 blocks)
         AABB pickupBox = self.getBoundingBox().inflate(1.5, 1.0, 1.5);
         List<ItemEntity> nearbyBanners = serverLevel.getEntitiesOfClass(
                 ItemEntity.class,
@@ -103,15 +99,12 @@ public abstract class RaiderMixin {
             }
             self.take(bannerEntity, 1);
 
-            // Drop the equipped crossbow onto the ground
             ItemStack weapon = self.getMainHandItem().copy();
             self.spawnAtLocation(serverLevel, weapon);
 
-            // Equip the white banner in main hand
             self.setItemSlot(EquipmentSlot.MAINHAND, singleBanner);
             self.setDropChance(EquipmentSlot.MAINHAND, 1.0F);
 
-            // Disengage from raid, clear target and aggression
             self.setAggressive(false);
             self.setTarget(null);
             Raid raid = self.getCurrentRaid();
@@ -123,7 +116,6 @@ public abstract class RaiderMixin {
             return;
         }
 
-        // 2. Attraction range (within 6 blocks): walk towards the thrown white banner
         AABB searchBox = self.getBoundingBox().inflate(6.0, 2.0, 6.0);
         List<ItemEntity> reachableBanners = serverLevel.getEntitiesOfClass(
                 ItemEntity.class,

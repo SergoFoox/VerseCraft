@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -64,6 +65,28 @@ public abstract class PistonBaseBlockMixin {
             }
         }
         return movingPistonBe;
+    }
+
+    @Inject(
+            method = "getNeighborSignal",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void versecraft$removeQuasiConnectivity(
+            SignalGetter level, BlockPos pos, Direction facing,
+            CallbackInfoReturnable<Boolean> cir
+    ) {
+        for (Direction direction : Direction.values()) {
+            if (direction != facing && level.hasSignal(pos.relative(direction), direction)) {
+                cir.setReturnValue(true);
+                return;
+            }
+        }
+        if (level.hasSignal(pos, Direction.DOWN)) {
+            cir.setReturnValue(true);
+            return;
+        }
+        cir.setReturnValue(false);
     }
 
     @Unique

@@ -1,0 +1,7 @@
+﻿{
+  "parent": "versecraft:block/tuff_golem_statue",
+  "textures": {
+    "0": "versecraft:block/tuff_golem_statue_light_gray",
+    "particle": "versecraft:block/tuff_golem_statue_light_gray"
+  }
+}

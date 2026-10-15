@@ -1,4 +1,4 @@
-{
+﻿{
   "block.versecraft.azalea_log": "Azalea Log",
   "block.versecraft.azalea_wood": "Azalea Wood",
   "block.versecraft.stripped_azalea_log": "Stripped Azalea Log",
@@ -174,6 +174,22 @@
   "block.versecraft.dyed_water_cauldron": "Dyed Water Cauldron",
   "block.versecraft.potion_cauldron": "Potion Cauldron",
   "block.versecraft.tuff_golem_statue": "Tuff Golem Statue",
+  "block.versecraft.white_tuff_golem_statue": "White Tuff Golem Statue",
+  "block.versecraft.orange_tuff_golem_statue": "Orange Tuff Golem Statue",
+  "block.versecraft.magenta_tuff_golem_statue": "Magenta Tuff Golem Statue",
+  "block.versecraft.light_blue_tuff_golem_statue": "Light Blue Tuff Golem Statue",
+  "block.versecraft.yellow_tuff_golem_statue": "Yellow Tuff Golem Statue",
+  "block.versecraft.lime_tuff_golem_statue": "Lime Tuff Golem Statue",
+  "block.versecraft.pink_tuff_golem_statue": "Pink Tuff Golem Statue",
+  "block.versecraft.gray_tuff_golem_statue": "Gray Tuff Golem Statue",
+  "block.versecraft.light_gray_tuff_golem_statue": "Light Gray Tuff Golem Statue",
+  "block.versecraft.cyan_tuff_golem_statue": "Cyan Tuff Golem Statue",
+  "block.versecraft.purple_tuff_golem_statue": "Purple Tuff Golem Statue",
+  "block.versecraft.blue_tuff_golem_statue": "Blue Tuff Golem Statue",
+  "block.versecraft.brown_tuff_golem_statue": "Brown Tuff Golem Statue",
+  "block.versecraft.green_tuff_golem_statue": "Green Tuff Golem Statue",
+  "block.versecraft.red_tuff_golem_statue": "Red Tuff Golem Statue",
+  "block.versecraft.black_tuff_golem_statue": "Black Tuff Golem Statue",
   "entity.versecraft.tuff_golem": "Tuff Golem",
   "item.versecraft.tuff_golem_spawn_egg": "Tuff Golem Spawn Egg"
 }

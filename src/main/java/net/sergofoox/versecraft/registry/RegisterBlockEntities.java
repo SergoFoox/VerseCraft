@@ -27,7 +27,7 @@ public class RegisterBlockEntities {
     public static final BlockEntityType<TuffGolemStatueBlockEntity> TUFF_GOLEM_STATUE = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             VerseCraft.id("tuff_golem_statue"),
-            new BlockEntityType<>(TuffGolemStatueBlockEntity::new, Set.of(RegisterBlocks.TUFF_GOLEM_STATUE))
+            new BlockEntityType<>(TuffGolemStatueBlockEntity::new, RegisterBlocks.getAllTuffGolemStatues())
     );
 
     public static void registerBlockEntities() {

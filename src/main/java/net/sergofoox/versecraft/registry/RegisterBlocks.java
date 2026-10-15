@@ -32,7 +32,12 @@ import net.sergofoox.versecraft.VerseCraft;
 import net.sergofoox.versecraft.block.*;
 import net.sergofoox.versecraft.block.IceflowerCropBlock;
 
+import net.minecraft.world.item.DyeColor;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.function.Function;
 
 public class RegisterBlocks {
@@ -298,8 +303,27 @@ public class RegisterBlocks {
             properties -> new Block(properties.strength(1.5f,6f)
                     .sound(SoundType.TUFF_BRICKS).requiresCorrectToolForDrops()));
 
+    public static final Map<DyeColor, Block> TUFF_GOLEM_STATUES = new EnumMap<>(DyeColor.class);
+
+    public static final Block WHITE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.WHITE);
+    public static final Block ORANGE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.ORANGE);
+    public static final Block MAGENTA_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.MAGENTA);
+    public static final Block LIGHT_BLUE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.LIGHT_BLUE);
+    public static final Block YELLOW_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.YELLOW);
+    public static final Block LIME_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.LIME);
+    public static final Block PINK_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.PINK);
+    public static final Block GRAY_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.GRAY);
+    public static final Block LIGHT_GRAY_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.LIGHT_GRAY);
+    public static final Block CYAN_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.CYAN);
+    public static final Block PURPLE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.PURPLE);
+    public static final Block BLUE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.BLUE);
+    public static final Block BROWN_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.BROWN);
+    public static final Block GREEN_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.GREEN);
+    public static final Block RED_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.RED);
+    public static final Block BLACK_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.BLACK);
+
     public static final Block TUFF_GOLEM_STATUE = register("tuff_golem_statue",
-            properties -> new TuffGolemStatueBlock(properties.strength(1.5f, 6.0f).sound(SoundType.TUFF).noOcclusion().requiresCorrectToolForDrops())
+            properties -> new TuffGolemStatueBlock(DyeColor.RED, properties.strength(1.5f, 6.0f).sound(SoundType.TUFF).noOcclusion().requiresCorrectToolForDrops())
     );
 
     //Calcite
@@ -794,6 +818,24 @@ public class RegisterBlocks {
         BlockTransformerHelper.registerStripping(AZALEA_WOOD, STRIPPED_AZALEA_WOOD.defaultBlockState());
     }
 
+
+    private static Block registerTuffGolemStatue(DyeColor color) {
+        Block block = register(color.getName() + "_tuff_golem_statue",
+                properties -> new TuffGolemStatueBlock(color, properties.strength(1.5f, 6.0f).sound(SoundType.TUFF).noOcclusion().requiresCorrectToolForDrops())
+        );
+        TUFF_GOLEM_STATUES.put(color, block);
+        return block;
+    }
+
+    public static Block getTuffGolemStatue(DyeColor color) {
+        return TUFF_GOLEM_STATUES.getOrDefault(color, RED_TUFF_GOLEM_STATUE);
+    }
+
+    public static Set<Block> getAllTuffGolemStatues() {
+        Set<Block> set = new HashSet<>(TUFF_GOLEM_STATUES.values());
+        set.add(TUFF_GOLEM_STATUE);
+        return set;
+    }
 
     private static Block registerBlockWithoutBlockItem(String name, Function<BlockBehaviour.Properties, Block> function) {
         Block toRegister = function.apply(BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name))));

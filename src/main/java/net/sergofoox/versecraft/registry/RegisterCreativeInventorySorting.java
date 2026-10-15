@@ -198,7 +198,22 @@ public class RegisterCreativeInventorySorting {
 
             //Other
             output.insertAfter(Blocks.CAMPFIRE, RegisterBlocks.COPPER_CAMPFIRE);
-            output.insertAfter(Items.COPPER_GOLEM_STATUE.waxed().oxidized(), RegisterBlocks.TUFF_GOLEM_STATUE);
+            output.insertAfter(Items.COPPER_GOLEM_STATUE.waxed().oxidized(), RegisterBlocks.WHITE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.WHITE_TUFF_GOLEM_STATUE, RegisterBlocks.ORANGE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.ORANGE_TUFF_GOLEM_STATUE, RegisterBlocks.MAGENTA_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.MAGENTA_TUFF_GOLEM_STATUE, RegisterBlocks.LIGHT_BLUE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.LIGHT_BLUE_TUFF_GOLEM_STATUE, RegisterBlocks.YELLOW_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.YELLOW_TUFF_GOLEM_STATUE, RegisterBlocks.LIME_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.LIME_TUFF_GOLEM_STATUE, RegisterBlocks.PINK_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.PINK_TUFF_GOLEM_STATUE, RegisterBlocks.GRAY_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.GRAY_TUFF_GOLEM_STATUE, RegisterBlocks.LIGHT_GRAY_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.LIGHT_GRAY_TUFF_GOLEM_STATUE, RegisterBlocks.CYAN_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.CYAN_TUFF_GOLEM_STATUE, RegisterBlocks.PURPLE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.PURPLE_TUFF_GOLEM_STATUE, RegisterBlocks.BLUE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.BLUE_TUFF_GOLEM_STATUE, RegisterBlocks.BROWN_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.BROWN_TUFF_GOLEM_STATUE, RegisterBlocks.GREEN_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.GREEN_TUFF_GOLEM_STATUE, RegisterBlocks.RED_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.RED_TUFF_GOLEM_STATUE, RegisterBlocks.BLACK_TUFF_GOLEM_STATUE);
 
         });
 

@@ -64,6 +64,22 @@ public class VerseBlocksLootTableProvider extends FabricBlockLootSubProvider {
         //Tuff
         dropSelf(RegisterBlocks.CRACKED_TUFF_BRICKS);
         dropSelf(RegisterBlocks.TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.WHITE_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.ORANGE_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.MAGENTA_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.LIGHT_BLUE_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.YELLOW_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.LIME_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.PINK_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.GRAY_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.LIGHT_GRAY_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.CYAN_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.PURPLE_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.BLUE_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.BROWN_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.GREEN_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.RED_TUFF_GOLEM_STATUE);
+        dropSelf(RegisterBlocks.BLACK_TUFF_GOLEM_STATUE);
 
         //Calcite
         dropSelf(RegisterBlocks.CALCITE_STAIRS);

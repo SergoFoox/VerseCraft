@@ -10,6 +10,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -44,9 +45,20 @@ public class TuffGolemStatueBlock extends HorizontalDirectionalBlock implements 
     private static final Map<Direction, VoxelShape> SHAPES = Shapes.rotateHorizontal(BASE_SHAPE);
     private static final VoxelShape COLLISION_SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 15.0, 15.0);
 
-    public TuffGolemStatueBlock(Properties properties) {
+    private final DyeColor color;
+
+    public TuffGolemStatueBlock(DyeColor color, Properties properties) {
         super(properties);
+        this.color = color != null ? color : DyeColor.RED;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    public TuffGolemStatueBlock(Properties properties) {
+        this(DyeColor.RED, properties);
+    }
+
+    public DyeColor getColor() {
+        return this.color;
     }
 
     @Override
@@ -83,7 +95,7 @@ public class TuffGolemStatueBlock extends HorizontalDirectionalBlock implements 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TuffGolemStatueBlockEntity(pos, state);
+        return new TuffGolemStatueBlockEntity(pos, state, this.color);
     }
 
     @Override
@@ -104,6 +116,7 @@ public class TuffGolemStatueBlock extends HorizontalDirectionalBlock implements 
         if (level.getBlockEntity(pos) instanceof TuffGolemStatueBlockEntity be) {
             ItemStack heldItem = be.getItem().copy();
             ItemStack playerHand = player.getItemInHand(hand);
+            DyeColor golemColor = be.getColor() != null ? be.getColor() : this.color;
 
             if (!heldItem.isEmpty()) {
                 be.setItem(ItemStack.EMPTY);
@@ -120,6 +133,7 @@ public class TuffGolemStatueBlock extends HorizontalDirectionalBlock implements 
                 golem.setYBodyRot(facing.toYRot());
                 golem.setOriginPos(pos);
                 golem.setOriginFacing(facing);
+                golem.setColor(golemColor);
                 golem.startWakingUp();
                 level.addFreshEntity(golem);
 
@@ -142,6 +156,7 @@ public class TuffGolemStatueBlock extends HorizontalDirectionalBlock implements 
                     golem.setYBodyRot(facing.toYRot());
                     golem.setOriginPos(pos);
                     golem.setOriginFacing(facing);
+                    golem.setColor(golemColor);
                     golem.startWakingUp();
                     level.addFreshEntity(golem);
 

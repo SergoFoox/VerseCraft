@@ -1,4 +1,4 @@
-{
+﻿{
   "block.versecraft.azalea_log": "Азалиевое бревно",
   "block.versecraft.azalea_wood": "Азалиевая древесина",
   "block.versecraft.stripped_azalea_log": "Обтёсанное азалиевое бревно",
@@ -175,6 +175,22 @@
   "block.versecraft.dyed_water_cauldron": "Котёл с окрашенной водой",
   "block.versecraft.potion_cauldron": "Котёл с зельем",
   "block.versecraft.tuff_golem_statue": "Статуя туфового голема",
+  "block.versecraft.white_tuff_golem_statue": "Белая статуя туфового голема",
+  "block.versecraft.orange_tuff_golem_statue": "Оранжевая статуя туфового голема",
+  "block.versecraft.magenta_tuff_golem_statue": "Пурпурная статуя туфового голема",
+  "block.versecraft.light_blue_tuff_golem_statue": "Голубая статуя туфового голема",
+  "block.versecraft.yellow_tuff_golem_statue": "Жёлтая статуя туфового голема",
+  "block.versecraft.lime_tuff_golem_statue": "Лаймовая статуя туфового голема",
+  "block.versecraft.pink_tuff_golem_statue": "Розовая статуя туфового голема",
+  "block.versecraft.gray_tuff_golem_statue": "Серая статуя туфового голема",
+  "block.versecraft.light_gray_tuff_golem_statue": "Светло-серая статуя туфового голема",
+  "block.versecraft.cyan_tuff_golem_statue": "Бирюзовая статуя туфового голема",
+  "block.versecraft.purple_tuff_golem_statue": "Фиолетовая статуя туфового голема",
+  "block.versecraft.blue_tuff_golem_statue": "Синяя статуя туфового голема",
+  "block.versecraft.brown_tuff_golem_statue": "Коричневая статуя туфового голема",
+  "block.versecraft.green_tuff_golem_statue": "Зелёная статуя туфового голема",
+  "block.versecraft.red_tuff_golem_statue": "Красная статуя туфового голема",
+  "block.versecraft.black_tuff_golem_statue": "Чёрная статуя туфового голема",
   "entity.versecraft.tuff_golem": "Туфовый голем",
   "item.versecraft.tuff_golem_spawn_egg": "Яйцо призыва туфового голема"
 }

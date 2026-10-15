@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.AbstractBedBlock;
 import net.minecraft.world.level.block.CopperGolemStatueBlock;
@@ -15,9 +16,18 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.sergofoox.versecraft.VerseCraft;
 import net.sergofoox.versecraft.entity.TuffGolem;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class TuffGolemRenderer extends MobRenderer<TuffGolem, TuffGolemRenderState, TuffGolemModel> {
 
-    private static final Identifier TEXTURE = VerseCraft.id("textures/entity/tuff_golem/tuff_golem.png");
+    private static final Map<DyeColor, Identifier> TEXTURES = new EnumMap<>(DyeColor.class);
+
+    static {
+        for (DyeColor color : DyeColor.values()) {
+            TEXTURES.put(color, VerseCraft.id("textures/entity/tuff_golem/tuff_golem_" + color.getName() + ".png"));
+        }
+    }
 
     public TuffGolemRenderer(EntityRendererProvider.Context context) {
         super(context, new TuffGolemModel(context.bakeLayer(TuffGolemModel.TUFF_GOLEM)), 0.4F);
@@ -26,7 +36,7 @@ public class TuffGolemRenderer extends MobRenderer<TuffGolem, TuffGolemRenderSta
 
     @Override
     public Identifier getTextureLocation(TuffGolemRenderState state) {
-        return TEXTURE;
+        return TEXTURES.getOrDefault(state.color, TEXTURES.get(DyeColor.RED));
     }
 
     @Override
@@ -38,6 +48,8 @@ public class TuffGolemRenderer extends MobRenderer<TuffGolem, TuffGolemRenderSta
     public void extractRenderState(TuffGolem entity, TuffGolemRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         ArmedEntityRenderState.extractArmedEntityRenderState(entity, state, this.itemModelResolver, partialTick);
+
+        state.color = entity.getColor();
 
         if (entity.isBusyWithAnim()) {
             Direction facing = entity.getOriginFacing();

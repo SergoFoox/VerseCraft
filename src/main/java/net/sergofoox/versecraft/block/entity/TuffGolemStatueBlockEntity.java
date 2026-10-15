@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,9 +20,15 @@ import org.jetbrains.annotations.Nullable;
 public class TuffGolemStatueBlockEntity extends BlockEntity {
 
     private ItemStack item = ItemStack.EMPTY;
+    private DyeColor color = DyeColor.RED;
+
+    public TuffGolemStatueBlockEntity(BlockPos pos, BlockState state, DyeColor color) {
+        super(RegisterBlockEntities.TUFF_GOLEM_STATUE, pos, state);
+        this.color = color != null ? color : DyeColor.RED;
+    }
 
     public TuffGolemStatueBlockEntity(BlockPos pos, BlockState state) {
-        super(RegisterBlockEntities.TUFF_GOLEM_STATUE, pos, state);
+        this(pos, state, DyeColor.RED);
     }
 
     public ItemStack getItem() {
@@ -30,6 +37,18 @@ public class TuffGolemStatueBlockEntity extends BlockEntity {
 
     public void setItem(ItemStack item) {
         this.item = item != null ? item : ItemStack.EMPTY;
+        this.setChanged();
+        if (this.level != null) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+        }
+    }
+
+    public DyeColor getColor() {
+        return this.color;
+    }
+
+    public void setColor(DyeColor color) {
+        this.color = color != null ? color : DyeColor.RED;
         this.setChanged();
         if (this.level != null) {
             this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
@@ -49,12 +68,14 @@ public class TuffGolemStatueBlockEntity extends BlockEntity {
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         output.store("item", ItemStack.OPTIONAL_CODEC, this.item);
+        output.putString("color", this.color.getName());
     }
 
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         this.item = input.read("item", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        this.color = DyeColor.byName(input.getStringOr("color", this.color != null ? this.color.getName() : "red"), DyeColor.RED);
     }
 
     @Override

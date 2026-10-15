@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.animal.golem.AbstractGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -53,6 +54,8 @@ public class TuffGolem extends AbstractGolem {
             SynchedEntityData.defineId(TuffGolem.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Direction> DATA_ORIGIN_FACING =
             SynchedEntityData.defineId(TuffGolem.class, EntityDataSerializers.DIRECTION);
+    private static final EntityDataAccessor<Byte> DATA_COLOR =
+            SynchedEntityData.defineId(TuffGolem.class, EntityDataSerializers.BYTE);
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState walkingAnimationState = new AnimationState();
@@ -77,6 +80,7 @@ public class TuffGolem extends AbstractGolem {
         super.defineSynchedData(builder);
         builder.define(DATA_ANIM_STATE, STATE_IDLE);
         builder.define(DATA_ORIGIN_FACING, Direction.NORTH);
+        builder.define(DATA_COLOR, (byte) DyeColor.RED.getId());
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -94,6 +98,14 @@ public class TuffGolem extends AbstractGolem {
         this.goalSelector.addGoal(2, new TuffGolemReturnHomeGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TuffGolemWanderNearHomeGoal(this, 0.8D));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+    }
+
+    public DyeColor getColor() {
+        return DyeColor.byId(this.entityData.get(DATA_COLOR));
+    }
+
+    public void setColor(DyeColor color) {
+        this.entityData.set(DATA_COLOR, (byte) (color != null ? color.getId() : DyeColor.RED.getId()));
     }
 
     public boolean isBusyWithAnim() {
@@ -346,11 +358,12 @@ public class TuffGolem extends AbstractGolem {
                         }
                     }
                     Direction statueFacing = facing != null ? facing : this.getDirection();
-                    BlockState statueState = RegisterBlocks.TUFF_GOLEM_STATUE.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, statueFacing);
+                    BlockState statueState = RegisterBlocks.getTuffGolemStatue(this.getColor()).defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, statueFacing);
                     this.level().setBlock(home, statueState, Block.UPDATE_ALL);
 
                     if (this.level().getBlockEntity(home) instanceof TuffGolemStatueBlockEntity be) {
                         be.setItem(this.getMainHandItem().copy());
+                        be.setColor(this.getColor());
                     }
 
                     this.level().playSound(null, home, SoundEvents.TUFF_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -533,6 +546,7 @@ public class TuffGolem extends AbstractGolem {
         output.putByte("anim_state", this.entityData.get(DATA_ANIM_STATE));
         output.putInt("anim_ticks", this.animTicks);
         output.putInt("awake_ticks", this.awakeTicks);
+        output.putString("color", this.getColor().getName());
     }
 
     @Override
@@ -550,5 +564,6 @@ public class TuffGolem extends AbstractGolem {
         this.entityData.set(DATA_ANIM_STATE, input.getByteOr("anim_state", STATE_IDLE));
         this.animTicks = input.getIntOr("anim_ticks", 0);
         this.awakeTicks = input.getIntOr("awake_ticks", 0);
+        this.setColor(DyeColor.byName(input.getStringOr("color", "red"), DyeColor.RED));
     }
 }

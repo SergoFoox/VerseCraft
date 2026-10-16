@@ -119,7 +119,7 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
     @Override
     public double acceptedDistance() {
-        return 2.5D;
+        return 1.4D;
     }
 
     @Override

@@ -14,6 +14,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.sergofoox.versecraft.entity.ai.MoobloomEatButtercupGoal;
+import net.sergofoox.versecraft.entity.ai.MoobloomFollowParentGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -63,6 +65,8 @@ public class Moobloom extends AbstractCow implements Shearable {
     private final int[] flowerRegrowTimers = new int[FLOWER_COUNT];
     private final UUID[] flowerReservations = new UUID[FLOWER_COUNT];
     private final Set<UUID> activePollinators = new HashSet<>();
+    @Nullable
+    private MoobloomEatButtercupGoal eatButtercupGoal;
 
     public Moobloom(EntityType<? extends Moobloom> entityType, Level level) {
         super(entityType, level);
@@ -77,9 +81,12 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new MoobloomWaitForBeeGoal(this));
-        this.goalSelector.addGoal(4, new MoobloomEatButtercupGoal(this, 1.15D, 10));
         super.registerGoals();
+        this.goalSelector.getAvailableGoals().removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof FollowParentGoal);
+        this.eatButtercupGoal = new MoobloomEatButtercupGoal(this, 1.15D, 10);
+        this.goalSelector.addGoal(1, new MoobloomWaitForBeeGoal(this));
+        this.goalSelector.addGoal(4, this.eatButtercupGoal);
+        this.goalSelector.addGoal(5, new MoobloomFollowParentGoal(this, 1.25D));
     }
 
     public boolean isGolden() {
@@ -92,7 +99,10 @@ public class Moobloom extends AbstractCow implements Shearable {
 
     public void turnGolden() {
         this.setGolden(true);
+        this.setBaby(true);
         if (this.level() instanceof ServerLevel serverLevel) {
+            serverLevel.playSound(null, this.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1.0F, 1.5F);
+            serverLevel.playSound(null, this.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.NEUTRAL, 0.6F, 1.8F);
             for (int i = 0; i < 15; i++) {
                 serverLevel.sendParticles(
                         ParticleTypes.HAPPY_VILLAGER,
@@ -237,6 +247,9 @@ public class Moobloom extends AbstractCow implements Shearable {
             this.setFlowerMask(newMask);
             this.flowerRegrowTimers[slot] = 2400;
             this.flowerReservations[slot] = null;
+            if (this.eatButtercupGoal != null) {
+                this.eatButtercupGoal.onFlowerLost();
+            }
 
             if (this.level() instanceof ServerLevel serverLevel) {
                 Vec3 flowerPos = this.getFlowerWorldPos(slot);
@@ -263,7 +276,7 @@ public class Moobloom extends AbstractCow implements Shearable {
     }
 
     public void onAteButtercup() {
-        if (!this.isAlive() || this.isBaby()) {
+        if (!this.isAlive()) {
             return;
         }
 
@@ -445,7 +458,21 @@ public class Moobloom extends AbstractCow implements Shearable {
     @Override
     @Nullable
     public Moobloom getBreedOffspring(ServerLevel level, net.minecraft.world.entity.AgeableMob otherParent) {
-        return RegisterEntityTypes.MOOBLOOM.create(level, EntitySpawnReason.BREEDING);
+        Moobloom baby = RegisterEntityTypes.MOOBLOOM.create(level, EntitySpawnReason.BREEDING);
+        if (baby != null) {
+            if (otherParent instanceof Moobloom other) {
+                if (this.isGolden() && other.isGolden()) {
+                    baby.setGolden(true);
+                } else if (this.isGolden() || other.isGolden()) {
+                    baby.setGolden(this.random.nextBoolean());
+                } else {
+                    baby.setGolden(false);
+                }
+            } else {
+                baby.setGolden(this.isGolden());
+            }
+        }
+        return baby;
     }
 
     @Override

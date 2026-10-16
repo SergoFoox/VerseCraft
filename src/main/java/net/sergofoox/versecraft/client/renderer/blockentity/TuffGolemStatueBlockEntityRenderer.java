@@ -27,7 +27,7 @@ public class TuffGolemStatueBlockEntityRenderer implements BlockEntityRenderer<T
 
     public static final float BLOCK_X_OFFSET = 0.0F;
     public static final float BLOCK_Y_OFFSET = 0.725F;
-    public static final float BLOCK_Z_OFFSET = -0.66F;
+    public static final float BLOCK_Z_OFFSET = -0.61F;
     public static final float BLOCK_SCALE = 0.65F;
 
     public static final float COPPER_GOLEM_X_OFFSET = 0.0F;

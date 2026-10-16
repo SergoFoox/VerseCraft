@@ -23,23 +23,41 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
     @Override
     public boolean canUse() {
-        if (this.moobloom.isGolden()) {
-            return false;
-        }
         if (!this.moobloom.isAlive() || this.moobloom.isBaby()) {
             return false;
         }
         if (this.moobloom.isWaitingForBee()) {
             return false;
         }
-        return super.canUse();
+        // Golden moobloom never eats if it already has all flowers
+        if (this.moobloom.isGolden() && this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
+            return false;
+        }
+        if (this.nextStartTick > 0) {
+            this.nextStartTick--;
+            return false;
+        }
+        this.nextStartTick = this.nextStartTick(this.mob);
+
+        // Golden moobloom missing flowers: 50% chance per check (15-30s cooldown)
+        if (this.moobloom.isGolden()) {
+            if (this.moobloom.getRandom().nextFloat() >= 0.5F) {
+                return false;
+            }
+        } else {
+            // Regular moobloom with full flowers eating golden dandelion: 50% chance (10-20s cooldown)
+            if (this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
+                if (this.moobloom.getRandom().nextFloat() >= 0.5F) {
+                    return false;
+                }
+            }
+        }
+
+        return this.findNearestBlock();
     }
 
     @Override
     public boolean canContinueToUse() {
-        if (this.moobloom.isGolden()) {
-            return false;
-        }
         if (this.hasEaten) {
             return false;
         }
@@ -49,7 +67,11 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
         if (this.moobloom.isWaitingForBee()) {
             return false;
         }
-        if (this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
+        // Golden moobloom with full flowers doesn't continue eating
+        if (this.moobloom.isGolden() && this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
+            return false;
+        }
+        if (!this.moobloom.isGolden() && this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
             if (!this.moobloom.level().getBlockState(this.blockPos).is(Blocks.GOLDEN_DANDELION)) {
                 return false;
             }
@@ -75,14 +97,16 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
     @Override
     protected boolean isValidTarget(LevelReader level, BlockPos pos) {
-        if (this.moobloom.isGolden()) {
-            return false;
-        }
         boolean isGoldenDandelion = level.getBlockState(pos).is(Blocks.GOLDEN_DANDELION);
         if (isGoldenDandelion) {
+            if (this.moobloom.isGolden()) {
+                return this.moobloom.getFlowerMask() != Moobloom.ALL_FLOWERS;
+            }
             return true;
         }
-        return this.moobloom.getFlowerMask() != Moobloom.ALL_FLOWERS && level.getBlockState(pos).is(RegisterBlocks.BUTTERCUP);
+
+        boolean isButtercup = level.getBlockState(pos).is(RegisterBlocks.BUTTERCUP);
+        return this.moobloom.getFlowerMask() != Moobloom.ALL_FLOWERS && isButtercup;
     }
 
     @Override
@@ -102,6 +126,15 @@ public class MoobloomEatButtercupGoal extends MoveToBlockGoal {
 
     @Override
     protected int nextStartTick(PathfinderMob mob) {
+        if (this.moobloom.isGolden()) {
+            // Golden moobloom missing flowers: cooldown 15-30 seconds (300-600 ticks)
+            return 300 + mob.getRandom().nextInt(300);
+        }
+        if (this.moobloom.getFlowerMask() == Moobloom.ALL_FLOWERS) {
+            // Regular moobloom eating golden dandelion: cooldown 10-20 seconds (200-400 ticks)
+            return 200 + mob.getRandom().nextInt(200);
+        }
+        // Regular moobloom missing flowers regrowing via buttercup: 5-10 seconds (100-200 ticks)
         return 100 + mob.getRandom().nextInt(100);
     }
 

@@ -218,13 +218,15 @@ public class Moobloom extends AbstractCow implements Shearable {
     public void onPollinationSuccess(int slot, Bee bee) {
         if (this.isGolden()) {
             bee.setBaby(true);
-            if (slot >= 0 && slot < FLOWER_COUNT) {
-                this.flowerReservations[slot] = null;
-            }
             if (this.level() instanceof ServerLevel serverLevel) {
-                serverLevel.playSound(null, this.blockPosition(), SoundEvents.BEE_POLLINATE, SoundSource.NEUTRAL, 1.0F, 1.2F);
+                serverLevel.playSound(null, bee.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1.0F, 1.5F);
+                serverLevel.playSound(null, bee.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.NEUTRAL, 0.6F, 1.8F);
+                serverLevel.sendParticles(
+                        ParticleTypes.HAPPY_VILLAGER,
+                        bee.getX(), bee.getY(0.5), bee.getZ(),
+                        10, 0.25, 0.25, 0.25, 0.05
+                );
             }
-            return;
         }
         this.onPollinationSuccess(slot);
     }
@@ -292,15 +294,13 @@ public class Moobloom extends AbstractCow implements Shearable {
         super.aiStep();
 
         if (!this.level().isClientSide()) {
-            if (!this.isGolden()) {
-                byte mask = this.getFlowerMask();
-                for (int i = 0; i < FLOWER_COUNT; i++) {
-                    if ((mask & (1 << i)) == 0) {
-                        if (this.flowerRegrowTimers[i] > 0) {
-                            this.flowerRegrowTimers[i]--;
-                            if (this.flowerRegrowTimers[i] <= 0) {
-                                this.regrowFlower(i);
-                            }
+            byte mask = this.getFlowerMask();
+            for (int i = 0; i < FLOWER_COUNT; i++) {
+                if ((mask & (1 << i)) == 0) {
+                    if (this.flowerRegrowTimers[i] > 0) {
+                        this.flowerRegrowTimers[i]--;
+                        if (this.flowerRegrowTimers[i] <= 0) {
+                            this.regrowFlower(i);
                         }
                     }
                 }

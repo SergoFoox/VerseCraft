@@ -4,10 +4,25 @@
   "package": "net.sergofoox.versecraft.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MyceliumBlockMixin"
+    "MyceliumBlockMixin",
+    "ArmorStandMixin",
+    "AbstractCauldronBlockMixin",
+    "SwampHutPieceMixin",
+    "ChunkGeneratorMixin",
+    "BeeMixin",
+    "BeeInvoker",
+    "PistonBaseBlockMixin",
+    "PistonMovingBlockEntityMixin",
+    "BlockStateBaseMixin",
+    "FaceAttachedHorizontalDirectionalBlockMixin",
+    "LecternBlockEntityMixin",
+    "RaiderMixin",
+    "PillagerMixin"
   ],
   "client": [
-
+    "ArmorStandRendererMixin",
+    "PistonHeadRenderStateMixin",
+    "PistonHeadRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

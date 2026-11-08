@@ -1,0 +1,353 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1,
+                "min": 0
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:emerald"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "versecraft:random_difficulty_chance",
+        "default_chance": 0.65,
+        "hard": 0.8,
+        "peaceful": 0.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1,
+                "min": 0
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:emerald",
+          "weight": 40
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3,
+                "min": 2
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:emerald",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5,
+                "min": 4
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:emerald",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:enchant_with_levels",
+              "levels": 30,
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:book",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.3
+              }
+            },
+            {
+              "type": "minecraft:enchant_with_levels",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 19,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:iron_pickaxe",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.3
+              }
+            },
+            {
+              "type": "minecraft:enchant_with_levels",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 19,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:iron_axe",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.3
+              }
+            },
+            {
+              "type": "minecraft:enchant_with_levels",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 19,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:iron_shovel",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.3
+              }
+            },
+            {
+              "type": "minecraft:enchant_with_levels",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 19,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:iron_sword",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.3
+              }
+            },
+            {
+              "type": "minecraft:enchant_with_levels",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 19,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:iron_helmet",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.3
+              }
+            },
+            {
+              "type": "minecraft:enchant_with_levels",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 19,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:iron_chestplate",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.3
+              }
+            },
+            {
+              "type": "minecraft:enchant_with_levels",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 19,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:iron_leggings",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.9,
+                "min": 0.3
+              }
+            },
+            {
+              "type": "minecraft:enchant_with_levels",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.5
+              },
+              "levels": {
+                "type": "minecraft:uniform",
+                "max": 19,
+                "min": 5
+              },
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:iron_boots",
+          "weight": 10
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "versecraft:entities/raider_drops"
+}

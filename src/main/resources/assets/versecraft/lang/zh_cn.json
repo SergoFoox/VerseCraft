@@ -24,7 +24,7 @@
   "entity.versecraft.azalea_boat": "杜鹃木运输船",
   "entity.versecraft.azalea_chest_boat": "杜鹃木船",
 
-  "item.versecraft.dragon_pottery_sherd": "龙形纹样陶片",
+  "item.versecraft.dragon_pottery_sherd": "圆形纹样陶片",
   "item.versecraft.egg_pottery_sherd": "蛋形纹样陶片",
   "item.versecraft.pillager_pottery_sherd": "掠夺者纹样陶片",
   "item.versecraft.portal_pottery_sherd": "传送门纹样陶片",
@@ -162,6 +162,11 @@
   "block.versecraft.tall_mycelium_grass": "高大的菌絲草",
   "block.versecraft.pop_flower": "流行花",
   "block.versecraft.glowshroom": "螢光菇",
+
+  "block.versecraft.buttercup": "毛茛",
+  "block.versecraft.potted_buttercup": "盆栽毛茛",
+  "entity.versecraft.moobloom": "哞花",
+  "item.versecraft.moobloom_spawn_egg": "哞花刷怪蛋",
 
   "block.versecraft.copper_jack_o_lantern": "铜制南瓜灯",
   "block.versecraft.copper_campfire": "铜篝火",

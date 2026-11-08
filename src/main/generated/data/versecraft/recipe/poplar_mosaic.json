@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "#": "minecraft:poplar_slab"
   },
@@ -9,7 +8,6 @@
     "#"
   ],
   "result": {
-    "count": 1,
     "id": "versecraft:poplar_mosaic"
   }
 }

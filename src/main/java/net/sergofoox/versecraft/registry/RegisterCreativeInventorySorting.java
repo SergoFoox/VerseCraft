@@ -198,6 +198,22 @@ public class RegisterCreativeInventorySorting {
 
             //Other
             output.insertAfter(Blocks.CAMPFIRE, RegisterBlocks.COPPER_CAMPFIRE);
+            output.insertAfter(Items.COPPER_GOLEM_STATUE.waxed().oxidized(), RegisterBlocks.WHITE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.WHITE_TUFF_GOLEM_STATUE, RegisterBlocks.ORANGE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.ORANGE_TUFF_GOLEM_STATUE, RegisterBlocks.MAGENTA_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.MAGENTA_TUFF_GOLEM_STATUE, RegisterBlocks.LIGHT_BLUE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.LIGHT_BLUE_TUFF_GOLEM_STATUE, RegisterBlocks.YELLOW_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.YELLOW_TUFF_GOLEM_STATUE, RegisterBlocks.LIME_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.LIME_TUFF_GOLEM_STATUE, RegisterBlocks.PINK_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.PINK_TUFF_GOLEM_STATUE, RegisterBlocks.GRAY_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.GRAY_TUFF_GOLEM_STATUE, RegisterBlocks.LIGHT_GRAY_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.LIGHT_GRAY_TUFF_GOLEM_STATUE, RegisterBlocks.CYAN_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.CYAN_TUFF_GOLEM_STATUE, RegisterBlocks.PURPLE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.PURPLE_TUFF_GOLEM_STATUE, RegisterBlocks.BLUE_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.BLUE_TUFF_GOLEM_STATUE, RegisterBlocks.BROWN_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.BROWN_TUFF_GOLEM_STATUE, RegisterBlocks.GREEN_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.GREEN_TUFF_GOLEM_STATUE, RegisterBlocks.RED_TUFF_GOLEM_STATUE);
+            output.insertAfter(RegisterBlocks.RED_TUFF_GOLEM_STATUE, RegisterBlocks.BLACK_TUFF_GOLEM_STATUE);
 
         });
 
@@ -220,7 +236,8 @@ public class RegisterCreativeInventorySorting {
             output.insertAfter(Blocks.TORCHFLOWER, RegisterBlocks.ICEFLOWER);
             output.insertAfter(RegisterBlocks.ICEFLOWER, RegisterBlocks.BLUE_ROSE);
             output.insertAfter(Blocks.PINK_PETALS, RegisterBlocks.POP_FLOWER);
-            output.insertAfter(RegisterBlocks.POP_FLOWER, RegisterBlocks.GLOWSHROOM);
+            output.insertAfter(RegisterBlocks.POP_FLOWER, RegisterBlocks.BUTTERCUP);
+            output.insertAfter(RegisterBlocks.BUTTERCUP, RegisterBlocks.GLOWSHROOM);
             output.insertAfter(Blocks.SHORT_GRASS, RegisterBlocks.SHORT_MYCELIUM_GRASS);
             output.insertAfter(Blocks.TALL_GRASS, RegisterBlocks.TALL_MYCELIUM_GRASS);
 
@@ -234,6 +251,11 @@ public class RegisterCreativeInventorySorting {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(output -> {
             //Food
             output.insertAfter(Items.CHORUS_FRUIT, RegisterItems.CHERRY);
+        });
+
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(output -> {
+            output.insertAfter(Items.MOOSHROOM_SPAWN_EGG, RegisterItems.MOOBLOOM_SPAWN_EGG);
+            output.insertAfter(Items.SNOW_GOLEM_SPAWN_EGG, RegisterItems.TUFF_GOLEM_SPAWN_EGG);
         });
     }
 }

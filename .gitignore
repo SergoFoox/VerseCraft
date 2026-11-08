@@ -5,6 +5,9 @@ build/
 out/
 classes/
 
+#ai agents
+.agents
+
 # eclipse
 
 *.launch

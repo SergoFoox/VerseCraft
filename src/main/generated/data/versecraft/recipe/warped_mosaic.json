@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "#": "minecraft:warped_slab"
   },
@@ -9,7 +8,6 @@
     "#"
   ],
   "result": {
-    "count": 1,
     "id": "versecraft:warped_mosaic"
   }
 }

@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "#": "minecraft:dark_oak_slab"
   },
@@ -9,7 +8,6 @@
     "#"
   ],
   "result": {
-    "count": 1,
     "id": "versecraft:dark_oak_mosaic"
   }
 }

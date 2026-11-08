@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "boat",
   "key": {
     "#": "versecraft:azalea_planks"
@@ -10,7 +9,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "versecraft:azalea_boat"
   }
 }

@@ -66,7 +66,6 @@ public class BlueRoseCropBlock extends CropBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // Рост чуть замедлен (шанс 2 из 3 пропустить такт, как у факельника)
         if (random.nextInt(3) != 0) {
             super.randomTick(state, level, pos, random);
         }

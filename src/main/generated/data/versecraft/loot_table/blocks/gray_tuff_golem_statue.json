@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "versecraft:gray_tuff_golem_statue"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

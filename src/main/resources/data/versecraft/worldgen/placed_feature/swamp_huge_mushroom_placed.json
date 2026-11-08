@@ -1,0 +1,73 @@
+{
+  "feature": "minecraft:mushroom_island_vegetation",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 8
+    },
+    {
+      "type": "minecraft:count",
+      "count": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    },
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_block_tag",
+            "offset": [
+              0,
+              -1,
+              0
+            ],
+            "tag": "minecraft:huge_red_mushroom_can_place_on"
+          },
+          {
+            "type": "minecraft:volume_match",
+            "min": [
+              -3,
+              0,
+              -3
+            ],
+            "max": [
+              3,
+              13,
+              3
+            ],
+            "match": {
+              "type": "minecraft:not",
+              "predicate": {
+                "type": "minecraft:any_of",
+                "predicates": [
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "tag": "minecraft:leaves"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "tag": "minecraft:logs"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

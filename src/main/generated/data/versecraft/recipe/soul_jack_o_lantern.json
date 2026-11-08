@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#",
-    "S"
-  ],
+  "category": "building",
   "key": {
-    "#": "minecraft:carved_pumpkin",
-    "S": "minecraft:soul_torch"
+    "A": "minecraft:carved_pumpkin",
+    "B": "minecraft:soul_torch"
   },
+  "pattern": [
+    "A",
+    "B"
+  ],
   "result": {
-    "id": "versecraft:soul_jack_o_lantern",
-    "count": 1
+    "id": "versecraft:soul_jack_o_lantern"
   }
 }

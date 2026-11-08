@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "#": "minecraft:crimson_slab"
   },
@@ -9,7 +8,6 @@
     "#"
   ],
   "result": {
-    "count": 1,
     "id": "versecraft:crimson_mosaic"
   }
 }

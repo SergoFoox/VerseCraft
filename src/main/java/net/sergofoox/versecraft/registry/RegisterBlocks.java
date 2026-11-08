@@ -32,7 +32,12 @@ import net.sergofoox.versecraft.VerseCraft;
 import net.sergofoox.versecraft.block.*;
 import net.sergofoox.versecraft.block.IceflowerCropBlock;
 
+import net.minecraft.world.item.DyeColor;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.function.Function;
 
 public class RegisterBlocks {
@@ -91,8 +96,8 @@ public class RegisterBlocks {
 
     public static final Block AZALEA_SHELF = register("azalea_shelf",
             properties -> new ShelfBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_SHELF)
-                    .mapColor(AZALEA_PLANKS.defaultMapColor())
-                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, "azalea_shelf"))))
+                    .mapColor(AZALEA_PLANKS.defaultMapColor()
+                    ).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, "azalea_shelf"))))
     );
 
     public static final Block AZALEA_SIGN = registerBlockWithoutBlockItem("azalea_sign",
@@ -201,6 +206,8 @@ public class RegisterBlocks {
 
     //Jungle Mosaic
 
+    public static final Block CHISELED_JUNGLE_MOSAIC = null;
+
     public static final Block JUNGLE_MOSAIC = register("jungle_mosaic",
             properties -> new Block(properties.strength(2f,3f)
                     .sound(SoundType.WOOD)));
@@ -295,6 +302,29 @@ public class RegisterBlocks {
     public static final Block CRACKED_TUFF_BRICKS = register("cracked_tuff_bricks",
             properties -> new Block(properties.strength(1.5f,6f)
                     .sound(SoundType.TUFF_BRICKS).requiresCorrectToolForDrops()));
+
+    public static final Map<DyeColor, Block> TUFF_GOLEM_STATUES = new EnumMap<>(DyeColor.class);
+
+    public static final Block WHITE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.WHITE);
+    public static final Block ORANGE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.ORANGE);
+    public static final Block MAGENTA_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.MAGENTA);
+    public static final Block LIGHT_BLUE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.LIGHT_BLUE);
+    public static final Block YELLOW_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.YELLOW);
+    public static final Block LIME_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.LIME);
+    public static final Block PINK_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.PINK);
+    public static final Block GRAY_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.GRAY);
+    public static final Block LIGHT_GRAY_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.LIGHT_GRAY);
+    public static final Block CYAN_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.CYAN);
+    public static final Block PURPLE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.PURPLE);
+    public static final Block BLUE_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.BLUE);
+    public static final Block BROWN_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.BROWN);
+    public static final Block GREEN_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.GREEN);
+    public static final Block RED_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.RED);
+    public static final Block BLACK_TUFF_GOLEM_STATUE = registerTuffGolemStatue(DyeColor.BLACK);
+
+    public static final Block TUFF_GOLEM_STATUE = register("tuff_golem_statue",
+            properties -> new TuffGolemStatueBlock(DyeColor.RED, properties.strength(1.5f, 6.0f).sound(SoundType.TUFF).noOcclusion().requiresCorrectToolForDrops())
+    );
 
     //Calcite
 
@@ -508,10 +538,10 @@ public class RegisterBlocks {
     );
 
     public static final Block SOUL_JACK_O_LANTERN = register("soul_jack_o_lantern",
-            p -> new CarvedPumpkinBlock(p.strength(1.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 10) .pushReaction(PushReaction.POPPED))
+            p -> new CarvedPumpkinBlock(p.strength(1.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 10))
     );
     public static final Block COPPER_JACK_O_LANTERN = register("copper_jack_o_lantern",
-            p -> new CarvedPumpkinBlock(p.strength(1.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 15) .pushReaction(PushReaction.POPPED))
+            p -> new CarvedPumpkinBlock(p.strength(1.0F).sound(SoundType.WOOD).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 15))
     );
 
     //Plants
@@ -524,7 +554,7 @@ public class RegisterBlocks {
                     .instabreak()
                     .sound(SoundType.GRASS)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block BLUE_ROSE_CROP = registerBlockWithoutBlockItem("blue_rose_crop",
@@ -533,14 +563,12 @@ public class RegisterBlocks {
                     .randomTicks()
                     .instabreak()
                     .sound(SoundType.CROP)
-                    .pushReaction(PushReaction.PUSH))
+                    .pushReaction(PushReaction.POPPED))
     );
 
     public static final Block POTTED_BLUE_ROSE = registerBlockWithoutBlockItem("potted_blue_rose",
-            properties -> new FlowerPotBlock(BLUE_ROSE, properties
-                    .instabreak()
-                    .noOcclusion()
-                    .pushReaction(PushReaction.PUSH))
+            properties -> new FlowerPotBlock(BLUE_ROSE, properties),
+            Blocks.flowerPotProperties()
     );
 
     public static final Block ICEFLOWER = register("iceflower",
@@ -551,7 +579,7 @@ public class RegisterBlocks {
                     .instabreak()
                     .sound(SoundType.GRASS)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block ICEFLOWER_CROP = register("iceflower_crop",
@@ -561,7 +589,7 @@ public class RegisterBlocks {
                     .randomTicks()
                     .instabreak()
                     .sound(SoundType.CROP)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block POTTED_ICEFLOWER = register("potted_iceflower",
@@ -577,11 +605,27 @@ public class RegisterBlocks {
                     .instabreak()
                     .sound(SoundType.GRASS)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block POTTED_POP_FLOWER = register("potted_pop_flower",
             properties -> new FlowerPotBlock(POP_FLOWER, properties),
+            Blocks.flowerPotProperties()
+    );
+
+    public static final Block BUTTERCUP = register("buttercup",
+            properties -> new FlowerBlock(MobEffects.POISON, 11.0F, properties),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .noCollision()
+                    .instabreak()
+                    .sound(SoundType.GRASS)
+                    .offsetType(BlockBehaviour.OffsetType.XZ)
+                    .pushReaction(PushReaction.POPPED)
+    );
+
+    public static final Block POTTED_BUTTERCUP = registerBlockWithoutBlockItem("potted_buttercup",
+            properties -> new FlowerPotBlock(BUTTERCUP, properties),
             Blocks.flowerPotProperties()
     );
 
@@ -604,7 +648,7 @@ public class RegisterBlocks {
                     .sound(SoundType.GRASS)
                     .ignitedByLava()
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block TALL_MYCELIUM_GRASS = register("tall_mycelium_grass",
@@ -617,7 +661,20 @@ public class RegisterBlocks {
                     .sound(SoundType.GRASS)
                     .ignitedByLava()
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .pushReaction(PushReaction.PUSH)
+                    .pushReaction(PushReaction.POPPED)
+    );
+
+    //Cauldron
+    public static final Block DYED_WATER_CAULDRON = registerBlockWithoutBlockItem("dyed_water_cauldron",
+            properties -> new DyedCauldronBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WATER_CAULDRON)
+                    .overrideLootTable(Blocks.CAULDRON.getLootTable())
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, "dyed_water_cauldron"))))
+    );
+
+    public static final Block POTION_CAULDRON = registerBlockWithoutBlockItem("potion_cauldron",
+            properties -> new PotionCauldronBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WATER_CAULDRON)
+                    .overrideLootTable(Blocks.CAULDRON.getLootTable())
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, "potion_cauldron"))))
     );
 
     private static void registerFuels() {
@@ -738,6 +795,7 @@ public class RegisterBlocks {
         fireRegistry.add(RegisterBlocks.TALL_MYCELIUM_GRASS, 100, 60);
         fireRegistry.add(RegisterBlocks.SHORT_MYCELIUM_GRASS, 100, 60);
         fireRegistry.add(RegisterBlocks.POP_FLOWER, 100, 60);
+        fireRegistry.add(RegisterBlocks.BUTTERCUP, 100, 60);
     }
 
     private static void registerComposting() {
@@ -751,6 +809,7 @@ public class RegisterBlocks {
         addCompostable(SHORT_MYCELIUM_GRASS, 0.30F);
         addCompostable(TALL_MYCELIUM_GRASS, 0.50F);
         addCompostable(RegisterItems.CHERRY, 0.65F);
+        addCompostable(BUTTERCUP, 0.65F);
 
     }
 
@@ -760,8 +819,31 @@ public class RegisterBlocks {
     }
 
 
+    private static Block registerTuffGolemStatue(DyeColor color) {
+        Block block = register(color.getName() + "_tuff_golem_statue",
+                properties -> new TuffGolemStatueBlock(color, properties.strength(1.5f, 6.0f).sound(SoundType.TUFF).noOcclusion().requiresCorrectToolForDrops())
+        );
+        TUFF_GOLEM_STATUES.put(color, block);
+        return block;
+    }
+
+    public static Block getTuffGolemStatue(DyeColor color) {
+        return TUFF_GOLEM_STATUES.getOrDefault(color, RED_TUFF_GOLEM_STATUE);
+    }
+
+    public static Set<Block> getAllTuffGolemStatues() {
+        Set<Block> set = new HashSet<>(TUFF_GOLEM_STATUES.values());
+        set.add(TUFF_GOLEM_STATUE);
+        return set;
+    }
+
     private static Block registerBlockWithoutBlockItem(String name, Function<BlockBehaviour.Properties, Block> function) {
         Block toRegister = function.apply(BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name))));
+        return Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name), toRegister);
+    }
+
+    private static Block registerBlockWithoutBlockItem(String name, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
+        Block toRegister = function.apply(properties.setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name))));
         return Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(VerseCraft.MOD_ID, name), toRegister);
     }
 

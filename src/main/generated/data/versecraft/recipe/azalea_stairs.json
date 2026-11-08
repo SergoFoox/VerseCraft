@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
-  "group": "wooden_stairs",
   "key": {
     "#": "versecraft:azalea_planks"
   },

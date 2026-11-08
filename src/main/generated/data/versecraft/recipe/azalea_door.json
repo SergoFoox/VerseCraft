@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
-  "group": "wooden_door",
   "key": {
     "#": "versecraft:azalea_planks"
   },

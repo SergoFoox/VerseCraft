@@ -1,0 +1,21 @@
+{
+  "values": [
+    "minecraft:spawner",
+    "minecraft:trial_spawner",
+    "minecraft:vault",
+    "minecraft:beacon",
+    "minecraft:conduit",
+    "minecraft:end_portal",
+    "minecraft:end_gateway",
+    "minecraft:creaking_heart",
+    "minecraft:enchanting_table",
+    "minecraft:ender_chest",
+    "minecraft:jukebox",
+    "minecraft:sculk_sensor",
+    "minecraft:calibrated_sculk_sensor",
+    "minecraft:sculk_catalyst",
+    "minecraft:sculk_shrieker",
+    "minecraft:grindstone",
+    "minecraft:lodestone"
+  ]
+}

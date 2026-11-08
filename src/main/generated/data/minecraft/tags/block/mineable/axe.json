@@ -1,58 +1,46 @@
 {
-  "replace": false,
   "values": [
-
     "versecraft:azalea_mosaic",
     "versecraft:azalea_mosaic_stairs",
     "versecraft:azalea_mosaic_slab",
-
     "versecraft:acacia_mosaic",
-    "versecraft:acacia_mosaic_slab",
     "versecraft:acacia_mosaic_stairs",
-
+    "versecraft:acacia_mosaic_slab",
     "versecraft:birch_mosaic",
-    "versecraft:birch_mosaic_slab",
     "versecraft:birch_mosaic_stairs",
-
+    "versecraft:birch_mosaic_slab",
     "versecraft:cherry_mosaic",
     "versecraft:cherry_mosaic_stairs",
     "versecraft:cherry_mosaic_slab",
-
     "versecraft:crimson_mosaic",
     "versecraft:crimson_mosaic_stairs",
     "versecraft:crimson_mosaic_slab",
-
     "versecraft:dark_oak_mosaic",
     "versecraft:dark_oak_mosaic_stairs",
     "versecraft:dark_oak_mosaic_slab",
-
     "versecraft:jungle_mosaic",
     "versecraft:jungle_mosaic_stairs",
     "versecraft:jungle_mosaic_slab",
-
     "versecraft:mangrove_mosaic",
     "versecraft:mangrove_mosaic_stairs",
     "versecraft:mangrove_mosaic_slab",
-
     "versecraft:oak_mosaic",
     "versecraft:oak_mosaic_stairs",
     "versecraft:oak_mosaic_slab",
-
     "versecraft:spruce_mosaic",
     "versecraft:spruce_mosaic_stairs",
     "versecraft:spruce_mosaic_slab",
-
     "versecraft:pale_oak_mosaic",
     "versecraft:pale_oak_mosaic_stairs",
     "versecraft:pale_oak_mosaic_slab",
-
+    "versecraft:poplar_mosaic",
+    "versecraft:poplar_mosaic_stairs",
+    "versecraft:poplar_mosaic_slab",
     "versecraft:warped_mosaic",
     "versecraft:warped_mosaic_stairs",
     "versecraft:warped_mosaic_slab",
-
     "versecraft:soul_jack_o_lantern",
     "versecraft:copper_jack_o_lantern",
     "versecraft:copper_campfire"
-
   ]
 }

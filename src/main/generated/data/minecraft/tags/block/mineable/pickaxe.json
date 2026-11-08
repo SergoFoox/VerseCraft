@@ -1,8 +1,23 @@
 {
-  "replace": false,
   "values": [
     "versecraft:cracked_tuff_bricks",
-
+    "versecraft:tuff_golem_statue",
+    "versecraft:white_tuff_golem_statue",
+    "versecraft:orange_tuff_golem_statue",
+    "versecraft:magenta_tuff_golem_statue",
+    "versecraft:light_blue_tuff_golem_statue",
+    "versecraft:yellow_tuff_golem_statue",
+    "versecraft:lime_tuff_golem_statue",
+    "versecraft:pink_tuff_golem_statue",
+    "versecraft:gray_tuff_golem_statue",
+    "versecraft:light_gray_tuff_golem_statue",
+    "versecraft:cyan_tuff_golem_statue",
+    "versecraft:purple_tuff_golem_statue",
+    "versecraft:blue_tuff_golem_statue",
+    "versecraft:brown_tuff_golem_statue",
+    "versecraft:green_tuff_golem_statue",
+    "versecraft:red_tuff_golem_statue",
+    "versecraft:black_tuff_golem_statue",
     "versecraft:dripstone_stairs",
     "versecraft:dripstone_slab",
     "versecraft:dripstone_wall",
@@ -17,7 +32,6 @@
     "versecraft:dripstone_bricks_slab",
     "versecraft:dripstone_bricks_wall",
     "versecraft:chiseled_dripstone_bricks",
-
     "versecraft:polished_diorite_wall",
     "versecraft:chiseled_diorite",
     "versecraft:diorite_bricks",
@@ -26,7 +40,6 @@
     "versecraft:diorite_bricks_slab",
     "versecraft:diorite_bricks_wall",
     "versecraft:chiseled_diorite_bricks",
-
     "versecraft:polished_andesite_wall",
     "versecraft:chiseled_andesite",
     "versecraft:andesite_bricks",
@@ -35,7 +48,6 @@
     "versecraft:andesite_bricks_slab",
     "versecraft:andesite_bricks_wall",
     "versecraft:chiseled_andesite_bricks",
-
     "versecraft:polished_granite_wall",
     "versecraft:chiseled_granite",
     "versecraft:granite_bricks",
@@ -44,7 +56,6 @@
     "versecraft:granite_bricks_slab",
     "versecraft:granite_bricks_wall",
     "versecraft:chiseled_granite_bricks",
-
     "versecraft:calcite_stairs",
     "versecraft:calcite_slab",
     "versecraft:calcite_wall",

@@ -1,14 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
+    "#": "minecraft:raw_copper",
     "L": "#minecraft:logs",
-    "S": "minecraft:stick",
-    "T": "minecraft:raw_copper"
+    "S": "minecraft:stick"
   },
   "pattern": [
     " S ",
-    "STS",
+    "S#S",
     "LLL"
   ],
   "result": {

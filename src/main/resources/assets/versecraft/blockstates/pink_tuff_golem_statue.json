@@ -1,0 +1,19 @@
+﻿{
+  "variants": {
+    "facing=east": {
+      "model": "versecraft:block/pink_tuff_golem_statue",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "versecraft:block/pink_tuff_golem_statue"
+    },
+    "facing=south": {
+      "model": "versecraft:block/pink_tuff_golem_statue",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "versecraft:block/pink_tuff_golem_statue",
+      "y": 270
+    }
+  }
+}

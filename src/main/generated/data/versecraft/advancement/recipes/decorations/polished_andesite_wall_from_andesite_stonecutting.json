@@ -1,12 +1,6 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_the_recipe": {
-      "conditions": {
-        "recipes": "versecraft:polished_andesite_wall_from_andesite_stonecutting"
-      },
-      "trigger": "minecraft:recipe_unlocked"
-    },
     "has_andesite": {
       "conditions": {
         "items": [
@@ -16,6 +10,12 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "versecraft:polished_andesite_wall_from_andesite_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [

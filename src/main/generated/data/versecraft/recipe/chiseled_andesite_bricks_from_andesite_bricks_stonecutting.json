@@ -2,7 +2,6 @@
   "type": "minecraft:stonecutting",
   "ingredient": "versecraft:andesite_bricks",
   "result": {
-    "count": 1,
     "id": "versecraft:chiseled_andesite_bricks"
   }
 }

@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
-  "group": "wooden_pressure_plate",
   "key": {
     "#": "versecraft:azalea_planks"
   },
@@ -9,7 +8,6 @@
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "versecraft:azalea_pressure_plate"
   }
 }
